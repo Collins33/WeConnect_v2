@@ -29,6 +29,7 @@ class Business(db.Model):
         return Business.query.all()
 
     def delete_business(self):
+        """deletes a business"""
         db.session.delete(self)
         db.session.commit() 
 
