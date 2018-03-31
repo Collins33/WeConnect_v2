@@ -27,6 +27,13 @@ class BusinessTestCase(unittest.TestCase):
         response=self.client().post('/api/v2/businesses', data=self.business_test)
         self.assertEqual(response.status_code,400)
 
+    def test_api_can_get_all_businesses(self):
+        response=self.client().post('/api/v2/businesses', data=self.business)
+        self.assertEqual(response.status_code,201)
+        res=self.client().get('/api/v2/businesses', data=self.business)
+        self.assertEqual(res.status_code,200)
+
+
 
 
 
