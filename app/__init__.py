@@ -47,6 +47,7 @@ def create_app(config_name):
             business.save()
 
             response=jsonify({
+                'status_code':201,
                 'id':business.id,
                 'name':business.name,
                 'description':business.description,
@@ -54,9 +55,12 @@ def create_app(config_name):
                 'contact':business.contact,
                 'category':business.category
             })
+            
 
             response.status_code=201
-            return response    
+            return response
+            
+
 
 
     return app
