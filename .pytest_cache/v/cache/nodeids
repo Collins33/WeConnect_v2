@@ -1,5 +1,6 @@
 [
   "test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
+  "test_business.py::BusinessTestCase::test_api_can_get_individual_business",
   "test_business.py::BusinessTestCase::test_business_creation",
   "test_business.py::BusinessTestCase::test_business_creation_without_all_details"
 ]

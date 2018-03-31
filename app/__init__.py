@@ -80,7 +80,7 @@ def create_app(config_name):
                 'description':business.description,
                 'location':business.location,
                 'contact':business.contact,
-                'caegory':business.category
+                'category':business.category
             }
             final_result.append(obj)
 

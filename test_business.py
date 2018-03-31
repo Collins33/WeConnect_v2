@@ -33,6 +33,16 @@ class BusinessTestCase(unittest.TestCase):
         res=self.client().get('/api/v2/businesses', data=self.business)
         self.assertEqual(res.status_code,200)
 
+    def test_api_can_get_individual_business(self):
+        response=self.client().post('/api/v2/businesses', data=self.business)
+        self.assertEqual(response.status_code,201)
+        #convert the response to json
+        result_in_json=json.loads(response.data.decode('utf-8').replace("'", "\""))
+
+        result=self.client().get('/api/v2/businesses/{}'.format(result_in_json['id']))
+        self.assertEqual(result.status_code,200)
+
+
 
 
 
