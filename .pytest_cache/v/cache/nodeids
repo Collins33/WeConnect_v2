@@ -1,3 +1,4 @@
 [
-  "test_business.py::BusinessTestCase::test_business_creation"
+  "test_business.py::BusinessTestCase::test_business_creation",
+  "test_business.py::BusinessTestCase::test_business_creation_without_all_details"
 ]

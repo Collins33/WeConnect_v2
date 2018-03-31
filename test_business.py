@@ -12,6 +12,7 @@ class BusinessTestCase(unittest.TestCase):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
         self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.business_test={'name':'crasty crab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
 
         #bind app to current context
         with self.app.app_context():
@@ -20,7 +21,12 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_business_creation(self):
         response=self.client().post('/api/v2/businesses', data=self.business)
-        self.assertEqual(response.status_code,201)        
+        self.assertEqual(response.status_code,201)
+
+    def test_business_creation_without_all_details(self):
+        response=self.client().post('/api/v2/businesses', data=self.business_test)
+        self.assertEqual(response.status_code,400)
+
 
 
 

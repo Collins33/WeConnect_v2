@@ -59,6 +59,12 @@ def create_app(config_name):
 
             response.status_code=201
             return response
+
+        else:
+            message="Enter all the details"
+            response=jsonify({"message":message,"status_code":400})
+            response.status_code=400
+            return response    
             
 
 
