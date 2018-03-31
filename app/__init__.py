@@ -64,7 +64,29 @@ def create_app(config_name):
             message="Enter all the details"
             response=jsonify({"message":message,"status_code":400})
             response.status_code=400
-            return response    
+            return response
+
+
+    @app.route('/api/v2/businesses', methods=['GET'])
+    def all_business():
+        """this will get all the businesses"""
+        businesses=Business.get_all()
+
+        final_result=[]
+        for business in businesses:
+            obj={
+                'id':business.id,
+                'name':business.name,
+                'description':business.description,
+                'location':business.location,
+                'contact':business.contact,
+                'caegory':business.category
+            }
+            final_result.append(obj)
+
+        response=jsonify(final_result)
+        response.status_code=200
+        return response            
             
 
 
