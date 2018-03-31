@@ -146,6 +146,30 @@ def create_app(config_name):
             response.status_code=200
             return response
 
+
+
+    @app.route('/api/v2/businesses/<string:location>', methods=['GET'])
+    def filter_location(location):
+        """get business based on location"""
+
+        businesses=Business.get_business_location(location)
+        business_location=[]
+
+        for business in businesses:
+            obj={
+                'id':business.id,
+                'name':business.name,
+                'description':business.description,
+                'location':business.location,
+                'contact':business.contact,
+                'category':business.category
+            }
+            business_location.append(obj)
+
+        response=jsonify(business_location)
+        response.status_code=200
+        return response            
+
                 
 
 

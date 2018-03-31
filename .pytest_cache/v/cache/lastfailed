@@ -1,4 +1,1 @@
-{
-  "test_business.py::BusinessTestCase::test_api_can_get_business_category": true,
-  "test_business.py::BusinessTestCase::test_api_can_get_businesses_location": true
-}
+{}
