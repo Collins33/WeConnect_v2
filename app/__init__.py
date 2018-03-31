@@ -109,8 +109,13 @@ def create_app(config_name):
             response.status_code=200
             return response         
 
-        
-
+        elif request.method == 'DELETE':
+            business.delete_business()
+            message="business successfully deleted"
+            response=jsonify({"message":message,"status_code":200})
+            response.status_code=200
+            return response
+            
                 
 
 
