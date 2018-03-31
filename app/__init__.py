@@ -4,10 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 #import the environment dict
 from instance.config import app_config
 
+from flask import request, jsonify, abort,session
+
 #initialize sqlalchemy
 db=SQLAlchemy()
 
 def create_app(config_name):
+    from app.models import Business
     """this method wraps creation of flask-api
     object and returns it after loading the configurations"""
 
@@ -18,5 +21,14 @@ def create_app(config_name):
 
     #connect the db
     db.init_app(app)
+
+    @app.route('/', methods=['GET'])
+    def welcome():
+        message="Welcome to WeConnect"
+
+        response=jsonify({'message':message,'status':201})
+        response.status_code=201
+        return response
+
 
     return app
