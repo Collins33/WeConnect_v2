@@ -88,7 +88,7 @@ def create_app(config_name):
         response.status_code=200
         return response
 
-    @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE'])
+    @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE','PUT'])
     def get_single_business(id):
         business=Business.query.filter_by(id=id).first()
         if not business:
@@ -115,7 +115,37 @@ def create_app(config_name):
             response=jsonify({"message":message,"status_code":200})
             response.status_code=200
             return response
-            
+
+        else:
+            #first get data from the input
+            name = str(request.data.get('name', ''))          
+            description=str(request.data.get('description', ''))
+            location=str(request.data.get('location', ''))
+            contact=str(request.data.get('contact', ''))
+            category=str(request.data.get('category',''))
+
+            #replace values in the found business
+            business.name=name
+            business.description=description
+            business.location=location
+            business.contact=contact
+            business.category=category
+
+            #save the business
+            business.save()
+
+            #create response with the saved business
+            response=jsonify({
+                'id':business.id,
+                'name':business.name,
+                'description':business.description,
+                'location':business.location,
+                'contact':business.contact,
+                'category':business.category
+            })
+            response.status_code=200
+            return response
+
                 
 
 

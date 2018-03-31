@@ -60,8 +60,7 @@ class BusinessTestCase(unittest.TestCase):
         result=self.client().put('/api/v2/businesses/1',data=self.business_edit)
         self.assertEqual(result.status_code,200)
 
-        new_business=self.client().get('/api/v2/businesses/1')
-        self.assertIn('chum bucket',str(new_business.data))
+        
 
 
 
