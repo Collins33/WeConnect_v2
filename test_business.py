@@ -42,6 +42,16 @@ class BusinessTestCase(unittest.TestCase):
         result=self.client().get('/api/v2/businesses/{}'.format(result_in_json['id']))
         self.assertEqual(result.status_code,200)
 
+    def test_api_can_delete_business(self):
+        response=self.client().post('/api/v2/businesses', data=self.business)
+        self.assertEqual(response.status_code,201)
+
+        result_in_json=json.loads(response.data.decode('utf-8').replace("'", "\""))
+        result=self.client().delete('/api/v2/businesses/{}'.format(result_in_json['id']))
+        self.assertEqual(result.status_code,200)
+
+
+
 
 
 

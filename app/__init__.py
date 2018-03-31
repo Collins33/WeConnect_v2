@@ -88,7 +88,7 @@ def create_app(config_name):
         response.status_code=200
         return response
 
-    @app.route('/api/v2/businesses/<int:id>', methods=['GET'])
+    @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE'])
     def get_single_business(id):
         business=Business.query.filter_by(id=id).first()
         if not business:
@@ -96,7 +96,8 @@ def create_app(config_name):
             response=jsonify({"message":message,"status_code":404})
             response.status_code=404
             return response
-        else:
+        if request.method == 'GET':
+
             response=jsonify({
                 'id':business.id,
                 'name':business.name,
@@ -107,7 +108,10 @@ def create_app(config_name):
             })   
             response.status_code=200
             return response         
-            
+
+        
+
+                
 
 
 

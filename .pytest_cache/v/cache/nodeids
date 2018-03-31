@@ -1,4 +1,5 @@
 [
+  "test_business.py::BusinessTestCase::test_api_can_delete_business",
   "test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
   "test_business.py::BusinessTestCase::test_api_can_get_individual_business",
   "test_business.py::BusinessTestCase::test_business_creation",
