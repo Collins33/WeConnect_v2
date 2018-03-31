@@ -155,20 +155,28 @@ def create_app(config_name):
         businesses=Business.get_business_location(location)
         business_location=[]
 
-        for business in businesses:
-            obj={
-                'id':business.id,
-                'name':business.name,
-                'description':business.description,
-                'location':business.location,
-                'contact':business.contact,
-                'category':business.category
-            }
-            business_location.append(obj)
+        if not businesses:
+            message="No business in that location"
+            response=jsonify({"message":message,"status_code":404})
+            response.status_code=404
+            return response
+        else:
 
-        response=jsonify(business_location)
-        response.status_code=200
-        return response            
+
+            for business in businesses:
+                obj={
+                    'id':business.id,
+                    'name':business.name,
+                    'description':business.description,
+                    'location':business.location,
+                    'contact':business.contact,
+                    'category':business.category
+                }
+                business_location.append(obj)
+
+            response=jsonify(business_location)
+            response.status_code=200
+            return response            
 
                 
 
