@@ -30,5 +30,33 @@ def create_app(config_name):
         response.status_code=201
         return response
 
+    """BUSINESS ENDPOINTS"""
+    @app.route('/api/v2/businesses',methods=['POST'])
+    def add_business():
+        """get business data and add business to database"""
+        name = str(request.data.get('name', ''))          
+        description=str(request.data.get('description', ''))
+        location=str(request.data.get('location', ''))
+        contact=str(request.data.get('contact', ''))
+        category=str(request.data.get('category',''))
+
+        """ensure user enters all data"""
+        if name and description and location and contact and category:
+            business=Business(name=name,description=description,location=location,contact=contact,category=category)
+
+            business.save()
+
+            response=jsonify({
+                'id':business.id,
+                'name':business.name,
+                'description':business.description,
+                'location':business.location,
+                'contact':business.contact,
+                'category':business.category
+            })
+
+            response.status_code=201
+            return response    
+
 
     return app
