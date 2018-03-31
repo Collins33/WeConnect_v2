@@ -13,6 +13,7 @@ class BusinessTestCase(unittest.TestCase):
         self.client=self.app.test_client
         self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
         self.business_test={'name':'crasty crab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
+        self.business_edit={'name':'chum bucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
 
         #bind app to current context
         with self.app.app_context():
@@ -49,6 +50,19 @@ class BusinessTestCase(unittest.TestCase):
         result_in_json=json.loads(response.data.decode('utf-8').replace("'", "\""))
         result=self.client().delete('/api/v2/businesses/{}'.format(result_in_json['id']))
         self.assertEqual(result.status_code,200)
+
+    def test_api_can_edit_business(self):
+        response=self.client().post('/api/v2/businesses', data=self.business)
+        self.assertEqual(response.status_code,201)
+
+        result_in_json=json.loads(response.data.decode('utf-8').replace("'", "\""))
+
+        result=self.client().put('/api/v2/businesses/1',data=self.business_edit)
+        self.assertEqual(result.status_code,200)
+
+        new_business=self.client().get('/api/v2/businesses/1')
+        self.assertIn('chum bucket',str(new_business.data))
+
 
 
 
