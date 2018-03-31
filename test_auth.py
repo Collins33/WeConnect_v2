@@ -18,3 +18,17 @@ class BusinessTestCase(unittest.TestCase):
             #create db tables
             db.create_all()
 
+    def test_business_creation(self):
+        response=self.client().post('/api/v2/businesses', data=self.business)
+        self.assertEqual(response.status_code,201)        
+
+
+
+
+    def tearDown(self):
+        """connect to current context
+        and drop all tables"""
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()        
+
