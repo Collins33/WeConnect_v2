@@ -34,7 +34,19 @@ class Business(db.Model):
         db.session.commit() 
 
     def __repr__(self):
-        return "<Business: {}>".format(self.name)           
+        return "<Business: {}>".format(self.name)
+
+    @staticmethod
+    def get_business_location(location):
+        """returns businesses that match the location"""
+        """will return list of businesses"""
+
+        return Business.query.filter_by(location=location)
+
+    @staticmethod
+    def get_business_category(category):
+        """return businesses that match the category"""
+        return Business.query.filter_by(category=category)           
 
 
 
