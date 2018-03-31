@@ -146,6 +146,65 @@ def create_app(config_name):
             response.status_code=200
             return response
 
+
+
+    @app.route('/api/v2/businesses/<string:location>', methods=['GET'])
+    def filter_location(location):
+        """get business based on location"""
+
+        businesses=Business.get_business_location(location)
+        business_location=[]
+
+        if not businesses:
+            message="No business in that location"
+            response=jsonify({"message":message,"status_code":404})
+            response.status_code=404
+            return response
+        else:
+            for business in businesses:
+                obj={
+                    'id':business.id,
+                    'name':business.name,
+                    'description':business.description,
+                    'location':business.location,
+                    'contact':business.contact,
+                    'category':business.category
+                }
+                business_location.append(obj)
+
+            response=jsonify(business_location)
+            response.status_code=200
+            return response
+
+
+    @app.route('/api/v2/businesses/<string:category>', methods=['GET'])
+    def filter_category(category):
+        """get business based on category"""
+
+        businesses=Business.get_business_category(category)
+        business_category=[]
+
+        if not businesses:
+            message="No business in that category"
+            response=jsonify({"message":message,"status_code":404})
+            response.status_code=404
+            return response
+        else:
+            for business in businesses:
+                obj={
+                    'id':business.id,
+                    'name':business.name,
+                    'description':business.description,
+                    'location':business.location,
+                    'contact':business.contact,
+                    'category':business.category
+                }
+                business_category.append(obj)
+
+            response=jsonify(business_category)
+            response.status_code=200
+            return response                
+
                 
 
 
