@@ -53,9 +53,25 @@ class User(db.Model):
         except Exception as e:
             return str(e)
 
+    @staticmethod
+    def decode_token(token):
+        """this method takes token as argument
+        and checks if it is valid"""
 
-        
-                  
+        try:
+            """decode using secret key"""
+            payload=jwt.decode(token, current_app.config.get('SECRET'))
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            """if the token is expired"""
+            return "Expired token. Login to get a new token"
+        except jwt.InvalidTokenError:
+            """if token is invalid"""
+            return "Invalid token. Please register or login"        
+
+
+
+
 
 class Business(db.Model):
     __tablename__ = 'businesses'
