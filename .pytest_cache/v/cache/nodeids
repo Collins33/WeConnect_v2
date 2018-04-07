@@ -1,4 +1,5 @@
 [
+  "tests/test_auth.py::AuthTestCase::test_registration",
   "tests/test_business.py::BusinessTestCase::test_api_can_delete_business",
   "tests/test_business.py::BusinessTestCase::test_api_can_edit_business",
   "tests/test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
