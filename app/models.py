@@ -14,12 +14,12 @@ class User(db.Model):
 
     def __init__(self,email,password):
         self.email=email
-        self.password=Bcrypt.generate_password_hash(password).decode()
+        self.password=Bcrypt().generate_password_hash(password).decode()
 
     def password_is_valid(self,password):
         """compare password against its hash version"""
         """will return true if they match"""
-        return Bcrypt.check_password_hash(self.password,password)
+        return Bcrypt().check_password_hash(self.password,password)
 
     def save(self):
         """save a user to the database"""
