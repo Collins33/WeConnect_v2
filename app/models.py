@@ -1,5 +1,8 @@
 from app import db
 from flask_bcrypt import Bcrypt
+import jwt
+from flask import current_app
+from datetime import datetime, timedelta
 
 class User(db.Model):
     __tablename__= 'users'
@@ -24,7 +27,51 @@ class User(db.Model):
     def save(self):
         """save a user to the database"""
         db.session.add(self)
-        db.session.commit()      
+        db.session.commit()
+
+    def generate_token(self,user_id):
+        """this method generates the user token
+        using the user_id"""
+        
+        try:
+            """first create the payload"""
+            payload={
+                'exp':datetime.utcnow() + timedelta(minutes=5),
+                'iat':datetime.utcnow(),
+                'sub':user_id
+            }
+
+            """create the byte string token"""
+            jwt_string=jwt.encode(
+                payload,
+                current_app.config.get('SECRET'),
+                algorithm='HS256'
+                
+            )
+            return jwt_string
+
+        except Exception as e:
+            return str(e)
+
+    @staticmethod
+    def decode_token(token):
+        """this method takes token as argument
+        and checks if it is valid"""
+
+        try:
+            """decode using secret key"""
+            payload=jwt.decode(token, current_app.config.get('SECRET'))
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            """if the token is expired"""
+            return "Expired token. Login to get a new token"
+        except jwt.InvalidTokenError:
+            """if token is invalid"""
+            return "Invalid token. Please register or login"        
+
+
+
+
 
 class Business(db.Model):
     __tablename__ = 'businesses'
