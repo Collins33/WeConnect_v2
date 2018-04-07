@@ -1,4 +1,30 @@
 from app import db
+from flask_bcrypt import Bcrypt
+
+class User(db.Model):
+    __tablename__= 'users'
+
+    id=db.Column(db.Integer,primary_key=True)
+    email=db.Column(db.String(300), nullable=False, unique=True)
+    password=db.Column(db.String(300),nullable=False)
+    confirm_password=db.Column(db.String(300),nullable=False)
+    """one to many relationship with business"""
+    businesses=db.relationship("Businesses",order_by='Business.id',cascade="all,delete-orphan")
+
+
+    def __init__(self,email,password):
+        self.email=email
+        self.password=Bcrypt().generate_password_hash(password).decode()
+
+    def password_is_valid(self,password):
+        """compare password against its hash version"""
+        """will return true if they match"""
+        return Bcrypt().check_password_hash(self.password,password)
+
+    def save(self):
+        """save a user to the database"""
+        db.session.add(self)
+        db.session.commit()      
 
 class Business(db.Model):
     __tablename__ = 'businesses'
@@ -9,8 +35,12 @@ class Business(db.Model):
     contact=db.Column(db.String(1000))
     category=db.Column(db.String(300))
     location=db.Column(db.String(300))
+    business_owner=db.Column(db.Integer,db.ForeignKey(User.id))
 
-    def __init__(self,name,description,contact,category,location):
+    def __init__(self,name,description,contact,category,location,business_owner):
+
+        """initialize with the business owner"""
+        self.business_owner=business_owner
         self.name=name
         self.description=description
         self.contact=contact
@@ -27,6 +57,11 @@ class Business(db.Model):
     def get_all():
         """returns all businesses"""
         return Business.query.all()
+
+    @staticmethod
+    def get(owner):
+        """this gets all the business for a particular user"""
+        return Business.query.filter_by(business_owner=owner)    
 
     def delete_business(self):
         """deletes a business"""
@@ -46,7 +81,10 @@ class Business(db.Model):
     @staticmethod
     def get_business_category(category):
         """return businesses that match the category"""
-        return Business.query.filter_by(category=category)           
+        return Business.query.filter_by(category=category)
+
+
+              
 
 
 
