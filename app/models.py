@@ -1,5 +1,8 @@
 from app import db
 from flask_bcrypt import Bcrypt
+import jwt
+from flask import current_app
+from datetime import datetime, timedelta
 
 class User(db.Model):
     __tablename__= 'users'
@@ -24,7 +27,35 @@ class User(db.Model):
     def save(self):
         """save a user to the database"""
         db.session.add(self)
-        db.session.commit()      
+        db.session.commit()
+
+    def generate_token(self,user_id):
+        """this method generates the user token
+        using the user_id"""
+        
+        try:
+            """first create the payload"""
+            payload={
+                'exp':datetime.utcnow() + timedelta(minutes=5),
+                'iat':datetime.utcnow(),
+                'sub':user_id
+            }
+
+            """create the byte string token"""
+            jwt_string=jwt.encode(
+                payload,
+                current_app.config.get('SECRET'),
+                algorithm='HS256'
+                
+            )
+            return jwt_string
+
+        except Exception as e:
+            return str(e)
+
+
+        
+                  
 
 class Business(db.Model):
     __tablename__ = 'businesses'
