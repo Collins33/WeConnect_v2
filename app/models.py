@@ -9,7 +9,22 @@ class User(db.Model):
     password=db.Column(db.String(300),nullable=False)
     confirm_password=db.Column(db.String(300),nullable=False)
     """one to many relationship with business"""
-    businesses=db.relationship("Businesses",order_by='Business.id',cascade="all,delete-orphan") 
+    businesses=db.relationship("Businesses",order_by='Business.id',cascade="all,delete-orphan")
+
+
+    def __init__(self,email,password):
+        self.email=email
+        self.password=Bcrypt.generate_password_hash(password).decode()
+
+    def password_is_valid(self,password):
+        """compare password against its hash version"""
+        """will return true if they match"""
+        return Bcrypt.check_password_hash(self.password,password)
+
+    def save(self):
+        """save a user to the database"""
+        db.session.add(self)
+        db.session.commit()      
 
 class Business(db.Model):
     __tablename__ = 'businesses'
