@@ -1,10 +1,10 @@
 [
-  "test_business.py::BusinessTestCase::test_api_can_delete_business",
-  "test_business.py::BusinessTestCase::test_api_can_edit_business",
-  "test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
-  "test_business.py::BusinessTestCase::test_api_can_get_business_category",
-  "test_business.py::BusinessTestCase::test_api_can_get_businesses_location",
-  "test_business.py::BusinessTestCase::test_api_can_get_individual_business",
-  "test_business.py::BusinessTestCase::test_business_creation",
-  "test_business.py::BusinessTestCase::test_business_creation_without_all_details"
+  "tests/test_business.py::BusinessTestCase::test_api_can_delete_business",
+  "tests/test_business.py::BusinessTestCase::test_api_can_edit_business",
+  "tests/test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
+  "tests/test_business.py::BusinessTestCase::test_api_can_get_business_category",
+  "tests/test_business.py::BusinessTestCase::test_api_can_get_businesses_location",
+  "tests/test_business.py::BusinessTestCase::test_api_can_get_individual_business",
+  "tests/test_business.py::BusinessTestCase::test_business_creation",
+  "tests/test_business.py::BusinessTestCase::test_business_creation_without_all_details"
 ]
