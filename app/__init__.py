@@ -22,6 +22,10 @@ def create_app(config_name):
     #connect the db
     db.init_app(app)
 
+    """import auth blueprint and register it"""
+    from .auth import auth_blueprint
+    app.register_blueprint(auth_blueprint)
+
     @app.route('/', methods=['GET'])
     def welcome():
         message="Welcome to WeConnect"
@@ -208,5 +212,7 @@ def create_app(config_name):
                 
 
 
+
+    
 
     return app
