@@ -37,7 +37,7 @@ class AuthTestCase(unittest.TestCase):
         res=self.client().post('/api/v2/auth/registration', data=self.user)
         result=self.client().post('/api/v2/auth/registration', data=self.user)
 
-        self.assertEqual(result.status_code,202)
+        self.assertEqual(result.status_code,409)
 
 
 

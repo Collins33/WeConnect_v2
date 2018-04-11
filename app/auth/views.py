@@ -53,7 +53,7 @@ class RegistrationView(MethodView):
                 "message":"user already exists"
             }
 
-            return make_response(jsonify(response)),202
+            return make_response(jsonify(response)),409
 
 
 """MAKE THE CLASS CALLABLE SO THAT IT
