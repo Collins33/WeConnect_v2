@@ -38,7 +38,11 @@ class AuthTestCase(unittest.TestCase):
         result=self.client().post('/api/v2/auth/registration', data=self.user)
 
         self.assertEqual(result.status_code,409)
-
+    
+    def test_login_user(self):
+        """test if the api can login a user"""
+        res=self.client().post('/api/v2/auth/login', data=self.user)
+        self.assertEqual(res.status_code,200)
 
 
     def tearDown(self):
