@@ -41,6 +41,7 @@ class AuthTestCase(unittest.TestCase):
     
     def test_login_user(self):
         """test if the api can login a user"""
+        result=self.client().post('/api/v2/auth/registration', data=self.user)
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,200)
 
