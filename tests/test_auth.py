@@ -32,6 +32,14 @@ class AuthTestCase(unittest.TestCase):
         # self.assertEqual(result['message'], 'you have successfully logged in')
         self.assertEqual(res.status_code,201)
 
+    def test_registration_user_already_exists(self):
+        """test if user can be registered twice"""
+        res=self.client().post('/api/v2/auth/registration', data=self.user)
+        result=self.client().post('/api/v2/auth/registration', data=self.user)
+
+        self.assertEqual(result.status_code,202)
+
+
 
     def tearDown(self):
         with self.app.app_context():
