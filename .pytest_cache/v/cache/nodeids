@@ -1,10 +1,4 @@
 [
-  "tests/test_business.py::BusinessTestCase::test_api_can_delete_business",
-  "tests/test_business.py::BusinessTestCase::test_api_can_edit_business",
-  "tests/test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
-  "tests/test_business.py::BusinessTestCase::test_api_can_get_business_category",
-  "tests/test_business.py::BusinessTestCase::test_api_can_get_businesses_location",
-  "tests/test_business.py::BusinessTestCase::test_api_can_get_individual_business",
-  "tests/test_business.py::BusinessTestCase::test_business_creation",
-  "tests/test_business.py::BusinessTestCase::test_business_creation_without_all_details"
+  "tests/test_auth.py::AuthTestCase::test_registration",
+  "tests/test_auth.py::AuthTestCase::test_registration_user_already_exists"
 ]

@@ -10,9 +10,8 @@ class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     email=db.Column(db.String(300), nullable=False, unique=True)
     password=db.Column(db.String(300),nullable=False)
-    confirm_password=db.Column(db.String(300),nullable=False)
     """one to many relationship with business"""
-    businesses=db.relationship("Businesses",order_by='Business.id',cascade="all,delete-orphan")
+    businesses=db.relationship("Business",order_by='Business.id',cascade="all,delete-orphan")
 
 
     def __init__(self,email,password):
