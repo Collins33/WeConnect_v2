@@ -1,5 +1,6 @@
 [
   "tests/test_auth.py::AuthTestCase::test_login_user",
+  "tests/test_auth.py::AuthTestCase::test_non_registered_user",
   "tests/test_auth.py::AuthTestCase::test_registration",
   "tests/test_auth.py::AuthTestCase::test_registration_user_already_exists"
 ]

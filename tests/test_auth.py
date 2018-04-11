@@ -45,6 +45,15 @@ class AuthTestCase(unittest.TestCase):
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,200)
 
+    def test_non_registered_user(self):
+        not_a_user = {
+            'email': 'not_a_user@example.com',
+            'password': 'nope'
+        }
+        res=self.client().post('/api/v2/auth/login', data=self.user)
+        self.assertEqual(res.status_code,401)
+
+
 
     def tearDown(self):
         with self.app.app_context():
