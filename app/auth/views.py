@@ -44,7 +44,7 @@ class RegistrationView(MethodView):
                 response={
                     "message":str(e)
                 }
-
+                print(response)
                 return make_response(jsonify(response)),401
 
         else:
@@ -63,4 +63,4 @@ registration_view=RegistrationView.as_view('registration_view')
 
 """add url rule to the blueprint"""
 """pass in the url, view and method"""
-auth_blueprint.add_url_rule('api/v2/auth/registration',view_func=registration_view,methods=['POST'])            
+auth_blueprint.add_url_rule('/api/v2/auth/registration',view_func=registration_view,methods=['POST'])            
