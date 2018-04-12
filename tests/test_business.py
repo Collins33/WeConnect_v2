@@ -37,9 +37,17 @@ class BusinessTestCase(unittest.TestCase):
         return self.client().post('/api/v2/auth/login',data=user_data)
                 
 
-#     def test_business_creation(self):
-#         response=self.client().post('/api/v2/businesses', data=self.business)
-#         self.assertEqual(response.status_code,201)
+    def test_business_creation(self):
+        #register a test user and log him in
+        self.register_user()
+        result=self.login_user()
+
+        #get the access token
+        access_token=json.loads(result.data.decode())['access token']
+
+        #add the access token to the header
+        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.assertEqual(response.status_code,201)
 
 #     def test_business_creation_without_all_details(self):
 #         response=self.client().post('/api/v2/businesses', data=self.business_test)
