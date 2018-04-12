@@ -43,7 +43,7 @@ class BusinessTestCase(unittest.TestCase):
         result=self.login_user()
 
         #get the access token
-        access_token=json.loads(result.data.decode())['access token']
+        access_token=json.loads(result.data.decode())['access_token']
 
         #add the access token to the header
         response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
