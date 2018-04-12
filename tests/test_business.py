@@ -1,24 +1,41 @@
-# import os
-# import unittest
-# import json
-# from app import db, create_app
+import os
+import unittest
+import json
+from app import db, create_app
 
-# class BusinessTestCase(unittest.TestCase):
-#     """this class tests the business endpoints"""
+class BusinessTestCase(unittest.TestCase):
+    """this class tests the business endpoints"""
 
-#     def setUp(self):
-#         """initilize the app
-#         create test variables"""
-#         self.app=create_app(config_name="testing")
-#         self.client=self.app.test_client
-#         self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
-#         self.business_test={'name':'crasty crab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
-#         self.business_edit={'name':'chum bucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
+    def setUp(self):
+        """initilize the app
+        create test variables"""
+        self.app=create_app(config_name="testing")
+        self.client=self.app.test_client
+        self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.business_test={'name':'crasty crab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
+        self.business_edit={'name':'chum bucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
 
-#         #bind app to current context
-#         with self.app.app_context():
-#             #create db tables
-#             db.create_all()
+        #bind app to current context
+        with self.app.app_context():
+            #create db tables
+            db.create_all()
+
+
+    def register_user(self,email="collins.muru@andela.com",password="123test"):
+        """this method will register a user"""
+        user_data={
+            'email':email,
+            'password':password
+        }
+        return self.client().post('/api/v2/auth/registration',data=user_data)
+
+    def login_user(self,email="collins.muru@andela.com",password="123test"):
+        user_data={
+            'email':email,
+            'password':password
+        }
+        return self.client().post('/api/v2/auth/login',data=user_data)
+                
 
 #     def test_business_creation(self):
 #         response=self.client().post('/api/v2/businesses', data=self.business)
@@ -91,16 +108,16 @@
 
 
 
-#     def tearDown(self):
-#         """connect to current context
-#         and drop all tables"""
-#         with self.app.app_context():
-#             db.session.remove()
-#             db.drop_all()
+    def tearDown(self):
+        """connect to current context
+        and drop all tables"""
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
 
 
 
 
-# # Make the tests conveniently executable
-# if __name__ == "__main__":
-#     unittest.main()
+# Make the tests conveniently executable
+if __name__ == "__main__":
+    unittest.main()
