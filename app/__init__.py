@@ -10,7 +10,7 @@ from flask import request, jsonify, abort,session
 db=SQLAlchemy()
 
 def create_app(config_name):
-    from app.models import Business
+    from app.models import Business, User
     """this method wraps creation of flask-api
     object and returns it after loading the configurations"""
 
@@ -37,38 +37,58 @@ def create_app(config_name):
     """BUSINESS ENDPOINTS"""
     @app.route('/api/v2/businesses',methods=['POST'])
     def add_business():
-        """get business data and add business to database"""
-        name = str(request.data.get('name', ''))          
-        description=str(request.data.get('description', ''))
-        location=str(request.data.get('location', ''))
-        contact=str(request.data.get('contact', ''))
-        category=str(request.data.get('category',''))
+        #get access token from the header
+        auth_header=request.headers.get('Authorization')
+        access_token=auth_header.split(" ")[1]
 
-        """ensure user enters all data"""
-        if name and description and location and contact and category:
-            business=Business(name=name,description=description,location=location,contact=contact,category=category)
 
-            business.save()
 
-            response=jsonify({
-                'status_code':201,
-                'id':business.id,
-                'name':business.name,
-                'description':business.description,
-                'location':business.location,
-                'contact':business.contact,
-                'category':business.category
-            })
-            
+        if access_token:
+            """user is legit"""
 
-            response.status_code=201
-            return response
+            #decode the access_token and get the user_id
+            user_id=User.decode_token(access_token)
+
+            #get the user data
+            name = str(request.data.get('name', ''))          
+            description=str(request.data.get('description', ''))
+            location=str(request.data.get('location', ''))
+            contact=str(request.data.get('contact', ''))
+            category=str(request.data.get('category',''))
+
+            #ensure all the data is there
+            if name and description and location and contact and category:
+                business=Business(name=name,description=description,location=location,contact=contact,category=category,business_owner=user_id)
+                business.save()
+
+                creation_response=jsonify({
+                    'id':business.id,
+                    'name':business.name,
+                    'description':business.description,
+                    'location':business.location,
+                    'contact':business.contact,
+                    'category':business.category,
+                    'business_owner':business.business_owner
+                })
+
+                creation_response.status_code=201
+                return creation_response
+                return creation_response.status_code
+
+            else:
+                message="Enter all the details"
+                #400 is bad request
+                response=jsonify({'message':message,'status':400})
+                response.status_code=400
+                return response
+
+
 
         else:
-            message="Enter all the details"
-            response=jsonify({"message":message,"status_code":400})
-            response.status_code=400
-            return response
+            """user is not legit"""
+
+
+        
 
 
     @app.route('/api/v2/businesses', methods=['GET'])
