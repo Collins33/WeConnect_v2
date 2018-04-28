@@ -73,7 +73,7 @@ def create_app(config_name):
 
                 creation_response.status_code=201
                 return creation_response
-                return creation_response.status_code
+                
 
             else:
                 message="Enter all the details"
@@ -82,14 +82,8 @@ def create_app(config_name):
                 response.status_code=400
                 return response
 
-
-
         else:
             """user is not legit"""
-
-
-        
-
 
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():
@@ -169,8 +163,6 @@ def create_app(config_name):
             })
             response.status_code=200
             return response
-
-
 
     @app.route('/api/v2/businesses/<string:location>', methods=['GET'])
     def filter_location(location):
