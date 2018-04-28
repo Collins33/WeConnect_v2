@@ -35,7 +35,7 @@ class User(db.Model):
         try:
             """first create the payload"""
             payload={
-                'exp':datetime.utcnow() + timedelta(minutes=5),
+                'exp':datetime.utcnow() + timedelta(minutes=100),
                 'iat':datetime.utcnow(),
                 'sub':user_id
             }
