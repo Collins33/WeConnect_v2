@@ -34,10 +34,13 @@ class AuthTestCase(unittest.TestCase):
 
     def test_registration_user_already_exists(self):
         """test if user can be registered twice"""
-        res=self.client().post('/api/v2/auth/registration', data=self.user)
+        self.client().post('/api/v2/auth/registration', data=self.user)
         result=self.client().post('/api/v2/auth/registration', data=self.user)
-
+        response_result=json.loads(result.data.decode())
         self.assertEqual(result.status_code,409)
+        self.assertEqual(response_result['message'],"user already exists")
+        
+        
     
     def test_login_user(self):
         """test if the api can login a user"""
