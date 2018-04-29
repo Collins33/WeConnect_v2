@@ -29,7 +29,7 @@ class AuthTestCase(unittest.TestCase):
         result=json.loads(res.data.decode())
 
         #assert the results
-        # self.assertEqual(result['message'], 'you have successfully logged in')
+        self.assertEqual(result['message'], 'successfully registered user')
         self.assertEqual(res.status_code,201)
 
     def test_registration_user_already_exists(self):

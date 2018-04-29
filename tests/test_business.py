@@ -104,18 +104,6 @@ class BusinessTestCase(unittest.TestCase):
 #         self.assertEqual(result.status_code,200)
 
 
-
-        
-
-
-
-
-
-
-
-
-
-
     def tearDown(self):
         """connect to current context
         and drop all tables"""
