@@ -21,6 +21,10 @@ class AuthTestCase(unittest.TestCase):
             db.drop_all()
             db.create_all()
 
+    def register_user(self):
+        result=self.client().post('/api/v2/auth/registration', data=self.user)
+        return result        
+
 
     def test_registration(self):
         res=self.client().post('/api/v2/auth/registration', data=self.user)
@@ -34,19 +38,19 @@ class AuthTestCase(unittest.TestCase):
 
     def test_registration_user_already_exists(self):
         """test if user can be registered twice"""
-        self.client().post('/api/v2/auth/registration', data=self.user)
+        self.register_user()
         result=self.client().post('/api/v2/auth/registration', data=self.user)
         response_result=json.loads(result.data.decode())
         self.assertEqual(result.status_code,409)
         self.assertEqual(response_result['message'],"user already exists")
-        
-        
-    
+            
     def test_login_user(self):
         """test if the api can login a user"""
-        result=self.client().post('/api/v2/auth/registration', data=self.user)
+        self.register_user()
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,200)
+        result_response=json.loads(res.data.decode())
+        self.assertEqual(result_response["message"],"you logged in successfully")
 
     def test_non_registered_user(self):
         not_a_user = {
