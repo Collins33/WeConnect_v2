@@ -49,6 +49,10 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(response.status_code,201)
         self.assertIn('crasty crab',str(response.data))
 
+    def test_business_creation_for_unregistered_user(self):
+        result=self.client().post('/api/v2/businesses', data=self.business_test)
+        self.assertEqual(result.status_code,401)    
+
 #     def test_business_creation_without_all_details(self):
 #         response=self.client().post('/api/v2/businesses', data=self.business_test)
 #         self.assertEqual(response.status_code,400)

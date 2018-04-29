@@ -41,11 +41,8 @@ def create_app(config_name):
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
 
-
-
         if access_token:
             """user is legit"""
-
             #decode the access_token and get the user_id
             user_id=User.decode_token(access_token)
 
