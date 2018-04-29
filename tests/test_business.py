@@ -51,17 +51,17 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
-        #register a user
-        self.register_user()
-        #login user
-        result=self.login_user()
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
+        # #register a user
+        # self.register_user()
+        # #login user
+        # result=self.login_user()
+        # #get the access token
+        # access_token=json.loads(result.data.decode())['access_token']
 
-        #create business by making a post request
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        #get all business by making a get request
-        get_response=self.client().get('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token))
+        # #create business by making a post request
+        # self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        # #get all business by making a get request
+        get_response=self.client().get('/api/v2/businesses')
         self.assertEqual(get_response.status_code,200)
             
 
