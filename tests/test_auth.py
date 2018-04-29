@@ -4,7 +4,6 @@ from app import create_app,db
 
 class AuthTestCase(unittest.TestCase):
     """testcase for auth blueprint"""
-
     def setUp(self):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
@@ -24,7 +23,6 @@ class AuthTestCase(unittest.TestCase):
     def register_user(self):
         result=self.client().post('/api/v2/auth/registration', data=self.user)
         return result        
-
 
     def test_registration(self):
         res=self.client().post('/api/v2/auth/registration', data=self.user)
@@ -59,8 +57,6 @@ class AuthTestCase(unittest.TestCase):
         }
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,401)
-
-
 
     def tearDown(self):
         with self.app.app_context():
