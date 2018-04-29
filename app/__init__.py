@@ -79,8 +79,15 @@ def create_app(config_name):
                 response.status_code=400
                 return response
 
-        else:
-            """user is not legit"""
+        # else:
+        #     """user is not legit"""
+        #     message = user_id
+        #     response = {
+        #             'message': message
+        #         }
+        #     return make_response(jsonify(response)), 401
+
+
 
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():

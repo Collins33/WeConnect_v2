@@ -49,9 +49,25 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(response.status_code,201)
         self.assertIn('crasty crab',str(response.data))
 
-    def test_business_creation_for_unregistered_user(self):
-        result=self.client().post('/api/v2/businesses', data=self.business_test)
-        self.assertEqual(result.status_code,401)    
+    def test_api_can_get_all_businesses(self):
+        """this tests if the api can return all bucketlists"""
+        #register a user
+        self.register_user()
+        #login user
+        result=self.login_user()
+        #get the access token
+        access_token=json.loads(result.data.decode())['access_token']
+
+        #create business by making a post request
+        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        #get all business by making a get request
+        get_response=self.client().get('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token))
+        self.assertEqual(get_response.status_code,200)
+            
+
+    # def test_business_creation_for_unregistered_user(self):
+    #     result=self.client().post('/api/v2/businesses', data=self.business_test)
+    #     self.assertEqual(result.status_code,401)    
 
 #     def test_business_creation_without_all_details(self):
 #         response=self.client().post('/api/v2/businesses', data=self.business_test)
