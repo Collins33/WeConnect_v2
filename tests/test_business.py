@@ -108,7 +108,22 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         edit_response=self.client().put('/api/v2/businesses/30',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
-        self.assertEqual(edit_response.status_code,404)    
+        self.assertEqual(edit_response.status_code,404)
+
+    def test_api_can_delete_business(self):
+        self.register_user()
+        result=self.login_user()
+        #get the access token
+        access_token=json.loads(result.data.decode())['access_token']
+        #add the access token to the header
+        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+
+        edit_response=self.client().delete('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token))
+        self.assertEqual(edit_response.status_code,200)
+        
+        result=self.client().get('/api/v2/businesses/1')
+        self.assertEqual(result.status_code,404)
+
              
     def tearDown(self):
         """connect to current context
@@ -116,6 +131,7 @@ class BusinessTestCase(unittest.TestCase):
         with self.app.app_context():
             db.session.remove()
             db.drop_all()
+
 
 
 
