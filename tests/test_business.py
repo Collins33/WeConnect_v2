@@ -38,14 +38,24 @@ class BusinessTestCase(unittest.TestCase):
         return self.client().post('/api/v2/auth/login',data=user_data)
                 
 
-    def add_business(self,business):
+    def add_business(self):
         self.register_user()
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=business)
-        return response          
+        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        return response
+
+    def add_second_business(self):
+        self.register_user()
+        result=self.login_user()
+        #get the access token
+        access_token=json.loads(result.data.decode())['access_token']
+        #add the access token to the header
+        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.secondBusiness)
+        return response
+
 
     def test_business_creation(self):
         #register a test user and log him in
@@ -62,16 +72,23 @@ class BusinessTestCase(unittest.TestCase):
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
         #add a business
-        self.add_business(self.business)
+        self.add_business()
         result=self.client().get('/api/v2/businesses')
         self.assertEqual(result.status_code,200)
 
     def test_api_can_get_business_by_id(self):
         #you dont need to be authenticated to view a business
-        self.add_business(self.business) #registers a user and adds a business
+        self.add_business() #registers a user and adds a business
         result=self.client().get('/api/v2/businesses/1')
         self.assertEqual(result.status_code,200) 
         self.assertIn('crasty crab',str(result.data))
+
+    def test_api_get_business_not_exist(self):
+        #add two businesses
+        self.add_business()
+        self.add_second_business()
+        result=self.client().get('/api/v2/businesses/5')
+        self.assertEqual(result.status_code,404) 
         
         
 
