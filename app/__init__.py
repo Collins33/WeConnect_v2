@@ -110,120 +110,144 @@ def create_app(config_name):
         response.status_code=200
         return response
 
-    @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE','PUT'])
+    @app.route('/api/v2/businesses/<int:id>', methods=['GET'])
     def get_single_business(id):
         business=Business.query.filter_by(id=id).first()
         if not business:
+            #check if the business exists
             message="business does not exist"
             response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
             response.status_code=404
             return response
-        if request.method == 'GET':
 
-            response=jsonify({
-                'id':business.id,
-                'name':business.name,
-                'description':business.description,
-                'location':business.location,
-                'contact':business.contact,
-                'category':business.category
-            })   
-            response.status_code=200
-            return response         
+        response=jsonify({
+            'id':business.id,
+            'name':business.name,
+            'description':business.description,
+            'location':business.location,
+            'contact':business.contact,
+            'category':business.category
+        })
 
-        elif request.method == 'DELETE':
-            business.delete_business()
-            message="business successfully deleted"
-            response=jsonify({"message":message,"status_code":200})
-            response.status_code=200
-            return response
-
-        else:
-            #first get data from the input
-            name = str(request.data.get('name', ''))          
-            description=str(request.data.get('description', ''))
-            location=str(request.data.get('location', ''))
-            contact=str(request.data.get('contact', ''))
-            category=str(request.data.get('category',''))
-
-            #replace values in the found business
-            business.name=name
-            business.description=description
-            business.location=location
-            business.contact=contact
-            business.category=category
-
-            #save the business
-            business.save()
-
-            #create response with the saved business
-            response=jsonify({
-                'id':business.id,
-                'name':business.name,
-                'description':business.description,
-                'location':business.location,
-                'contact':business.contact,
-                'category':business.category
-            })
-            response.status_code=200
-            return response
-
-    @app.route('/api/v2/businesses/<string:location>', methods=['GET'])
-    def filter_location(location):
-        """get business based on location"""
-
-        businesses=Business.get_business_location(location)
-        business_location=[]
-
-        if not businesses:
-            message="No business in that location"
-            response=jsonify({"message":message,"status_code":404})
-            response.status_code=404
-            return response
-        else:
-            for business in businesses:
-                obj={
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category
-                }
-                business_location.append(obj)
-
-            response=jsonify(business_location)
-            response.status_code=200
-            return response
+        response.status_code=200
+        return response    
 
 
-    @app.route('/api/v2/businesses/<string:category>', methods=['GET'])
-    def filter_category(category):
-        """get business based on category"""
+    # @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE','PUT'])
+    # def get_single_business(id):
+    #     business=Business.query.filter_by(id=id).first()
+    #     if not business:
+    #         message="business does not exist"
+    #         response=jsonify({"message":message,"status_code":404})
+    #         response.status_code=404
+    #         return response
+    #     if request.method == 'GET':
 
-        businesses=Business.get_business_category(category)
-        business_category=[]
+    #         response=jsonify({
+    #             'id':business.id,
+    #             'name':business.name,
+    #             'description':business.description,
+    #             'location':business.location,
+    #             'contact':business.contact,
+    #             'category':business.category
+    #         })   
+    #         response.status_code=200
+    #         return response         
 
-        if not businesses:
-            message="No business in that category"
-            response=jsonify({"message":message,"status_code":404})
-            response.status_code=404
-            return response
-        else:
-            for business in businesses:
-                obj={
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category
-                }
-                business_category.append(obj)
+    #     elif request.method == 'DELETE':
+    #         business.delete_business()
+    #         message="business successfully deleted"
+    #         response=jsonify({"message":message,"status_code":200})
+    #         response.status_code=200
+    #         return response
 
-            response=jsonify(business_category)
-            response.status_code=200
-            return response                
+    #     else:
+    #         #first get data from the input
+    #         name = str(request.data.get('name', ''))          
+    #         description=str(request.data.get('description', ''))
+    #         location=str(request.data.get('location', ''))
+    #         contact=str(request.data.get('contact', ''))
+    #         category=str(request.data.get('category',''))
+
+    #         #replace values in the found business
+    #         business.name=name
+    #         business.description=description
+    #         business.location=location
+    #         business.contact=contact
+    #         business.category=category
+
+    #         #save the business
+    #         business.save()
+
+    #         #create response with the saved business
+    #         response=jsonify({
+    #             'id':business.id,
+    #             'name':business.name,
+    #             'description':business.description,
+    #             'location':business.location,
+    #             'contact':business.contact,
+    #             'category':business.category
+    #         })
+    #         response.status_code=200
+    #         return response
+
+    # @app.route('/api/v2/businesses/<string:location>', methods=['GET'])
+    # def filter_location(location):
+    #     """get business based on location"""
+
+    #     businesses=Business.get_business_location(location)
+    #     business_location=[]
+
+    #     if not businesses:
+    #         message="No business in that location"
+    #         response=jsonify({"message":message,"status_code":404})
+    #         response.status_code=404
+    #         return response
+    #     else:
+    #         for business in businesses:
+    #             obj={
+    #                 'id':business.id,
+    #                 'name':business.name,
+    #                 'description':business.description,
+    #                 'location':business.location,
+    #                 'contact':business.contact,
+    #                 'category':business.category
+    #             }
+    #             business_location.append(obj)
+
+    #         response=jsonify(business_location)
+    #         response.status_code=200
+    #         return response
+
+
+    # @app.route('/api/v2/businesses/<string:category>', methods=['GET'])
+    # def filter_category(category):
+    #     """get business based on category"""
+
+    #     businesses=Business.get_business_category(category)
+    #     business_category=[]
+
+    #     if not businesses:
+    #         message="No business in that category"
+    #         response=jsonify({"message":message,"status_code":404})
+    #         response.status_code=404
+    #         return response
+    #     else:
+    #         for business in businesses:
+    #             obj={
+    #                 'id':business.id,
+    #                 'name':business.name,
+    #                 'description':business.description,
+    #                 'location':business.location,
+    #                 'contact':business.contact,
+    #                 'category':business.category
+    #             }
+    #             business_category.append(obj)
+
+    #         response=jsonify(business_category)
+    #         response.status_code=200
+    #         return response                
 
                 
 

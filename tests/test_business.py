@@ -66,12 +66,13 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,200)
 
     def test_api_can_get_business_by_id(self):
-        #register a test user and log him in
-        self.register_user()
-        result=self.login_user()
-        #get access token from the login response
-        access_token=json.loads(result.data.decode())['access_token']
-        print(access_token)
+        #you dont need to be authenticated to view a business
+        self.add_business() #registers a user and adds a business
+        result=self.client().get('/api/v2/businesses/1')
+        self.assertEqual(result.status_code,200) 
+        self.assertIn('crasty crab',str(result.data))
+        
+        
 
 
         
