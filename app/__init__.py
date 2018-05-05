@@ -131,7 +131,19 @@ def create_app(config_name):
         })
 
         response.status_code=200
-        return response    
+        return response
+
+    @app.route('/api/v2/businesses/<int:id>', methods=['PUT'])
+    def edit_business(id):
+        business=Business.query.filter_by(id=id).first()
+        if not business:
+            #check if the business exists
+            message="business does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
+            return response
+
 
 
     # @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE','PUT'])
