@@ -6,7 +6,6 @@
   "test_business.py::BusinessTestCase::test_api_can_get_businesses_location": true,
   "test_business.py::BusinessTestCase::test_api_can_get_individual_business": true,
   "test_business.py::BusinessTestCase::test_business_creation": true,
-  "tests/test_business.py::BusinessTestCase": true,
   "tests/test_business.py::BusinessTestCase::test_api_can_delete_business": true,
   "tests/test_business.py::BusinessTestCase::test_api_can_edit_business": true,
   "tests/test_business.py::BusinessTestCase::test_api_can_get_business_category": true,

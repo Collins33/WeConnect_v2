@@ -12,6 +12,7 @@ class BusinessTestCase(unittest.TestCase):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
         self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.secondBusiness={'name':'chum bucket','description':'Fast food restaurant','contact':'0702848031','category':'fast food','location':'atlantic'}
         self.business_test={'name':'crasty crab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
         self.business_edit={'name':'chum bucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
 
@@ -37,13 +38,13 @@ class BusinessTestCase(unittest.TestCase):
         return self.client().post('/api/v2/auth/login',data=user_data)
                 
 
-    def add_business(self):
+    def add_business(self,business):
         self.register_user()
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=business)
         return response          
 
     def test_business_creation(self):
@@ -61,13 +62,13 @@ class BusinessTestCase(unittest.TestCase):
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
         #add a business
-        self.add_business()
+        self.add_business(self.business)
         result=self.client().get('/api/v2/businesses')
         self.assertEqual(result.status_code,200)
 
     def test_api_can_get_business_by_id(self):
         #you dont need to be authenticated to view a business
-        self.add_business() #registers a user and adds a business
+        self.add_business(self.business) #registers a user and adds a business
         result=self.client().get('/api/v2/businesses/1')
         self.assertEqual(result.status_code,200) 
         self.assertIn('crasty crab',str(result.data))
