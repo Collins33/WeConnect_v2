@@ -62,7 +62,7 @@ class LoginView(MethodView):
         """the method to handle post request to the login route"""
         try:
 
-            """get the user who matches the email"""
+            """get the user who matches the email entered"""
             user=User.query.filter_by(email=request.data['email']).first()
 
             if user and user.password_is_valid(request.data['password']):

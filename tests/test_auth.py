@@ -4,7 +4,6 @@ from app import create_app,db
 
 class AuthTestCase(unittest.TestCase):
     """testcase for auth blueprint"""
-
     def setUp(self):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
@@ -21,6 +20,9 @@ class AuthTestCase(unittest.TestCase):
             db.drop_all()
             db.create_all()
 
+    def register_user(self):
+        result=self.client().post('/api/v2/auth/registration', data=self.user)
+        return result        
 
     def test_registration(self):
         res=self.client().post('/api/v2/auth/registration', data=self.user)
@@ -29,21 +31,24 @@ class AuthTestCase(unittest.TestCase):
         result=json.loads(res.data.decode())
 
         #assert the results
-        # self.assertEqual(result['message'], 'you have successfully logged in')
+        self.assertEqual(result['message'], 'successfully registered user')
         self.assertEqual(res.status_code,201)
 
     def test_registration_user_already_exists(self):
         """test if user can be registered twice"""
-        res=self.client().post('/api/v2/auth/registration', data=self.user)
+        self.register_user()
         result=self.client().post('/api/v2/auth/registration', data=self.user)
-
+        response_result=json.loads(result.data.decode())
         self.assertEqual(result.status_code,409)
-    
+        self.assertEqual(response_result['message'],"user already exists")
+            
     def test_login_user(self):
         """test if the api can login a user"""
-        result=self.client().post('/api/v2/auth/registration', data=self.user)
+        self.register_user()
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,200)
+        result_response=json.loads(res.data.decode())
+        self.assertEqual(result_response["message"],"you logged in successfully")
 
     def test_non_registered_user(self):
         not_a_user = {
@@ -52,8 +57,6 @@ class AuthTestCase(unittest.TestCase):
         }
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,401)
-
-
 
     def tearDown(self):
         with self.app.app_context():

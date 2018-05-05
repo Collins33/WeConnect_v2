@@ -41,11 +41,8 @@ def create_app(config_name):
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
 
-
-
         if access_token:
             """user is legit"""
-
             #decode the access_token and get the user_id
             user_id=User.decode_token(access_token)
 
@@ -82,8 +79,15 @@ def create_app(config_name):
                 response.status_code=400
                 return response
 
-        else:
-            """user is not legit"""
+        # else:
+        #     """user is not legit"""
+        #     message = user_id
+        #     response = {
+        #             'message': message
+        #         }
+        #     return make_response(jsonify(response)), 401
+
+
 
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():
@@ -106,125 +110,106 @@ def create_app(config_name):
         response.status_code=200
         return response
 
-    @app.route('/api/v2/businesses/<int:id>', methods=['GET','DELETE','PUT'])
+    @app.route('/api/v2/businesses/<int:id>', methods=['GET'])
     def get_single_business(id):
         business=Business.query.filter_by(id=id).first()
         if not business:
+            #check if the business exists
             message="business does not exist"
             response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
             response.status_code=404
             return response
-        if request.method == 'GET':
 
-            response=jsonify({
-                'id':business.id,
-                'name':business.name,
-                'description':business.description,
-                'location':business.location,
-                'contact':business.contact,
-                'category':business.category
-            })   
-            response.status_code=200
-            return response         
+        response=jsonify({
+            'id':business.id,
+            'name':business.name,
+            'description':business.description,
+            'location':business.location,
+            'contact':business.contact,
+            'category':business.category
+        })
 
-        elif request.method == 'DELETE':
-            business.delete_business()
-            message="business successfully deleted"
-            response=jsonify({"message":message,"status_code":200})
-            response.status_code=200
+        response.status_code=200
+        return response
+
+    @app.route('/api/v2/businesses/<int:id>', methods=['PUT'])
+    def edit_business(id):
+        business=Business.query.filter_by(id=id).first()
+        if not business:
+            #check if the business exists
+            message="business does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
             return response
 
-        else:
-            #first get data from the input
+        #get access token from the header
+        auth_header=request.headers.get('Authorization')
+        access_token=auth_header.split(" ")[1]
+
+        if access_token:
+            #if access token exists, user can edit business
+            #get data from the requested data
+            business_owner=User.decode_token(access_token)
+
+            
             name = str(request.data.get('name', ''))          
             description=str(request.data.get('description', ''))
             location=str(request.data.get('location', ''))
             contact=str(request.data.get('contact', ''))
             category=str(request.data.get('category',''))
-
-            #replace values in the found business
-            business.name=name
-            business.description=description
-            business.location=location
-            business.contact=contact
+            
+            #replace the details of the found business
+            business.name=name,
+            business.description=description,
+            business.location=location,
+            business.contact=contact,
             business.category=category
-
             #save the business
             business.save()
 
-            #create response with the saved business
             response=jsonify({
+
                 'id':business.id,
                 'name':business.name,
                 'description':business.description,
                 'location':business.location,
                 'contact':business.contact,
-                'category':business.category
+                'category':business.category,
+                'business_owner':business.business_owner
             })
+
             response.status_code=200
             return response
 
-    @app.route('/api/v2/businesses/<string:location>', methods=['GET'])
-    def filter_location(location):
-        """get business based on location"""
+    @app.route('/api/v2/businesses/<int:id>', methods=['DELETE'])
+    def delete_business(id):
+        business=Business.query.filter_by(id=id).first()
 
-        businesses=Business.get_business_location(location)
-        business_location=[]
-
-        if not businesses:
-            message="No business in that location"
+        if not business:
+            #check if the business exists
+            message="business does not exist"
             response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
             response.status_code=404
             return response
-        else:
-            for business in businesses:
-                obj={
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category
-                }
-                business_location.append(obj)
 
-            response=jsonify(business_location)
+
+        #get access token from the header
+        auth_header=request.headers.get('Authorization')
+        access_token=auth_header.split(" ")[1]
+
+        if access_token:
+            #if access_token exists, delete business
+            business.delete_business()
+            response=jsonify({"message":"business successfully deleted","status_code":200})
             response.status_code=200
-            return response
-
-
-    @app.route('/api/v2/businesses/<string:category>', methods=['GET'])
-    def filter_category(category):
-        """get business based on category"""
-
-        businesses=Business.get_business_category(category)
-        business_category=[]
-
-        if not businesses:
-            message="No business in that category"
-            response=jsonify({"message":message,"status_code":404})
-            response.status_code=404
-            return response
-        else:
-            for business in businesses:
-                obj={
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category
-                }
-                business_category.append(obj)
-
-            response=jsonify(business_category)
-            response.status_code=200
-            return response                
-
-                
+            return response    
 
 
 
-    
+
+
 
     return app
