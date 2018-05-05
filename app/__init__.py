@@ -183,5 +183,33 @@ def create_app(config_name):
             response.status_code=200
             return response
 
+    @app.route('/api/v2/businesses/<int:id>', methods=['DELETE'])
+    def delete_business(id):
+        business=Business.query.filter_by(id=id).first()
+
+        if not business:
+            #check if the business exists
+            message="business does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
+            return response
+
+
+        #get access token from the header
+        auth_header=request.headers.get('Authorization')
+        access_token=auth_header.split(" ")[1]
+
+        if access_token:
+            #if access_token exists, delete business
+            business.delete_business()
+            response=jsonify({"message":"business successfully deleted","status_code":200})
+            response.status_code=200
+            return response    
+
+
+
+
+
 
     return app
