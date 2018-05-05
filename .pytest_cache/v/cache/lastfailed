@@ -12,6 +12,5 @@
   "tests/test_business.py::BusinessTestCase::test_api_can_get_business_category": true,
   "tests/test_business.py::BusinessTestCase::test_api_can_get_businesses_location": true,
   "tests/test_business.py::BusinessTestCase::test_api_can_get_individual_business": true,
-  "tests/test_business.py::BusinessTestCase::test_api_can_update_business": true,
   "tests/test_business.py::BusinessTestCase::test_business_creation_for_unregistered_user": true
 }
