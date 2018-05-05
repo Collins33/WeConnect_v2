@@ -64,6 +64,16 @@ class BusinessTestCase(unittest.TestCase):
         self.add_business()
         result=self.client().get('/api/v2/businesses')
         self.assertEqual(result.status_code,200)
+
+    def test_api_can_get_business_by_id(self):
+        #register a test user and log him in
+        self.register_user()
+        result=self.login_user()
+        #get access token from the login response
+        access_token=json.loads(result.data.decode())['access_token']
+        print(access_token)
+
+
         
         
         
@@ -129,12 +139,12 @@ class BusinessTestCase(unittest.TestCase):
 #         self.assertEqual(result.status_code,200)
 
 
-    def tearDown(self):
-        """connect to current context
-        and drop all tables"""
-        with self.app.app_context():
-            db.session.remove()
-            db.drop_all()
+        def tearDown(self):
+            """connect to current context
+            and drop all tables"""
+            with self.app.app_context():
+                db.session.remove()
+                db.drop_all()
 
 
 
