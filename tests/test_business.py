@@ -100,6 +100,7 @@ class BusinessTestCase(unittest.TestCase):
 
         edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,200)
+        
 
     def test_api_update_nonexistent_business(self):
         self.register_user()
