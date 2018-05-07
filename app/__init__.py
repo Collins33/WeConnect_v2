@@ -26,6 +26,10 @@ def create_app(config_name):
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
 
+    """import the reviews blueprint and register it"""
+    from .reviews import review_blueprint
+    app.register_blueprint(review_blueprint)
+
     @app.route('/', methods=['GET'])
     def welcome():
         message="Welcome to WeConnect"
