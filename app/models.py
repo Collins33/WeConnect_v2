@@ -138,13 +138,20 @@ class Review(db.Model):
     rating=db.Column(db.Integer)
     business_main=db.Column(db.Integer,db.ForeignKey(Business.id))
 
-    def __init__(self,opinion,rating):
+    def __init__(self,opinion,rating,business_main):
+        self.business_main=business_main
         self.opinion=opinion
         self.rating = rating
 
     def save(self):
         db.session.add(self)
-        db.session.commit()    
+        db.session.commit()
+    
+    @staticmethod
+    def get_all_reviews():
+        """return all reviews"""
+        return Review.query.all()
+
 
 
 
