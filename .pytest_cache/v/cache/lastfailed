@@ -1,0 +1,4 @@
+{
+  "tests/test_reviews.py::ReviewsTestCase::test_review_creation": true,
+  "tests/test_reviews.py::ReviewsTestCase::test_review_get_all": true
+}

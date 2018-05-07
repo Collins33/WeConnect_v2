@@ -82,7 +82,7 @@ class Business(db.Model):
     category=db.Column(db.String(300))
     location=db.Column(db.String(300))
     business_owner=db.Column(db.Integer,db.ForeignKey(User.id))
-    reviews=db.relationship('Review',order_by="review.id", cascade="all, delete-orphan")
+    reviews=db.relationship('Review',order_by="Review.id", cascade="all, delete-orphan")
 
     def __init__(self,name,description,contact,category,location,business_owner):
 
