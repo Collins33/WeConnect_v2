@@ -10,7 +10,7 @@ from flask import request, jsonify, abort,session
 db=SQLAlchemy()
 
 def create_app(config_name):
-    from app.models import Business, User
+    from app.models import Business, User, Review
     """this method wraps creation of flask-api
     object and returns it after loading the configurations"""
 
@@ -206,8 +206,38 @@ def create_app(config_name):
             response=jsonify({"message":"business successfully deleted","status_code":200})
             response.status_code=200
             return response    
+    
+    @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
+    def add_review(id):
+        opinion=str(request.data.get('opinion', ''))
+        rating=int(request.data.get('rating', ''))
 
+        new_review=Review(opinion=opinion,rating=rating,business_main=id)
 
+        new_review.save()
+
+        message="succesfully added the review"
+
+        response=jsonify({"message":message})
+        response.status_code=200
+        return response
+    
+    @app.route('/api/v2/businesses/<int:id>/reviews', methods=['GET'])
+    def get_reviews(id):
+        reviews=Review.get_all_reviews()
+
+        all_reviews=[]
+
+        for review in reviews:
+            obj={
+                "id":review.id,
+                "opinion":review.opinion,
+                "rating":review.rating
+            }
+            all_reviews.append(obj)
+        response=jsonify(all_reviews)
+        response.status_code=200
+        return response    
 
 
 
