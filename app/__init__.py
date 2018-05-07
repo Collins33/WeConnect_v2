@@ -221,7 +221,10 @@ def create_app(config_name):
         response=jsonify({"message":message})
         response.status_code=200
         return response
-
+    
+    @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
+    def get_reviews(id):
+        pass
 
 
 
