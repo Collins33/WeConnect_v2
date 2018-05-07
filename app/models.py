@@ -82,6 +82,7 @@ class Business(db.Model):
     category=db.Column(db.String(300))
     location=db.Column(db.String(300))
     business_owner=db.Column(db.Integer,db.ForeignKey(User.id))
+    reviews=db.relationship('Review',order_by="review.id", cascade="all, delete-orphan")
 
     def __init__(self,name,description,contact,category,location,business_owner):
 
@@ -128,6 +129,24 @@ class Business(db.Model):
     def get_business_category(category):
         """return businesses that match the category"""
         return Business.query.filter_by(category=category)
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    id=db.Column(db.Integer,primary_key=True)
+    opinion=db.Column(db.String(300))
+    rating=db.Column(db.Integer)
+    business_main=db.Column(db.Integer,db.ForeignKey(Business.id))
+
+    def __init__(self,opinion,rating):
+        self.opinion=opinion
+        self.rating = rating
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()    
+
+
 
 
               
