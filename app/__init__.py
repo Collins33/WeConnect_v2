@@ -222,9 +222,22 @@ def create_app(config_name):
         response.status_code=200
         return response
     
-    @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
+    @app.route('/api/v2/businesses/<int:id>/reviews', methods=['GET'])
     def get_reviews(id):
-        pass
+        reviews=Review.get_all_reviews()
+
+        all_reviews=[]
+
+        for review in reviews:
+            obj={
+                "id":review.id,
+                "opinion":review.opinion,
+                "rating":review.rating
+            }
+            all_reviews.append(obj)
+        response=jsonify(all_reviews)
+        response.status_code=200
+        return response    
 
 
 
