@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 import jwt
 from flask import current_app
 from datetime import datetime, timedelta
+import re
 
 class User(db.Model):
     __tablename__= 'users'
@@ -66,7 +67,26 @@ class User(db.Model):
             return "Expired token. Login to get a new token"
         except jwt.InvalidTokenError:
             """if token is invalid"""
-            return "Invalid token. Please register or login"        
+            return "Invalid token. Please register or login"
+
+    @staticmethod
+    def validate_email(email):
+        if re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", email):
+            return True
+        return False
+
+    @staticmethod
+    def validate_password_length(password):
+        if len(password) > 6:
+            return True
+        return False
+
+    @staticmethod
+    def validate_password_format(password):
+        if re.match(r"^[A-Za-z0-9\.\+_-]*$",password):
+            return True
+        return False    
+
 
 
 

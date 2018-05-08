@@ -29,16 +29,49 @@ class RegistrationView(MethodView):
                 #get the data from the request
                 email=post_data['email']
                 password=post_data['password']
-                user=User(email=email,password=password)
-                user.save()
+                confirm_password=post_data['confirm_password']
+                #validate email
+                valid_email=User.validate_email(email)
+                valid_password_length=User.validate_password_length(password)
+                valid_password_format=User.validate_password_format(password)
 
-                response={
-                    "message":"successfully registered user"
-                }
-                #return response to notify user that they have been registered
-                #make_response() is used for returning responses
+                if password == confirm_password and valid_email and valid_password_length and valid_password_format:
+                    user=User(email=email,password=password)
+                    user.save()
 
-                return make_response(jsonify(response)),201
+                    response={
+                        "message":"successfully registered user"
+                    }
+                    #return response to notify user that they have been registered
+                    #make_response() is used for returning responses
+
+                    return make_response(jsonify(response)),201
+
+                elif password != confirm_password:
+                    response={
+                        "message":"password and confirm_password have to match"
+                    }
+                    return make_response(jsonify(response)),400
+
+                elif not valid_email:
+                    response={
+                        "message":"enter valid email"
+                    }
+                    return make_response(jsonify(response)),400
+
+                elif not valid_password_length:
+                    response={
+                        "message":"password length should be greater than 6"
+                    }
+                    return make_response(jsonify(response)),400
+
+                else:
+                    response={
+                        "message":"email cannot be empty"
+                    }
+                    return make_response(jsonify(response)),400
+
+
 
             except Exception as e:
                 response={
@@ -61,7 +94,6 @@ class LoginView(MethodView):
     def post(self):
         """the method to handle post request to the login route"""
         try:
-
             """get the user who matches the email entered"""
             user=User.query.filter_by(email=request.data['email']).first()
 

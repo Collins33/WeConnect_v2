@@ -51,12 +51,52 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(result_response["message"],"you logged in successfully")
 
     def test_non_registered_user(self):
-        not_a_user = {
-            'email': 'not_a_user@example.com',
-            'password': 'nope'
-        }
+        
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,401)
+
+    def test_password_confirm_not_match(self):
+        user={
+            'email': 'not_a_user@example.com',
+            'password': 'nope',
+            'confirm_password':'nope2'
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        self.assertIn("password and confirm_password have to match", str(result.data))
+        
+    def test_invalid_email(self):
+        user={
+            'email': 'collins.com',
+            'password': 'nope',
+            'confirm_password':'nope'
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        self.assertIn("enter valid email",str(result.data))
+
+    def test_short_password(self):
+        user={
+            'email': 'collinsnjau39@gmail.com',
+            'password': 'nope',
+            'confirm_password':'nope'
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        self.assertIn("password length should be greater than 6",str(result.data))
+
+    def test_empty_password(self):
+        user={
+            'email': 'collinsnjau39@gmail.com',
+            'password': '       ',
+            'confirm_password':'       '
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        self.assertIn("email cannot be empty",str(result.data))
+
+
+
 
     def tearDown(self):
         with self.app.app_context():
