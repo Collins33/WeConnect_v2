@@ -7,7 +7,7 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 -git clone https://github.com/Collins33/WeConnect_v2.git
 
--cd WeConnect
+-cd WeConnect_v2
 
 -virtualenv venv
 
@@ -15,8 +15,19 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 -pip install -r requirements.txt
 
+## Database
+-Ensure Postgresql is installed in your machine
+-Create database weconnect
+
+## Migrations
+-python manage.py db init
+
+-python manage.py db migrate
+
+-python manage.py db upgrade
+
 ## Running tests
-- pytest
+-pytest
 
 ### Prerequisites
 
@@ -24,7 +35,13 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 -virtual environment
 
+-postgresql
+
 ## Running it on machine
+-create .env file and add the environment variables
+
+-run source .env
+
 -flask run
 
 ## ENDPOINTS
@@ -41,7 +58,7 @@ WeConnect provides a platform that brings businesses and individuals together. T
 | GET  /api/businesses/businessId         | retrieve a single business by id   |
 | GET  /api/businesses/businessName       | retrieve a single business by name |
 | POST  /api/businesses/businessId/reviews| add a review                  |
-| GET  /api/businesses/businessId/reviews | get all reviews               |       
+| GET  /api/businesses/businessId/reviews | get all reviews for a business               |       
        
        
 
