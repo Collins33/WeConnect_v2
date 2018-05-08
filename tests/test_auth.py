@@ -68,6 +68,15 @@ class AuthTestCase(unittest.TestCase):
         result=self.client().post('/api/v2/auth/registration', data=user)
         self.assertEqual(result.status_code,400)
         
+    def test_invalid_email(self):
+        user={
+            'email': 'collins.com',
+            'password': 'nope',
+            'confirm_password':'nope'
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+
 
     def tearDown(self):
         with self.app.app_context():

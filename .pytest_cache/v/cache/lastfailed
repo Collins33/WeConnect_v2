@@ -1,1 +1,3 @@
-{}
+{
+  "tests/test_auth.py::AuthTestCase::test_invalid_email": true
+}
