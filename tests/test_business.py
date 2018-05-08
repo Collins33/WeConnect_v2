@@ -135,6 +135,7 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         result=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
         self.assertEqual(result.status_code,400)#bad request
+       
            
     def tearDown(self):
         """connect to current context
