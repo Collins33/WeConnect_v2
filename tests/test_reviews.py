@@ -17,11 +17,12 @@ class ReviewsTestCase(unittest.TestCase):
             #create db tables
             db.create_all()
 
-    def register_user(self,email="collins.muru@andela.com",password="123test"):
+    def register_user(self,email="collins.muru@andela.com",password="123test",confirm_password="123test"):
         """this method will register a user"""
         user_data={
             'email':email,
-            'password':password
+            'password':password,
+            'confirm_password':confirm_password
         }
         return self.client().post('/api/v2/auth/registration',data=user_data)
 

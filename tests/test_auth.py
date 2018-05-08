@@ -53,10 +53,21 @@ class AuthTestCase(unittest.TestCase):
     def test_non_registered_user(self):
         not_a_user = {
             'email': 'not_a_user@example.com',
-            'password': 'nope'
+            'password': 'nope',
+            'confirm_password':'nope'
         }
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,401)
+
+    def test_password_confirm_not_match(self):
+        user={
+            'email': 'not_a_user@example.com',
+            'password': 'nope',
+            'confirm_password':'nope2'
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        
 
     def tearDown(self):
         with self.app.app_context():
