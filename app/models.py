@@ -150,6 +150,13 @@ class Business(db.Model):
         """return businesses that match the category"""
         return Business.query.filter_by(category=category)
 
+    @staticmethod
+    def validate_business_details(detail):
+        if re.match(r"^[A-Za-z0-9\.\+_-]*$",detail):
+            return True
+        return False 
+
+
 class Review(db.Model):
     __tablename__ = 'reviews'
 

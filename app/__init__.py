@@ -52,24 +52,38 @@ def create_app(config_name):
             location=str(request.data.get('location', ''))
             contact=str(request.data.get('contact', ''))
             category=str(request.data.get('category',''))
+            #validate user data
+            validate_name=Business.validate_business_details(name)
+            
 
             #ensure all the data is there
             if name and description and location and contact and category:
-                business=Business(name=name,description=description,location=location,contact=contact,category=category,business_owner=user_id)
-                business.save()
 
-                creation_response=jsonify({
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category,
-                    'business_owner':business.business_owner
-                })
+                if validate_name:
 
-                creation_response.status_code=201
-                return creation_response
+                    business=Business(name=name,description=description,location=location,contact=contact,category=category,business_owner=user_id)
+                    business.save()
+
+                    creation_response=jsonify({
+                        'id':business.id,
+                        'name':business.name,
+                        'description':business.description,
+                        'location':business.location,
+                        'contact':business.contact,
+                        'category':business.category,
+                        'business_owner':business.business_owner
+                    })
+
+                    creation_response.status_code=201
+                    return creation_response
+
+                else:
+                    message="details cannot be empty string"
+                    #400 is bad request
+                    response=jsonify({'message':message,'status':400})
+                    response.status_code=400
+                    return response
+
                 
 
             else:

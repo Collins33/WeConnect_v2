@@ -10,7 +10,7 @@ class ReviewsTestCase(unittest.TestCase):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
         self.review={"opinion":"Good business with good food","rating":5}
-        self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.business={'name':'crastycrab','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
 
         #bind app to the current context
         with self.app.app_context():
