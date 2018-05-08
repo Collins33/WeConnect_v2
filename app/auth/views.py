@@ -30,8 +30,10 @@ class RegistrationView(MethodView):
                 email=post_data['email']
                 password=post_data['password']
                 confirm_password=post_data['confirm_password']
+                #validate email
+                valid_email=User.validate_email(email)
 
-                if password == confirm_password:
+                if password == confirm_password and valid_email:
                     user=User(email=email,password=password)
                     user.save()
 
@@ -43,11 +45,19 @@ class RegistrationView(MethodView):
 
                     return make_response(jsonify(response)),201
 
-                else:
+                elif password != confirm_password:
                     response={
                         "message":"password and confirm_password have to match"
                     }
                     return make_response(jsonify(response)),400
+
+                else:
+                    response={
+                        "message":"enter valid email"
+                    }
+                    return make_response(jsonify(response)),400
+
+
                     
                         
 
