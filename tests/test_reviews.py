@@ -54,6 +54,11 @@ class ReviewsTestCase(unittest.TestCase):
         result=self.client().get('api/v2/businesses/1/reviews')
         self.assertEqual(result.status_code,200)
 
+    def test_review_not_exist(self):
+        self.add_business()
+        result=self.client().get('api/v2/businesses/1/reviews')
+        self.assertEqual(result.status_code,404)    
+
 
 
 

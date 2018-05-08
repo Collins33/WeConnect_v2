@@ -1,1 +1,3 @@
-{}
+{
+  "tests/test_reviews.py::ReviewsTestCase::test_review_not_exist": true
+}
