@@ -179,6 +179,11 @@ class Review(db.Model):
         """return all reviews"""
         return Review.query.all()
 
+    @staticmethod
+    def get_business_review(id):
+        #get reviews for a particular business
+        return Review.query.filter_by(business_main=id)    
+
 
 
 
