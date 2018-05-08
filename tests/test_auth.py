@@ -77,6 +77,17 @@ class AuthTestCase(unittest.TestCase):
         result=self.client().post('/api/v2/auth/registration', data=user)
         self.assertEqual(result.status_code,400)
 
+    def test_short_password(self):
+        user={
+            'email': 'collinsnjau39@gmail.com',
+            'password': 'nope',
+            'confirm_password':'nope'
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        self.assertIn("password length should be greater than 6",str(result.data))
+
+
 
     def tearDown(self):
         with self.app.app_context():

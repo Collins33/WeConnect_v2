@@ -32,8 +32,9 @@ class RegistrationView(MethodView):
                 confirm_password=post_data['confirm_password']
                 #validate email
                 valid_email=User.validate_email(email)
+                valid_password_length=User.validate_password_length(password)
 
-                if password == confirm_password and valid_email:
+                if password == confirm_password and valid_email and valid_password_length:
                     user=User(email=email,password=password)
                     user.save()
 
@@ -51,15 +52,18 @@ class RegistrationView(MethodView):
                     }
                     return make_response(jsonify(response)),400
 
-                else:
+                elif not valid_email:
                     response={
                         "message":"enter valid email"
                     }
                     return make_response(jsonify(response)),400
 
+                else:
+                    response={
+                        "message":"password length should be greater than 6"
+                    }
+                    return make_response(jsonify(response)),400
 
-                    
-                        
 
             except Exception as e:
                 response={
@@ -82,7 +86,6 @@ class LoginView(MethodView):
     def post(self):
         """the method to handle post request to the login route"""
         try:
-
             """get the user who matches the email entered"""
             user=User.query.filter_by(email=request.data['email']).first()
 
