@@ -11,10 +11,11 @@ class BusinessTestCase(unittest.TestCase):
         create test variables"""
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
-        self.business={'name':'crasty crab','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
-        self.secondBusiness={'name':'chum bucket','description':'Fast food restaurant','contact':'0702848031','category':'fast food','location':'atlantic'}
-        self.business_test={'name':'crasty crab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
-        self.business_edit={'name':'chum bucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.business=self.business={'name':'crastycrab','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
+        self.secondBusiness={'name':'chumbucket','description':'Fast food restaurant','contact':'0702848031','category':'fast food','location':'atlantic'}
+        self.business_test={'name':'crastycrab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
+        self.business_edit={'name':'chumbucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.empty_name={'name':'  ','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
 
         #bind app to current context
         with self.app.app_context():
@@ -68,7 +69,7 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(response.status_code,201)
-        self.assertIn('crasty crab',str(response.data))
+        self.assertIn('crastycrab',str(response.data))
 
 
     def test_api_can_get_all_businesses(self):
@@ -83,7 +84,7 @@ class BusinessTestCase(unittest.TestCase):
         self.add_business() #registers a user and adds a business
         result=self.client().get('/api/v2/businesses/1')
         self.assertEqual(result.status_code,200) 
-        self.assertIn('crasty crab',str(result.data))
+        self.assertIn('crastycrab',str(result.data))
 
     def test_api_get_business_not_exist(self):
         #add two businesses
@@ -126,7 +127,15 @@ class BusinessTestCase(unittest.TestCase):
         result=self.client().get('/api/v2/businesses/1')
         self.assertEqual(result.status_code,404)
 
-             
+    def test_register_business_empty_string(self):
+        self.register_user()
+        result=self.login_user()
+        #get the access token
+        access_token=json.loads(result.data.decode())['access_token']
+        #add the access token to the header
+        result=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
+        self.assertEqual(result.status_code,400)#bad request
+           
     def tearDown(self):
         """connect to current context
         and drop all tables"""

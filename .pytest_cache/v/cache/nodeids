@@ -14,6 +14,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_get_business_not_exist",
   "tests/test_business.py::BusinessTestCase::test_api_update_nonexistent_business",
   "tests/test_business.py::BusinessTestCase::test_business_creation",
+  "tests/test_business.py::BusinessTestCase::test_register_business_empty_string",
   "tests/test_reviews.py::ReviewsTestCase::test_review_creation",
   "tests/test_reviews.py::ReviewsTestCase::test_review_get_all"
 ]
