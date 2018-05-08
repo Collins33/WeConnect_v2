@@ -51,11 +51,7 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(result_response["message"],"you logged in successfully")
 
     def test_non_registered_user(self):
-        not_a_user = {
-            'email': 'not_a_user@example.com',
-            'password': 'nope',
-            'confirm_password':'nope'
-        }
+        
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,401)
 
@@ -67,6 +63,7 @@ class AuthTestCase(unittest.TestCase):
         }
         result=self.client().post('/api/v2/auth/registration', data=user)
         self.assertEqual(result.status_code,400)
+        self.assertIn("password and confirm_password have to match", str(result.data))
         
     def test_invalid_email(self):
         user={
@@ -76,6 +73,7 @@ class AuthTestCase(unittest.TestCase):
         }
         result=self.client().post('/api/v2/auth/registration', data=user)
         self.assertEqual(result.status_code,400)
+        self.assertIn("enter valid email",str(result.data))
 
     def test_short_password(self):
         user={
