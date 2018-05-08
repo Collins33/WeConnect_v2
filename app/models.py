@@ -79,6 +79,12 @@ class User(db.Model):
     def validate_password_length(password):
         if len(password) > 6:
             return True
+        return False
+
+    @staticmethod
+    def validate_password_format(password):
+        if re.match(r"^[A-Za-z0-9\.\+_-]*$",password):
+            return True
         return False    
 
 

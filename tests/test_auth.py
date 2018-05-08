@@ -85,6 +85,17 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,400)
         self.assertIn("password length should be greater than 6",str(result.data))
 
+    def test_empty_password(self):
+        user={
+            'email': 'collinsnjau39@gmail.com',
+            'password': '       ',
+            'confirm_password':'       '
+        }
+        result=self.client().post('/api/v2/auth/registration', data=user)
+        self.assertEqual(result.status_code,400)
+        self.assertIn("email cannot be empty",str(result.data))
+
+
 
 
     def tearDown(self):

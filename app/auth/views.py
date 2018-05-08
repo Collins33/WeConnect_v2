@@ -33,8 +33,9 @@ class RegistrationView(MethodView):
                 #validate email
                 valid_email=User.validate_email(email)
                 valid_password_length=User.validate_password_length(password)
+                valid_password_format=User.validate_password_format(password)
 
-                if password == confirm_password and valid_email and valid_password_length:
+                if password == confirm_password and valid_email and valid_password_length and valid_password_format:
                     user=User(email=email,password=password)
                     user.save()
 
@@ -58,11 +59,18 @@ class RegistrationView(MethodView):
                     }
                     return make_response(jsonify(response)),400
 
-                else:
+                elif not valid_password_length:
                     response={
                         "message":"password length should be greater than 6"
                     }
                     return make_response(jsonify(response)),400
+
+                else:
+                    response={
+                        "message":"email cannot be empty"
+                    }
+                    return make_response(jsonify(response)),400
+
 
 
             except Exception as e:
