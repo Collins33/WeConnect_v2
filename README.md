@@ -17,6 +17,7 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 ## Database
 -Ensure Postgresql is installed in your machine
+
 -Create database weconnect
 
 ## Migrations
