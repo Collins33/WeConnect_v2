@@ -223,6 +223,23 @@ def create_app(config_name):
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
     def add_review(id):
+        businesses = Business.check_business_exists(id)
+        all_business=[]
+
+        for business in businesses:
+            obj={
+                "name":business.name
+            }
+            all_business.append(obj)
+
+        if not all_business:
+            message="cannot add review business that does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
+            return response
+
+
         opinion=str(request.data.get('opinion', ''))
         rating=int(request.data.get('rating', ''))
 
@@ -238,6 +255,22 @@ def create_app(config_name):
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['GET'])
     def get_reviews(id):
+        businesses = Business.check_business_exists(id)
+        all_business=[]
+
+        for business in businesses:
+            obj={
+                "name":business.name
+            }
+            all_business.append(obj)
+
+        if not all_business:
+            message="cannot get review business that does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
+            return response    
+
         reviews=Review.get_business_review(id)#RETURNS REVIEWS FOR THAT BUSINESS ID
         all_reviews=[]
         for review in reviews:
@@ -247,6 +280,7 @@ def create_app(config_name):
                 "rating":review.rating
             }
             all_reviews.append(obj)
+            
         if not all_reviews:
             message="no reviews available"
             response=jsonify({"message":message,"status_code":404})

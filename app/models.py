@@ -154,7 +154,12 @@ class Business(db.Model):
     def validate_business_details(detail):
         if re.match(r"^[A-Za-z0-9\.\+_-]*$",detail):
             return True
-        return False 
+        return False
+
+    @staticmethod
+    def check_business_exists(id):
+        return Business.query.filter_by(id=id)
+         
 
 
 class Review(db.Model):
