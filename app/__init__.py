@@ -255,6 +255,22 @@ def create_app(config_name):
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['GET'])
     def get_reviews(id):
+        businesses = Business.check_business_exists(id)
+        all_business=[]
+
+        for business in businesses:
+            obj={
+                "name":business.name
+            }
+            all_business.append(obj)
+
+        if not all_business:
+            message="cannot get review business that does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
+            return response    
+
         reviews=Review.get_business_review(id)#RETURNS REVIEWS FOR THAT BUSINESS ID
         all_reviews=[]
         for review in reviews:

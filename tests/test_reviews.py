@@ -68,7 +68,7 @@ class ReviewsTestCase(unittest.TestCase):
         self.add_business()
         self.client().post('api/v2/businesses/1/reviews', data=self.review)
         result=self.client().get('api/v2/businesses/5/reviews')
-        self.assertEqual(result.status_code,400)
+        self.assertEqual(result.status_code,404)
                   
 
 
