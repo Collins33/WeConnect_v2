@@ -223,6 +223,23 @@ def create_app(config_name):
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
     def add_review(id):
+        businesses = Business.check_business_exists(id)
+        all_business=[]
+
+        for business in businesses:
+            obj={
+                "name":business.name
+            }
+            all_business.append(obj)
+
+        if not all_business:
+            message="cannot add review business that does not exist"
+            response=jsonify({"message":message,"status_code":404})
+            #404 if business does not exist
+            response.status_code=404
+            return response
+
+
         opinion=str(request.data.get('opinion', ''))
         rating=int(request.data.get('rating', ''))
 

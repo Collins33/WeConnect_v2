@@ -158,10 +158,8 @@ class Business(db.Model):
 
     @staticmethod
     def check_business_exists(id):
-        business=Business.query.filter_by(id=id)   
-        if business:
-            return True
-        return False 
+        return Business.query.filter_by(id=id)
+         
 
 
 class Review(db.Model):
