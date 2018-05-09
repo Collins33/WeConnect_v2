@@ -242,7 +242,7 @@ def create_app(config_name):
         all_reviews=[]
         for review in reviews:
             obj={
-                "id":review.id,
+                
                 "opinion":review.opinion,
                 "rating":review.rating
             }
