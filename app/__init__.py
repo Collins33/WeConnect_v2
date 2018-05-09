@@ -247,6 +247,7 @@ def create_app(config_name):
                 "rating":review.rating
             }
             all_reviews.append(obj)
+            
         if not all_reviews:
             message="no reviews available"
             response=jsonify({"message":message,"status_code":404})

@@ -57,7 +57,19 @@ class ReviewsTestCase(unittest.TestCase):
     def test_review_not_exist(self):
         self.add_business()
         result=self.client().get('api/v2/businesses/1/reviews')
-        self.assertEqual(result.status_code,404)   
+        self.assertEqual(result.status_code,404)
+
+    def test_add_review_business_not_exist(self):
+        result=self.client().post('api/v2/businesses/10/reviews', data=self.review)
+        self.assertEqual(result.status_code,400)
+        self.assertIn('cannot add review business that does not exist', str(result.data))
+
+    def test_get_review_business_not_exist(self):
+        self.add_business()
+        self.client().post('api/v2/businesses/1/reviews', data=self.review)
+        result=self.client().get('api/v2/businesses/5/reviews')
+        self.assertEqual(result.status_code,400)
+                  
 
 
 

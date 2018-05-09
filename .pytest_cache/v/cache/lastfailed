@@ -1,1 +1,4 @@
-{}
+{
+  "tests/test_reviews.py::ReviewsTestCase::test_add_review_business_not_exist": true,
+  "tests/test_reviews.py::ReviewsTestCase::test_get_review_business_not_exist": true
+}
