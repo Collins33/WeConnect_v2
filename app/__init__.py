@@ -240,7 +240,6 @@ def create_app(config_name):
     def get_reviews(id):
         reviews=Review.get_business_review(id)#RETURNS REVIEWS FOR THAT BUSINESS ID
         all_reviews=[]
-
         for review in reviews:
             obj={
                 "id":review.id,
