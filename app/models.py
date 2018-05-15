@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import re
 
 class Access_token(db.Model):
-    __tablename__= 'users'
+    __tablename__= 'access_tokens'
     id=db.Column(db.Integer,primary_key=True)
     token=db.Column(db.String(1000),nullable=False,unique=True)
 
