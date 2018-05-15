@@ -22,7 +22,12 @@ class AuthTestCase(unittest.TestCase):
 
     def register_user(self):
         result=self.client().post('/api/v2/auth/registration', data=self.user)
-        return result        
+        return result
+
+    def log_in(self):
+        self.register_user()
+        result= self.client().post('/api/v2/auth/login', data=self.user)
+        return result       
 
     def test_registration(self):
         res=self.client().post('/api/v2/auth/registration', data=self.user)
@@ -49,6 +54,11 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(res.status_code,200)
         result_response=json.loads(res.data.decode())
         self.assertEqual(result_response["message"],"you logged in successfully")
+
+    def test_logout_user(self):
+        """test if api can logout a user"""
+        self.register_user()
+
 
     def test_non_registered_user(self):
         
