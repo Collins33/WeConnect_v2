@@ -58,6 +58,11 @@ class AuthTestCase(unittest.TestCase):
     def test_logout_user(self):
         """test if api can logout a user"""
         self.register_user()
+        result=self.log_in()
+        access_token=json.loads(result.data.decode())['access_token']
+        response=self.client().post('/api/v2/auth/log-out',data={"access_token":access_token})
+        self.assertEqual(response.status_code,200)
+        self.assertIn("You have successfully logged out",str(response.data))
 
 
     def test_non_registered_user(self):
