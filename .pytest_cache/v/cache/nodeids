@@ -17,6 +17,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_update_nonexistent_business",
   "tests/test_business.py::BusinessTestCase::test_business_creation",
   "tests/test_business.py::BusinessTestCase::test_business_creation_user_logged_out",
+  "tests/test_business.py::BusinessTestCase::test_logged_out_user_cannot_delete_business",
   "tests/test_business.py::BusinessTestCase::test_register_business_empty_string",
   "tests/test_reviews.py::ReviewsTestCase::test_add_review_business_not_exist",
   "tests/test_reviews.py::ReviewsTestCase::test_get_review_business_not_exist",

@@ -223,13 +223,24 @@ def create_app(config_name):
         #get access token from the header
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
-
-        if access_token:
+        
+        valid_token=Access_token.query.filter_by(token=access_token).first()
+        if not valid_token:
             #if access_token exists, delete business
             business.delete_business()
             response=jsonify({"message":"business successfully deleted","status_code":200})
             response.status_code=200
-            return response    
+            return response
+
+        else:
+            """user is not legit"""
+            message = "You are not logged in. Please log in"
+            response=jsonify({
+                "message":message
+            })
+            response.status_code=403
+            return response
+
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
     def add_review(id):
