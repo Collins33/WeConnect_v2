@@ -16,6 +16,7 @@ class BusinessTestCase(unittest.TestCase):
         self.business_test={'name':'crastycrab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
         self.business_edit={'name':'chumbucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
         self.empty_name={'name':'  ','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
+        self.empty_update={'name':'','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
 
         #bind app to current context
         with self.app.app_context():
@@ -117,6 +118,17 @@ class BusinessTestCase(unittest.TestCase):
         edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,200)
 
+    def test_api_cannot_update_business_fields_missing(self):
+        self.register_user()
+        result=self.login_user()
+        #get the access token
+        access_token=json.loads(result.data.decode())['access_token']
+        #add the access token to the header
+        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.empty_update)
+        self.assertEqual(edit_response.status_code,400)
+        self.assertIn("No field can be empty when updating a business",str(edit_response.data))
+        
     def test_api_logged_out_user_cannot_update_business(self):
         self.register_user()
         result=self.login_user()
