@@ -186,28 +186,37 @@ def create_app(config_name):
             contact=str(request.data.get('contact', ''))
             category=str(request.data.get('category',''))
             
-            #replace the details of the found business
-            business.name=name,
-            business.description=description,
-            business.location=location,
-            business.contact=contact,
-            business.category=category
-            #save the business
-            business.save()
+            if name and description and location and contact and category:
 
-            response=jsonify({
+                #replace the details of the found business
+                business.name=name,
+                business.description=description,
+                business.location=location,
+                business.contact=contact,
+                business.category=category
+                #save the business
+                business.save()
 
-                'id':business.id,
-                'name':business.name,
-                'description':business.description,
-                'location':business.location,
-                'contact':business.contact,
-                'category':business.category,
-                'business_owner':business.business_owner
-            })
+                response=jsonify({
+                    'id':business.id,
+                    'name':business.name,
+                    'description':business.description,
+                    'location':business.location,
+                    'contact':business.contact,
+                    'category':business.category,
+                    'business_owner':business.business_owner
+                })
 
-            response.status_code=200
-            return response
+                response.status_code=200
+                return response
+
+            else:
+                message="No field can be empty when updating a business"
+                response=jsonify({
+                    "message":message,"status":400
+                })
+                response.status_code=400
+                return response 
 
         else:
             """user is not legit"""

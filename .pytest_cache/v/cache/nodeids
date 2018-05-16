@@ -12,6 +12,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
   "tests/test_business.py::BusinessTestCase::test_api_can_get_business_by_id",
   "tests/test_business.py::BusinessTestCase::test_api_can_update_business",
+  "tests/test_business.py::BusinessTestCase::test_api_cannot_update_business_fields_missing",
   "tests/test_business.py::BusinessTestCase::test_api_get_business_not_exist",
   "tests/test_business.py::BusinessTestCase::test_api_logged_out_user_cannot_update_business",
   "tests/test_business.py::BusinessTestCase::test_api_update_nonexistent_business",
