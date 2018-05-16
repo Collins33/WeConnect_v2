@@ -75,10 +75,6 @@ class BusinessTestCase(unittest.TestCase):
         #add business without registering a user and logging them in
         response=self.client().post('/api/v2/businesses',data=self.business)
         self.assertEqual(response.status_code,403)
-        
-
-
-
 
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""

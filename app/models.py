@@ -15,7 +15,15 @@ class Access_token(db.Model):
 
     def save(self):
         db.session.add(self)
-        db.session.commit()    
+        db.session.commit()
+    
+    @staticmethod
+    def validate_token(token):
+        """returns true if the token is in the database"""
+        token=Access_token.query.filter_by(token=token)
+        if token:
+            return True
+        return False        
 
 
 class User(db.Model):
