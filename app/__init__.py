@@ -34,27 +34,6 @@ def create_app(config_name):
         response.status_code=201
         return response
 
-    @app.route('/api/v2/auth/log-out',methods=["POST"])
-    def log_out():
-
-        #get access token from the header
-        auth_header=request.headers.get('Authorization')
-        access_token=auth_header.split(" ")[1]
-             
-        if access_token:
-
-            my_token=Access_token(token=access_token)
-            my_token.save
-            message="You have successfully logged out"
-            response=jsonify({
-                "message":message,"status":200
-            })
-            response.status_code=200
-            return response
-
-            
-
-
 
     """BUSINESS ENDPOINTS"""
     @app.route('/api/v2/businesses',methods=['POST'])
