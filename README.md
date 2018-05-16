@@ -2,6 +2,7 @@
 
 WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with using an api
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fc3b48f3c8ae41c281b52e3055612cfc)](https://www.codacy.com/app/Collins33/WeConnect_v2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Collins33/WeConnect_v2&amp;utm_campaign=Badge_Grade)
 
 ## Getting Started
 
