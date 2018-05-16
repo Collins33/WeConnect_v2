@@ -71,6 +71,14 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(response.status_code,201)
         self.assertIn('crastycrab',str(response.data))
 
+    def test_business_creation_user_logged_out(self):
+        #add business without registering a user and logging them in
+        response=self.client().post('/api/v2/businesses',data=self.business)
+        self.assertEqual(response.status_code,403)
+        
+
+
+
 
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
