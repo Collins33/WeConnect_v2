@@ -125,23 +125,7 @@ class LoginView(MethodView):
             return make_response(jsonify(response)),500
 
 
-class LogoutView(MethodView):
 
-    def post(self):
-
-        #get the access token
-
-        auth_header=request.headers.get('Authorization')
-        access_token=auth_header.split(" ")[1]
-
-        access=Access_token(token=access_token)
-        access.save()
-
-        response={
-            "message":"You have successfully logged out"
-        }
-
-        return make_response(jsonify(response)),200
 
 
 
@@ -151,10 +135,10 @@ CAN TAKE REQUESTS AND RETURN RESPONSES"""
 
 registration_view=RegistrationView.as_view('registration_view')
 login_view=LoginView.as_view('login_view')
-logout_view=LogoutView.as_view('logout_view')
+
 
 """add url rule to the blueprint"""
 """pass in the url, view and method"""
 auth_blueprint.add_url_rule('/api/v2/auth/registration',view_func=registration_view,methods=['POST'])
 auth_blueprint.add_url_rule('/api/v2/auth/login',view_func=login_view,methods=['POST'])
-auth_blueprint.add_url_rule('/api/v2/auth/log-out',view_func=logout_view,methods=['POST'])            
+            

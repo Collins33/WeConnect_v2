@@ -26,7 +26,7 @@ class AuthTestCase(unittest.TestCase):
 
     def log_in(self):
         self.register_user()
-        result= self.client().post('/api/v2/auth/login', data=self.user)
+        result=self.client().post('/api/v2/auth/login', data=self.user)
         return result       
 
     def test_registration(self):
@@ -60,7 +60,8 @@ class AuthTestCase(unittest.TestCase):
         self.register_user()
         result=self.log_in()
         access_token=json.loads(result.data.decode())['access_token']
-        response=self.client().post('/api/v2/auth/log-out',data={"access_token":access_token})
+        
+        response=self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
         self.assertEqual(response.status_code,200)
         self.assertIn("You have successfully logged out",str(response.data))
 
