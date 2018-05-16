@@ -198,7 +198,6 @@ def create_app(config_name):
                 business.save()
 
                 response=jsonify({
-
                     'id':business.id,
                     'name':business.name,
                     'description':business.description,
