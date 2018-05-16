@@ -14,7 +14,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 class TestingConfig(Config):
-    """Configurations for Testing, with a separate test database."""
+    """Configurations for Testing, with a separate test database. Used during testing"""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'postgresql://collinsnjau:wrestlemania34@localhost/test_db'
     DEBUG = True
