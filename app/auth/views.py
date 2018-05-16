@@ -133,7 +133,7 @@ class LogoutView(MethodView):
         if access_token:
 
             my_token=Access_token(token=access_token)
-            my_token.save
+            my_token.save()
             message="You have successfully logged out"
             response=jsonify({
                 "message":message,"status":200

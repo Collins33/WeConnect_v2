@@ -41,8 +41,9 @@ def create_app(config_name):
         #get access token from the header
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
+        valid_token=Access_token.query.filter_by(token=access_token).first() #return true if token is valid
 
-        if access_token:
+        if not valid_token:
             """user is legit"""
             #decode the access_token and get the user_id
             user_id=User.decode_token(access_token)
@@ -84,23 +85,20 @@ def create_app(config_name):
                     response=jsonify({'message':message,'status':400})
                     response.status_code=400
                     return response
-
-                
-
             else:
                 message="Enter all the details"
-                #400 is bad request
                 response=jsonify({'message':message,'status':400})
                 response.status_code=400
                 return response
 
-        # else:
-        #     """user is not legit"""
-        #     message = user_id
-        #     response = {
-        #             'message': message
-        #         }
-        #     return make_response(jsonify(response)), 401
+        else:
+            """user is not legit"""
+            message = "You are not logged in. Please log in"
+            response=jsonify({
+                "message":message
+            })
+            response.status_code=403
+            return response
 
 
 
