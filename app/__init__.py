@@ -160,8 +160,9 @@ def create_app(config_name):
         #get access token from the header
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
-
-        if access_token:
+        
+        valid_token=Access_token.query.filter_by(token=access_token).first() 
+        if not valid_token:
             #if access token exists, user can edit business
             #get data from the requested data
             business_owner=User.decode_token(access_token)
@@ -195,6 +196,16 @@ def create_app(config_name):
 
             response.status_code=200
             return response
+
+        else:
+            """user is not legit"""
+            message = "You are not logged in. Please log in"
+            response=jsonify({
+                "message":message
+            })
+            response.status_code=403
+            return response
+
 
     @app.route('/api/v2/businesses/<int:id>', methods=['DELETE'])
     def delete_business(id):
