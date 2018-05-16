@@ -167,9 +167,6 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(del_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(del_response.data))
         
-        
-
-
     def test_register_business_empty_string(self):
         self.register_user()
         result=self.login_user()
@@ -178,6 +175,20 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         result=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
         self.assertEqual(result.status_code,400)#bad request
+
+
+    def test_register_business_name_exists(self):
+        #register a test user and log him in
+        self.register_user()
+        result=self.login_user()
+        #get the access token
+        access_token=json.loads(result.data.decode())['access_token']
+        #add the access token to the header
+        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        second_response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.assertEqual(second_response.status_code,409)
+        self.assertIn("Business name already exists", str(second_response.data))
+
        
            
     def tearDown(self):
