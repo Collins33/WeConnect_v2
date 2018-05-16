@@ -5,6 +5,18 @@ from flask import current_app
 from datetime import datetime, timedelta
 import re
 
+class Access_token(db.Model):
+    __tablename__= 'access_tokens'
+    id=db.Column(db.Integer,primary_key=True)
+    token=db.Column(db.String(1000),nullable=False,unique=True)
+
+    def __init__(self,token):
+        self.token=token
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
 class User(db.Model):
     __tablename__= 'users'
 

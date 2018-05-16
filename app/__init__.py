@@ -10,7 +10,7 @@ from flask import request, jsonify, abort,session
 db=SQLAlchemy()
 
 def create_app(config_name):
-    from app.models import Business, User, Review
+    from app.models import Business, User, Review,Access_token
     """this method wraps creation of flask-api
     object and returns it after loading the configurations"""
 
@@ -34,14 +34,16 @@ def create_app(config_name):
         response.status_code=201
         return response
 
+
     """BUSINESS ENDPOINTS"""
     @app.route('/api/v2/businesses',methods=['POST'])
     def add_business():
         #get access token from the header
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
+        valid_token=Access_token.query.filter_by(token=access_token).first() #return true if token is valid
 
-        if access_token:
+        if not valid_token:
             """user is legit"""
             #decode the access_token and get the user_id
             user_id=User.decode_token(access_token)
@@ -83,23 +85,20 @@ def create_app(config_name):
                     response=jsonify({'message':message,'status':400})
                     response.status_code=400
                     return response
-
-                
-
             else:
                 message="Enter all the details"
-                #400 is bad request
                 response=jsonify({'message':message,'status':400})
                 response.status_code=400
                 return response
 
-        # else:
-        #     """user is not legit"""
-        #     message = user_id
-        #     response = {
-        #             'message': message
-        #         }
-        #     return make_response(jsonify(response)), 401
+        else:
+            """user is not legit"""
+            message = "You are not logged in. Please log in"
+            response=jsonify({
+                "message":message
+            })
+            response.status_code=403
+            return response
 
 
 
@@ -161,8 +160,9 @@ def create_app(config_name):
         #get access token from the header
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
-
-        if access_token:
+        
+        valid_token=Access_token.query.filter_by(token=access_token).first() 
+        if not valid_token:
             #if access token exists, user can edit business
             #get data from the requested data
             business_owner=User.decode_token(access_token)
@@ -197,6 +197,16 @@ def create_app(config_name):
             response.status_code=200
             return response
 
+        else:
+            """user is not legit"""
+            message = "You are not logged in. Please log in"
+            response=jsonify({
+                "message":message
+            })
+            response.status_code=403
+            return response
+
+
     @app.route('/api/v2/businesses/<int:id>', methods=['DELETE'])
     def delete_business(id):
         business=Business.query.filter_by(id=id).first()
@@ -213,13 +223,24 @@ def create_app(config_name):
         #get access token from the header
         auth_header=request.headers.get('Authorization')
         access_token=auth_header.split(" ")[1]
-
-        if access_token:
+        
+        valid_token=Access_token.query.filter_by(token=access_token).first()
+        if not valid_token:
             #if access_token exists, delete business
             business.delete_business()
             response=jsonify({"message":"business successfully deleted","status_code":200})
             response.status_code=200
-            return response    
+            return response
+
+        else:
+            """user is not legit"""
+            message = "You are not logged in. Please log in"
+            response=jsonify({
+                "message":message
+            })
+            response.status_code=403
+            return response
+
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
     def add_review(id):
