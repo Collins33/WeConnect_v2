@@ -82,6 +82,7 @@ class BusinessTestCase(unittest.TestCase):
 
         response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(response.status_code,403)
+        self.assertIn("You are not logged in. Please log in",str(response.data))
         
 
     def test_api_can_get_all_businesses(self):
@@ -128,6 +129,7 @@ class BusinessTestCase(unittest.TestCase):
         self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
         edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,403)
+        self.assertIn("You are not logged in. Please log in",str(edit_response.data))
 
     def test_api_update_nonexistent_business(self):
         self.register_user()
@@ -161,8 +163,9 @@ class BusinessTestCase(unittest.TestCase):
         #log out the user
 
         self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-        edit_response=self.client().delete('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token))
-        self.assertEqual(edit_response.status_code,403)
+        del_response=self.client().delete('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token))
+        self.assertEqual(del_response.status_code,403)
+        self.assertIn("You are not logged in. Please log in",str(del_response.data))
         
         
 
