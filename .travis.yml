@@ -14,5 +14,5 @@ before_script:
   - createdb test_db
 
 # command to run tests
-script: coverage run --source=app pytest
+script: - nosetests --with-coverage --cover-package=app
 after_success: coveralls
