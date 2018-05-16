@@ -57,39 +57,51 @@ def create_app(config_name):
             #validate user data
             validate_name=Business.validate_business_details(name)
             
+            business_exist=Business.query.filter_by(name=name).first()
 
-            #ensure all the data is there
-            if name and description and location and contact and category:
+            if not business_exist:
+            #first validate that the business name does not exist
+                
+                if name and description and location and contact and category:
+                #ensure all the data is there
+                    if validate_name:
 
-                if validate_name:
+                        business=Business(name=name,description=description,location=location,contact=contact,category=category,business_owner=user_id)
+                        business.save()
 
-                    business=Business(name=name,description=description,location=location,contact=contact,category=category,business_owner=user_id)
-                    business.save()
+                        creation_response=jsonify({
+                            'id':business.id,
+                            'name':business.name,
+                            'description':business.description,
+                            'location':business.location,
+                            'contact':business.contact,
+                            'category':business.category,
+                            'business_owner':business.business_owner
+                        })
 
-                    creation_response=jsonify({
-                        'id':business.id,
-                        'name':business.name,
-                        'description':business.description,
-                        'location':business.location,
-                        'contact':business.contact,
-                        'category':business.category,
-                        'business_owner':business.business_owner
-                    })
+                        creation_response.status_code=201
+                        return creation_response
 
-                    creation_response.status_code=201
-                    return creation_response
-
+                    else:
+                        message="details cannot be empty string"
+                        #400 is bad request
+                        response=jsonify({'message':message,'status':400})
+                        response.status_code=400
+                        return response
                 else:
-                    message="details cannot be empty string"
-                    #400 is bad request
+                    message="Enter all the details"
                     response=jsonify({'message':message,'status':400})
                     response.status_code=400
                     return response
+
             else:
-                message="Enter all the details"
-                response=jsonify({'message':message,'status':400})
-                response.status_code=400
-                return response
+                #if business name exists
+                message="Business name already exists"
+                response=jsonify({
+                    "message":message,'status':409
+                })
+                response.status_code=409
+                return response        
 
         else:
             """user is not legit"""
