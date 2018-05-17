@@ -24,6 +24,7 @@
   "tests/test_business.py::BusinessTestCase::test_logged_out_user_cannot_delete_business",
   "tests/test_business.py::BusinessTestCase::test_register_business_empty_string",
   "tests/test_business.py::BusinessTestCase::test_register_business_name_exists",
+  "tests/test_business.py::BusinessTestCase::test_response_no_business_in_filter",
   "tests/test_business.py::BusinessTestCase::test_search_empty_field",
   "tests/test_reviews.py::ReviewsTestCase::test_add_review_business_not_exist",
   "tests/test_reviews.py::ReviewsTestCase::test_get_review_business_not_exist",

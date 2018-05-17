@@ -1,3 +1,4 @@
 {
-  "tests/test_auth.py::AuthTestCase::test_logout_without_login": true
+  "tests/test_auth.py::AuthTestCase::test_logout_without_login": true,
+  "tests/test_business.py::BusinessTestCase::test_response_no_business_in_filter": true
 }

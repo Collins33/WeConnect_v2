@@ -308,6 +308,7 @@ def create_app(config_name):
             response=jsonify({"message":message,"status_code":404})
             response.status_code=404
             return response
+            
         else:
             for business in businesses:
                 obj={
