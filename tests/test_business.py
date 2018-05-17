@@ -17,6 +17,7 @@ class BusinessTestCase(unittest.TestCase):
         self.business_edit={'name':'chumbucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
         self.empty_name={'name':'  ','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
         self.empty_update={'name':'','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
+        self.search_param={'name':'crastycrab'}
 
         #bind app to current context
         with self.app.app_context():
@@ -101,10 +102,10 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_api_can_get_business_by_name(self):
         #you dont need to be authenticated to view or search for a business
-        self.add_business() #registers a user and adds a business
-        result=self.client().get('/api/v2/businesses/search/crasty')
-        self.assertEqual(result.status_code,200) 
-        self.assertIn('crastycrab',str(result.data))
+        self.add_business() #registers a user and adds a business called crasty crab
+        result=self.client().post('/api/v2/businesses/search', data=self.search_param)# fill form to search for it
+        self.assertEqual(result.status_code,200)#expected request status 
+        self.assertIn('crastycrab',str(result.data))# request should return the whole business
             
 
     def test_api_get_business_not_exist(self):
