@@ -1,19 +1,26 @@
 language: python
+env:
+  FLASK_CONFIG='testing'
+  DATABASE_URL="postgresql://localhost/weconnect"
+  SECRET_KEY="some-very-long-string-of-random-characters-CHANGE-TO-YOUR-LIKING"
+  EMAIL="hcbullss@gmail.com"
+  PASSWORD="hc_bullss"
 python:
-  - "3.6"
-
+  - "3.6.5"
 services:
-  - postgresql
-
-# command to install dependencies
+  -postgresql
 install:
   - pip install -r requirements.txt
-  - pip install coveralls --quiet
-
+  - pip install coveralls
 before_script:
-  - createdb test_db
-
-# command to run tests
-script: - nosetests --with-coverage --cover-package=app
-
-after_success: coveralls
+  - psql -c 'create database test_db;' -U postgres
+script:
+  - nosetests --exe -v --with-coverage --cover-package=app
+  - coveralls
+after_success:
+ - coveralls
+notifications:
+  slack:
+    on_success: never
+    on_failure: never
+  email: false
