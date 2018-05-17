@@ -1,10 +1,4 @@
 language: python
-env:
-  FLASK_CONFIG='testing'
-  DATABASE_URL="postgresql://localhost/weconnect"
-  SECRET_KEY="some-very-long-string-of-random-characters-CHANGE-TO-YOUR-LIKING"
-  EMAIL="hcbullss@gmail.com"
-  PASSWORD="hc_bullss"
 python:
   - "3.6.5"
 services:
