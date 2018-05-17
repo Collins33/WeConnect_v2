@@ -9,9 +9,6 @@ install:
 before_script:
   - psql -c 'create database test_db;' -U postgres
 
-env:
-  - ISOLATED=true
-
 script:
   - nosetests --exe -v --with-coverage
 
