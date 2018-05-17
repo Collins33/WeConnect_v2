@@ -99,6 +99,14 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,200) 
         self.assertIn('crastycrab',str(result.data))
 
+    def test_api_can_get_business_by_name(self):
+        #you dont need to be authenticated to view or search for a business
+        self.add_business() #registers a user and adds a business
+        result=self.client().get('/api/v2/businesses/search/crasty')
+        self.assertEqual(result.status_code,200) 
+        self.assertIn('crastycrab',str(result.data))
+            
+
     def test_api_get_business_not_exist(self):
         #add two businesses
         self.add_business()
