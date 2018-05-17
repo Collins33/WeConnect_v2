@@ -100,6 +100,14 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,200) 
         self.assertIn('crastycrab',str(result.data))
 
+    def test_api_can_filter_by_category(self):
+        #you dont need to be authenticated to view a business
+        self.add_business() #registers a user and adds a business
+        result=self.client().get('/api/v2/businesses/fastfood')
+        self.assertEqual(result.status_code,200) 
+        self.assertIn('crastycrab',str(result.data))
+
+
     def test_api_can_get_business_by_name(self):
         #you dont need to be authenticated to view or search for a business
         self.add_business() #registers a user and adds a business called crasty crab
