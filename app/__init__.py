@@ -268,7 +268,15 @@ def create_app(config_name):
         name = str(request.data.get('name', ''))
         if name:
             business=Business.get_business_by_name(name)#get the business
-            
+
+            if not business:
+                 #check if the business exists
+                message="Sorry but the business could not be found"
+                response=jsonify({"message":message,"status_code":404})
+                #404 if business does not exist
+                response.status_code=404
+                return response
+            #if the business exists
             response=jsonify({
             'id':business.id,
             'name':business.name,
@@ -276,7 +284,7 @@ def create_app(config_name):
             'location':business.location,
             'contact':business.contact,
             'category':business.category})
-
+            
             response.status_code=200
             return response
 
@@ -286,14 +294,6 @@ def create_app(config_name):
         #404 if business does not exist
         response.status_code=400
         return response    
-
-
-
-
-
-       
-               
-
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])
     def add_review(id):

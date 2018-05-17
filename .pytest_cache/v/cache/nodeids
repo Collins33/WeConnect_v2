@@ -16,6 +16,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_cannot_update_business_fields_missing",
   "tests/test_business.py::BusinessTestCase::test_api_get_business_not_exist",
   "tests/test_business.py::BusinessTestCase::test_api_logged_out_user_cannot_update_business",
+  "tests/test_business.py::BusinessTestCase::test_api_response_for_search_not_exist",
   "tests/test_business.py::BusinessTestCase::test_api_update_nonexistent_business",
   "tests/test_business.py::BusinessTestCase::test_business_creation",
   "tests/test_business.py::BusinessTestCase::test_business_creation_user_logged_out",
