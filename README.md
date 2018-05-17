@@ -5,6 +5,8 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fc3b48f3c8ae41c281b52e3055612cfc)](https://www.codacy.com/app/Collins33/WeConnect_v2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Collins33/WeConnect_v2&amp;utm_campaign=Badge_Grade)
 
+[![Coverage Status](https://coveralls.io/repos/github/Collins33/WeConnect_v2/badge.svg?branch=master)](https://coveralls.io/github/Collins33/WeConnect_v2?branch=master)
+
 
 ## Getting Started
 
