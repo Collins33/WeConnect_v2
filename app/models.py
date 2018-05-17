@@ -140,7 +140,12 @@ class Business(db.Model):
     @staticmethod
     def get(owner):
         """this gets all the business for a particular user"""
-        return Business.query.filter_by(business_owner=owner)    
+        return Business.query.filter_by(business_owner=owner)
+
+    @staticmethod
+    def get_business_by_name(name):
+        """this method should return list with business that matches the name"""
+        return Business.query.filter_by(name=name)    
 
     def delete_business(self):
         """deletes a business"""
