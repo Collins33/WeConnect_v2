@@ -252,7 +252,6 @@ def create_app(config_name):
             response=jsonify({"message":"business successfully deleted","status_code":200})
             response.status_code=200
             return response
-
         else:
             """user is not legit"""
             message = "You are not logged in. Please log in"
@@ -261,6 +260,39 @@ def create_app(config_name):
             })
             response.status_code=403
             return response
+
+
+    @app.route('/api/v2/businesses/search', methods=['POST'])
+    def search_by_name():
+        """gets the name user searches for and returns corresponding business"""
+        name = str(request.data.get('name', ''))
+        if name:
+            business=Business.get_business_by_name(name)#get the business
+            
+            response=jsonify({
+            'id':business.id,
+            'name':business.name,
+            'description':business.description,
+            'location':business.location,
+            'contact':business.contact,
+            'category':business.category})
+
+            response.status_code=200
+            return response
+
+        #check if the business exists
+        message="please enter name to search"
+        response=jsonify({"message":message,"status_code":400})
+        #404 if business does not exist
+        response.status_code=400
+        return response    
+
+
+
+
+
+       
+               
 
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['POST'])

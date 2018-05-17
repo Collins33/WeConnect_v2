@@ -145,7 +145,7 @@ class Business(db.Model):
     @staticmethod
     def get_business_by_name(name):
         """this method should return list with business that matches the name"""
-        return Business.query.filter_by(name=name)    
+        return Business.query.filter_by(name=name).first()    
 
     def delete_business(self):
         """deletes a business"""

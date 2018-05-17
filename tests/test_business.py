@@ -106,6 +106,14 @@ class BusinessTestCase(unittest.TestCase):
         result=self.client().post('/api/v2/businesses/search', data=self.search_param)# fill form to search for it
         self.assertEqual(result.status_code,200)#expected request status 
         self.assertIn('crastycrab',str(result.data))# request should return the whole business
+
+    def test_search_empty_field(self):
+        #if the user searches an empty field
+        self.add_business() #registers a user and adds a business called crasty crab
+        result=self.client().post('/api/v2/businesses/search', data={'name':''})# fill form to search for it
+        self.assertEqual(result.status_code,400)#expected request status 
+        self.assertIn('please enter name to search',str(result.data))# request should return the whole business
+            
             
 
     def test_api_get_business_not_exist(self):
