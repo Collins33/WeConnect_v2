@@ -300,30 +300,30 @@ def create_app(config_name):
     def filter_category(category):
         """get business based on category"""
 
-        businesses=Business.get_business_category(category)
+        businesses=Business.query.filter_by(category=category)
         business_category=[]
 
-        if not businesses:
+        
+        for business in businesses:
+            obj={
+                'id':business.id,
+                'name':business.name,
+                'description':business.description,
+                'location':business.location,
+                'contact':business.contact,
+                'category':business.category
+            }
+            business_category.append(obj)
+        
+        if not business_category:
             message="No business in that category"
             response=jsonify({"message":message,"status_code":404})
             response.status_code=404
             return response
-            
-        else:
-            for business in businesses:
-                obj={
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category
-                }
-                business_category.append(obj)
 
-            response=jsonify(business_category)
-            response.status_code=200
-            return response 
+        response=jsonify(business_category)
+        response.status_code=200
+        return response 
 
 
     
