@@ -362,7 +362,7 @@ def create_app(config_name):
             response.status_code=201
             return response
 
-        message="you cannot add an empty review"
+        message="make sure the opinion and rating are included"
         response=jsonify({"message":message,"status_code":400})
         response.status_code=400
         return response  
