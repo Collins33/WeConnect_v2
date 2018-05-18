@@ -30,8 +30,8 @@ def create_app(config_name):
     def welcome():
         message="Welcome to WeConnect"
 
-        response=jsonify({'message':message,'status':201})
-        response.status_code=201
+        response=jsonify({'message':message,'status':200})
+        response.status_code=200
         return response
 
 
@@ -357,7 +357,7 @@ def create_app(config_name):
         message="succesfully added the review"
 
         response=jsonify({"message":message})
-        response.status_code=200
+        response.status_code=201
         return response
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['GET'])

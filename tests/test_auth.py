@@ -65,8 +65,7 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(response.status_code,200)
         self.assertIn("You have successfully logged out",str(response.data))
 
-    def test_non_registered_user(self):
-        
+    def test_non_registered_user(self):       
         res=self.client().post('/api/v2/auth/login', data=self.user)
         self.assertEqual(res.status_code,401)
 
