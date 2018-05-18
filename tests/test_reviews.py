@@ -46,7 +46,7 @@ class ReviewsTestCase(unittest.TestCase):
         #first add the business
         self.add_business()
         result=self.client().post('api/v2/businesses/1/reviews', data=self.review)
-        self.assertEqual(result.status_code,200)
+        self.assertEqual(result.status_code,201)
 
     def test_review_get_all(self):
         self.add_business()
@@ -70,11 +70,6 @@ class ReviewsTestCase(unittest.TestCase):
         result=self.client().get('api/v2/businesses/5/reviews')
         self.assertEqual(result.status_code,404)
                   
-
-
-
-
-
     def tearDown(self):
         """run after every test to ensure database is empty"""
         with self.app.app_context():
