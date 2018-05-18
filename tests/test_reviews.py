@@ -10,6 +10,7 @@ class ReviewsTestCase(unittest.TestCase):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
         self.review={"opinion":"Good business with good food","rating":5}
+        self.wrong_review={"rating":5}
         self.business={'name':'crastycrab','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
 
         #bind app to the current context
@@ -47,6 +48,7 @@ class ReviewsTestCase(unittest.TestCase):
         self.add_business()
         result=self.client().post('api/v2/businesses/1/reviews', data=self.review)
         self.assertEqual(result.status_code,201)
+        self.assertIn("succesfully added the review", str(result.data))
 
     def test_review_get_all(self):
         self.add_business()
@@ -69,6 +71,15 @@ class ReviewsTestCase(unittest.TestCase):
         self.client().post('api/v2/businesses/1/reviews', data=self.review)
         result=self.client().get('api/v2/businesses/5/reviews')
         self.assertEqual(result.status_code,404)
+
+    def test_add_empty_review(self):
+        #first add the business
+        self.add_business()
+        result=self.client().post('api/v2/businesses/1/reviews', data=self.wrong_review)
+        self.assertEqual(result.status_code,400)#bad request
+        self.assertIn("you cannot add an empty review", str(result.data))
+        
+
                   
     def tearDown(self):
         """run after every test to ensure database is empty"""
