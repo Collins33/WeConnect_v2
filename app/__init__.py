@@ -349,16 +349,23 @@ def create_app(config_name):
 
         opinion=str(request.data.get('opinion', ''))
         rating=int(request.data.get('rating', ''))
+        
+        if rating and opinion:
 
-        new_review=Review(opinion=opinion,rating=rating,business_main=id)
+            new_review=Review(opinion=opinion,rating=rating,business_main=id)
 
-        new_review.save()
+            new_review.save()
 
-        message="succesfully added the review"
+            message="succesfully added the review"
 
-        response=jsonify({"message":message})
-        response.status_code=201
-        return response
+            response=jsonify({"message":message})
+            response.status_code=201
+            return response
+
+        message="make sure the opinion and rating are included"
+        response=jsonify({"message":message,"status_code":400})
+        response.status_code=400
+        return response  
     
     @app.route('/api/v2/businesses/<int:id>/reviews', methods=['GET'])
     def get_reviews(id):
