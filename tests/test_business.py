@@ -36,7 +36,7 @@ class BusinessTestCase(unittest.TestCase):
         }
         return self.client().post('/api/v2/auth/registration',data=user_data)
 
-    def login_user(self,email="collins.muru@andela.com",password="123test",confirm_password="123test"):
+    def login_user(self,email,password,confirm_password):
         user_data={
             'email':email,
             'password':password,
@@ -47,7 +47,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def add_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -56,7 +56,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def add_second_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -67,7 +67,7 @@ class BusinessTestCase(unittest.TestCase):
     def test_business_creation(self):
         #register a test user and log him in
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -78,7 +78,7 @@ class BusinessTestCase(unittest.TestCase):
     def test_business_creation_when_user_logged_out(self):
         #register a test user and log him in
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -148,7 +148,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_api_can_update_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -159,7 +159,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_api_cannot_update_business_with_fields_missing(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -170,7 +170,7 @@ class BusinessTestCase(unittest.TestCase):
         
     def test_api_logged_out_user_cannot_update_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -183,7 +183,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_api_cannot_update_nonexistent_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         edit_response=self.client().put(BusinessTestCase.business_id_url.format('30'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
@@ -191,7 +191,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_api_can_delete_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -203,7 +203,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_logged_out_user_cannot_delete_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -216,7 +216,7 @@ class BusinessTestCase(unittest.TestCase):
         
     def test_register_business_with_empty_string(self):
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
@@ -226,7 +226,7 @@ class BusinessTestCase(unittest.TestCase):
     def test_register_business_with_name_already_exists(self):
         #register a test user and log him in
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user()
+        result=self.login_user("collins.muru@andela.com","123test","123test")
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
