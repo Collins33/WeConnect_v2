@@ -41,7 +41,7 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(result['message'], 'successfully registered user')
         self.assertEqual(res.status_code,201)
 
-    def test_registration_user_already_exists(self):
+    def test_registration_when_user_already_exists(self):
         """test if user can be registered twice"""
         #register the user the first time
         self.register_user()
@@ -79,7 +79,7 @@ class AuthTestCase(unittest.TestCase):
         res=self.client().post(AuthTestCase.login, data=self.user)
         self.assertEqual(res.status_code,401)#bad request 
 
-    def test_password_confirm_not_match(self):
+    def test_password_and_confirm_not_match(self):
         """return the message if password is not same as confirm password"""
         user={
             'email': 'not_a_user@example.com',
