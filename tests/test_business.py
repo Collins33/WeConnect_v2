@@ -5,6 +5,9 @@ from app import db, create_app
 
 class BusinessTestCase(unittest.TestCase):
     """this class tests the business endpoints"""
+    #business_endpoints
+    register_business='/api/v2/businesses'
+    business_id_url='/api/v2/businesses/{}'
 
     def setUp(self):
         """initilize the app
@@ -18,7 +21,6 @@ class BusinessTestCase(unittest.TestCase):
         self.empty_name={'name':'  ','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
         self.empty_update={'name':'','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
         self.search_param={'name':'crastycrab'}
-
         #bind app to current context
         with self.app.app_context():
             #create db tables
@@ -48,7 +50,7 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         return response
 
     def add_second_business(self):
@@ -57,7 +59,7 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.secondBusiness)
+        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.secondBusiness)
         return response
 
 
@@ -68,7 +70,7 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(response.status_code,201)
         self.assertIn('crastycrab',str(response.data))
 
@@ -81,7 +83,7 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
 
-        response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(response.data))
         
@@ -90,20 +92,20 @@ class BusinessTestCase(unittest.TestCase):
         """this tests if the api can return all bucketlists"""
         #add a business
         self.add_business()
-        result=self.client().get('/api/v2/businesses')
+        result=self.client().get(BusinessTestCase.register_business)
         self.assertEqual(result.status_code,200)
 
     def test_api_can_get_business_by_id(self):
         #you dont need to be authenticated to view a business
         self.add_business() #registers a user and adds a business
-        result=self.client().get('/api/v2/businesses/1')
+        result=self.client().get(BusinessTestCase.business_id_url.format('1'))
         self.assertEqual(result.status_code,200) 
         self.assertIn('crastycrab',str(result.data))
 
     def test_api_can_filter_by_category(self):
         #you dont need to be authenticated to view a business
         self.add_business() #registers a user and adds a business
-        result=self.client().get('/api/v2/businesses/fastfood')
+        result=self.client().get(BusinessTestCase.business_id_url.format('fastfood'))
         self.assertEqual(result.status_code,200) 
         self.assertIn('crastycrab',str(result.data))
 
@@ -111,7 +113,7 @@ class BusinessTestCase(unittest.TestCase):
         """test for filtering with category that does not exist"""
         #you dont need to be authenticated to view a business
         self.add_business() #registers a user and adds a business
-        result=self.client().get('/api/v2/businesses/cars')
+        result=self.client().get(BusinessTestCase.business_id_url.format('cars'))
         self.assertEqual(result.status_code,404) 
         self.assertIn("No business in that category",str(result.data))
 
@@ -141,7 +143,7 @@ class BusinessTestCase(unittest.TestCase):
         #add two businesses
         self.add_business()
         self.add_second_business()
-        result=self.client().get('/api/v2/businesses/10')
+        result=self.client().get(BusinessTestCase.business_id_url.format('10'))
         self.assertEqual(result.status_code,404)
 
     def test_api_can_update_business(self):
@@ -150,9 +152,9 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
 
-        edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
+        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,200)
 
     def test_api_cannot_update_business_fields_missing(self):
@@ -161,8 +163,8 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.empty_update)
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.empty_update)
         self.assertEqual(edit_response.status_code,400)
         self.assertIn("No field can be empty when updating a business",str(edit_response.data))
         
@@ -172,10 +174,10 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)        
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)        
         #log out the user
         self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-        edit_response=self.client().put('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
+        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(edit_response.data))
 
@@ -184,7 +186,7 @@ class BusinessTestCase(unittest.TestCase):
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
-        edit_response=self.client().put('/api/v2/businesses/30',headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
+        edit_response=self.client().put(BusinessTestCase.business_id_url.format('30'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,404)
 
     def test_api_can_delete_business(self):
@@ -193,12 +195,12 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
 
-        edit_response=self.client().delete('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token))
+        edit_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token))
         self.assertEqual(edit_response.status_code,200)
         
-        result=self.client().get('/api/v2/businesses/1')
+        result=self.client().get(BusinessTestCase.business_id_url.format('1'))
         self.assertEqual(result.status_code,404)
 
     def test_logged_out_user_cannot_delete_business(self):
@@ -207,10 +209,10 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         #log out the user
         self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-        del_response=self.client().delete('/api/v2/businesses/1',headers=dict(Authorization="Bearer "+ access_token))
+        del_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token))
         self.assertEqual(del_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(del_response.data))
         
@@ -220,7 +222,7 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        result=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
+        result=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
         self.assertEqual(result.status_code,400)#bad request
 
     def test_register_business_name_exists(self):
@@ -230,13 +232,11 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        second_response=self.client().post('/api/v2/businesses',headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        second_response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(second_response.status_code,409)
         self.assertIn("Business name already exists", str(second_response.data))
-
-       
-           
+          
     def tearDown(self):
         """connect to current context
         and drop all tables"""
