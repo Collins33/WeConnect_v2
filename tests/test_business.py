@@ -152,6 +152,23 @@ class BusinessTestCase(unittest.TestCase):
         edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,200)
 
+    def test_unauthorized_user_cannot_update_business(self):
+        """you cannot edit a business you did not create"""
+        #register and login first user
+        self.register_user("collins.muru@andela.com","123test","123test")
+        result=self.login_user("collins.muru@andela.com","123test","123test")
+        #register and login second user
+        self.register_user("collinsnjau39@gmail.com","123test","123test")
+        second_result=self.login_user("collinsnjau39@gmail.com","123test","123test")
+        #first user add a business
+        access_token_first=json.loads(result.data.decode())['access_token']
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token_first) ,data=self.business)
+        #second user tries to update the business
+        access_token_second=json.loads(second_result.data.decode())['access_token']
+        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token_second),data=self.secondBusiness)
+        self.assertIn("You cannot update a business you did not add",str(edit_response.data))
+        self.assertEqual(edit_response.status_code,401)
+
     def test_api_cannot_update_business_with_fields_missing(self):
         self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user("collins.muru@andela.com","123test","123test")
