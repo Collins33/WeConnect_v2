@@ -19,13 +19,11 @@ class Access_token(db.Model):
 
 class User(db.Model):
     __tablename__= 'users'
-
     id=db.Column(db.Integer,primary_key=True)
     email=db.Column(db.String(300), nullable=False, unique=True)
     password=db.Column(db.String(300),nullable=False)
     """one to many relationship with business"""
     businesses=db.relationship("Business",order_by='Business.id',cascade="all,delete-orphan")
-
 
     def __init__(self,email,password):
         self.email=email
@@ -44,7 +42,6 @@ class User(db.Model):
     def generate_token(self,user_id):
         """this method generates the user token
         using the user_id"""
-        
         try:
             """first create the payload"""
             payload={
@@ -52,16 +49,13 @@ class User(db.Model):
                 'iat':datetime.utcnow(),
                 'sub':user_id
             }
-
             """create the byte string token"""
             jwt_string=jwt.encode(
                 payload,
                 current_app.config.get('SECRET'),
                 algorithm='HS256'
-                
             )
             return jwt_string
-
         except Exception as e:
             return str(e)
 
@@ -69,7 +63,6 @@ class User(db.Model):
     def decode_token(token):
         """this method takes token as argument
         and checks if it is valid"""
-
         try:
             """decode using secret key"""
             payload=jwt.decode(token, current_app.config.get('SECRET'))
@@ -99,14 +92,8 @@ class User(db.Model):
             return True
         return False    
 
-
-
-
-
-
 class Business(db.Model):
     __tablename__ = 'businesses'
-
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(300))
     description=db.Column(db.String(1000))
@@ -117,7 +104,6 @@ class Business(db.Model):
     review=db.relationship('Review',order_by="Review.id", cascade="all, delete-orphan")
 
     def __init__(self,name,description,contact,category,location,business_owner):
-
         """initialize with the business owner"""
         self.business_owner=business_owner
         self.name=name
@@ -125,7 +111,6 @@ class Business(db.Model):
         self.contact=contact
         self.category=category
         self.location=location
-
 
     def save(self):
         """save business to database"""
@@ -159,7 +144,6 @@ class Business(db.Model):
     def get_business_location(location):
         """returns businesses that match the location"""
         """will return list of businesses"""
-
         return Business.query.filter_by(location=location)
 
     @staticmethod
@@ -177,11 +161,8 @@ class Business(db.Model):
     def check_business_exists(id):
         return Business.query.filter_by(id=id)
          
-
-
 class Review(db.Model):
     __tablename__ = 'reviews'
-
     id=db.Column(db.Integer,primary_key=True)
     opinion=db.Column(db.String(300))
     rating=db.Column(db.Integer)
