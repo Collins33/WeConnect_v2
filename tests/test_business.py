@@ -167,7 +167,7 @@ class BusinessTestCase(unittest.TestCase):
         access_token_second=json.loads(second_result.data.decode())['access_token']
         edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token_second),data=self.secondBusiness)
         self.assertIn("You cannot update a business you did not add",str(edit_response.data))
-        self.assertEqual(edit_response.status_code,401)
+        self.assertEqual(edit_response.status_code,401)#unauthorized
 
     def test_api_cannot_update_business_with_fields_missing(self):
         self.register_user("collins.muru@andela.com","123test","123test")

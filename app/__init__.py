@@ -26,7 +26,6 @@ def create_app(config_name):
         response.status_code=200
         return response
 
-
     """BUSINESS ENDPOINTS"""
     @app.route('/api/v2/businesses',methods=['POST'])
     def add_business():
@@ -150,40 +149,48 @@ def create_app(config_name):
         if not valid_token:
             #if access token exists, user can edit business
             #get data from the requested data
-            business_owner=User.decode_token(access_token)
-            name = str(request.data.get('name', ''))          
-            description=str(request.data.get('description', ''))
-            location=str(request.data.get('location', ''))
-            contact=str(request.data.get('contact', ''))
-            category=str(request.data.get('category',''))
-            #ensure all the fields are available
-            if name and description and location and contact and category:
-                #replace the details of the found business
-                business.name=name,
-                business.description=description,
-                business.location=location,
-                business.contact=contact,
-                business.category=category
-                #save the business
-                business.save()
-                response=jsonify({
-                    'id':business.id,
-                    'name':business.name,
-                    'description':business.description,
-                    'location':business.location,
-                    'contact':business.contact,
-                    'category':business.category,
-                    'business_owner':business.business_owner
-                })
-                response.status_code=200
-                return response
-            else:
-                message="No field can be empty when updating a business"
-                response=jsonify({
-                    "message":message,"status":400
-                })
-                response.status_code=400
-                return response 
+            business_owner=User.decode_token(access_token)#returns the id of logged in user
+            real_owner=business.business_owner#return id of the user who created the business
+            #check if logged in id is equal to id of business owner
+            if business_owner == real_owner:
+                name = str(request.data.get('name', ''))          
+                description=str(request.data.get('description', ''))
+                location=str(request.data.get('location', ''))
+                contact=str(request.data.get('contact', ''))
+                category=str(request.data.get('category',''))
+                #ensure all the fields are available
+                if name and description and location and contact and category:
+                    #replace the details of the found business
+                    business.name=name,
+                    business.description=description,
+                    business.location=location,
+                    business.contact=contact,
+                    business.category=category
+                    #save the business
+                    business.save()
+                    response=jsonify({
+                        'id':business.id,
+                        'name':business.name,
+                        'description':business.description,
+                        'location':business.location,
+                        'contact':business.contact,
+                        'category':business.category,
+                        'business_owner':business.business_owner
+                    })
+                    response.status_code=200
+                    return response
+                else:
+                    message="No field can be empty when updating a business"
+                    response=jsonify({
+                        "message":message,"status":400
+                    })
+                    response.status_code=400
+                    return response
+
+            message="You cannot update a business you did not add"
+            response=jsonify({"message":message,"status_code":401})
+            response.status_code=401
+            return response
         else:
             """user is not legit"""
             message = "You are not logged in. Please log in"
