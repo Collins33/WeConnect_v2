@@ -27,7 +27,7 @@ class BusinessTestCase(unittest.TestCase):
             #create db tables
             db.create_all()
 
-    def register_user(self,email="collins.muru@andela.com",password="123test",confirm_password="123test"):
+    def register_user(self,email,password,confirm_password):
         """this method will register a user"""
         user_data={
             'email':email,
@@ -46,7 +46,7 @@ class BusinessTestCase(unittest.TestCase):
                 
 
     def add_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -55,7 +55,7 @@ class BusinessTestCase(unittest.TestCase):
         return response
 
     def add_second_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -66,7 +66,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_business_creation(self):
         #register a test user and log him in
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -77,7 +77,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_business_creation_when_user_logged_out(self):
         #register a test user and log him in
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -147,7 +147,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,404)
 
     def test_api_can_update_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -158,7 +158,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(edit_response.status_code,200)
 
     def test_api_cannot_update_business_with_fields_missing(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -169,7 +169,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertIn("No field can be empty when updating a business",str(edit_response.data))
         
     def test_api_logged_out_user_cannot_update_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -182,7 +182,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertIn("You are not logged in. Please log in",str(edit_response.data))
 
     def test_api_cannot_update_nonexistent_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -190,7 +190,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(edit_response.status_code,404)
 
     def test_api_can_delete_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -202,7 +202,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,404)
 
     def test_logged_out_user_cannot_delete_business(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -215,7 +215,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertIn("You are not logged in. Please log in",str(del_response.data))
         
     def test_register_business_with_empty_string(self):
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
@@ -225,7 +225,7 @@ class BusinessTestCase(unittest.TestCase):
 
     def test_register_business_with_name_already_exists(self):
         #register a test user and log him in
-        self.register_user()
+        self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user()
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']

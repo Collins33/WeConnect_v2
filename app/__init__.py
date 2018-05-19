@@ -8,15 +8,14 @@ db=SQLAlchemy()
 
 def create_app(config_name):
     from app.models import Business, User, Review,Access_token
-    """this method wraps creation of flask-api
-    object and returns it after loading the configurations"""
+    #this method wraps creation of flask-api object and returns it after loading the configurations
     app=FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     #connect the db
     db.init_app(app)
-    """import auth blueprint and register it"""
+    #import auth blueprint and register it
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
 
@@ -36,7 +35,7 @@ def create_app(config_name):
         access_token=auth_header.split(" ")[1]
         valid_token=Access_token.query.filter_by(token=access_token).first() #return true if token is valid
         if not valid_token:
-            """user is legit"""
+            #user is legit
             #decode the access_token and get the user_id
             user_id=User.decode_token(access_token)
             #get the user data
@@ -86,7 +85,7 @@ def create_app(config_name):
                 response.status_code=409
                 return response        
         else:
-            """user is not legit"""
+            #user is not legit
             message = "You are not logged in. Please log in"
             response=jsonify({
                 "message":message
