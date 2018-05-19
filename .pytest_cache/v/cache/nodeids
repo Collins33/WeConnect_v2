@@ -3,7 +3,7 @@
   "tests/test_auth.py::AuthTestCase::test_invalid_email",
   "tests/test_auth.py::AuthTestCase::test_login_user",
   "tests/test_auth.py::AuthTestCase::test_logout_user",
-  "tests/test_auth.py::AuthTestCase::test_non_registered_user",
+  "tests/test_auth.py::AuthTestCase::test_non_registered_user_trying_to_login",
   "tests/test_auth.py::AuthTestCase::test_password_confirm_not_match",
   "tests/test_auth.py::AuthTestCase::test_registration",
   "tests/test_auth.py::AuthTestCase::test_registration_user_already_exists",
