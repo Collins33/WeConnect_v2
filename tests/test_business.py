@@ -62,6 +62,11 @@ class BusinessTestCase(unittest.TestCase):
         response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.secondBusiness)
         return response
 
+    def test_api_welcome_page(self):
+        response=self.client().get('/')
+        self.assertEqual(response.status_code,200)
+        self.assertIn("Welcome to WeConnect",str(response.data))    
+
     def test_business_creation(self):
         #register a test user and log him in
         self.register_user("collins.muru@andela.com","123test","123test")
