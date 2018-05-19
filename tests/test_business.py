@@ -8,6 +8,7 @@ class BusinessTestCase(unittest.TestCase):
     #business_endpoints
     register_business='/api/v2/businesses'
     business_id_url='/api/v2/businesses/{}'
+    user_logout='/api/v2/auth/log-out'
 
     def setUp(self):
         """initilize the app
@@ -81,7 +82,7 @@ class BusinessTestCase(unittest.TestCase):
         #get the access token
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
-        self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
+        self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
 
         response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(response.status_code,403)
@@ -176,7 +177,7 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)        
         #log out the user
-        self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
+        self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
         edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(edit_response.data))
@@ -211,7 +212,7 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         #log out the user
-        self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
+        self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
         del_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token))
         self.assertEqual(del_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(del_response.data))
@@ -243,10 +244,6 @@ class BusinessTestCase(unittest.TestCase):
         with self.app.app_context():
             db.session.remove()
             db.drop_all()
-
-
-
-
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
