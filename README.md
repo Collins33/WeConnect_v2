@@ -3,7 +3,9 @@
 WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with using an api
 [![Build Status](https://travis-ci.org/Collins33/WeConnect_v2.svg?branch=master)](https://travis-ci.org/Collins33/WeConnect_v2)
 
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fc3b48f3c8ae41c281b52e3055612cfc)](https://www.codacy.com/app/Collins33/WeConnect_v2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Collins33/WeConnect_v2&amp;utm_campaign=Badge_Grade)
+
 
 [![Coverage Status](https://coveralls.io/repos/github/Collins33/WeConnect_v2/badge.svg?branch=master)](https://coveralls.io/github/Collins33/WeConnect_v2?branch=master)
 
@@ -23,7 +25,9 @@ WeConnect provides a platform that brings businesses and individuals together. T
 ## Database
 -Ensure Postgresql is installed in your machine
 
--Create database weconnect
+-Create database: weconnect
+
+-Create test database: test_db
 
 ## Migrations
 -python manage.py db init
@@ -34,6 +38,8 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 ## Running tests
 -pytest
+
+-nosetest --with-coverage
 
 ### Prerequisites
 
@@ -86,7 +92,7 @@ WeConnect provides a platform that brings businesses and individuals together. T
 
 ## License
 
-This project is licensed under the MIT License ]
+This project is licensed under the MIT License 
 
 
 

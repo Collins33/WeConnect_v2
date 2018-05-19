@@ -22,7 +22,7 @@ class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     email=db.Column(db.String(300), nullable=False, unique=True)
     password=db.Column(db.String(300),nullable=False)
-    """one to many relationship with business"""
+    #one to many relationship with business
     businesses=db.relationship("Business",order_by='Business.id',cascade="all,delete-orphan")
 
     def __init__(self,email,password):
@@ -43,13 +43,13 @@ class User(db.Model):
         """this method generates the user token
         using the user_id"""
         try:
-            """first create the payload"""
+            #first create the payload
             payload={
                 'exp':datetime.utcnow() + timedelta(minutes=100),
                 'iat':datetime.utcnow(),
                 'sub':user_id
             }
-            """create the byte string token"""
+            #create the byte string token
             jwt_string=jwt.encode(
                 payload,
                 current_app.config.get('SECRET'),
@@ -64,14 +64,14 @@ class User(db.Model):
         """this method takes token as argument
         and checks if it is valid"""
         try:
-            """decode using secret key"""
+            #decode using secret key
             payload=jwt.decode(token, current_app.config.get('SECRET'))
             return payload['sub']
         except jwt.ExpiredSignatureError:
-            """if the token is expired"""
+        #if the token is expired
             return "Expired token. Login to get a new token"
         except jwt.InvalidTokenError:
-            """if token is invalid"""
+            #if token is invalid
             return "Invalid token. Please register or login"
 
     @staticmethod
