@@ -75,7 +75,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(response.status_code,201)
         self.assertIn('crastycrab',str(response.data))
 
-    def test_business_creation_user_logged_out(self):
+    def test_business_creation_when_user_logged_out(self):
         #register a test user and log him in
         self.register_user()
         result=self.login_user()
@@ -118,7 +118,6 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,404) 
         self.assertIn("No business in that category",str(result.data))
 
-
     def test_api_can_get_business_by_name(self):
         #you dont need to be authenticated to view or search for a business
         self.add_business() #registers a user and adds a business called crasty crab
@@ -126,7 +125,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,200)#expected request status 
         self.assertIn('crastycrab',str(result.data))# request should return the whole business
 
-    def test_search_empty_field(self):
+    def test_search_with_empty_field(self):
         #if the user searches an empty field
         self.add_business() #registers a user and adds a business called crasty crab
         result=self.client().post('/api/v2/businesses/search', data={'name':''})# fill form to search for it
@@ -140,7 +139,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(result.status_code,404)#expected request status 
         self.assertIn('Sorry but the business could not be found',str(result.data))# request should return the whole business
 
-    def test_api_get_business_not_exist(self):
+    def test_api_get_business_does_not_exist(self):
         #add two businesses
         self.add_business()
         self.add_second_business()
@@ -158,7 +157,7 @@ class BusinessTestCase(unittest.TestCase):
         edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,200)
 
-    def test_api_cannot_update_business_fields_missing(self):
+    def test_api_cannot_update_business_with_fields_missing(self):
         self.register_user()
         result=self.login_user()
         #get the access token
@@ -182,7 +181,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(edit_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(edit_response.data))
 
-    def test_api_update_nonexistent_business(self):
+    def test_api_cannot_update_nonexistent_business(self):
         self.register_user()
         result=self.login_user()
         #get the access token
@@ -197,10 +196,8 @@ class BusinessTestCase(unittest.TestCase):
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
         self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-
         edit_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token))
-        self.assertEqual(edit_response.status_code,200)
-        
+        self.assertEqual(edit_response.status_code,200) 
         result=self.client().get(BusinessTestCase.business_id_url.format('1'))
         self.assertEqual(result.status_code,404)
 
@@ -217,7 +214,7 @@ class BusinessTestCase(unittest.TestCase):
         self.assertEqual(del_response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(del_response.data))
         
-    def test_register_business_empty_string(self):
+    def test_register_business_with_empty_string(self):
         self.register_user()
         result=self.login_user()
         #get the access token
@@ -226,7 +223,7 @@ class BusinessTestCase(unittest.TestCase):
         result=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
         self.assertEqual(result.status_code,400)#bad request
 
-    def test_register_business_name_exists(self):
+    def test_register_business_with_name_already_exists(self):
         #register a test user and log him in
         self.register_user()
         result=self.login_user()
