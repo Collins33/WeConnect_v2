@@ -1,9 +1,7 @@
 import os
-
 from flask_script import Manager#manager tracks how the commands are run on the terminal
 from flask_migrate import Migrate, MigrateCommand#contains a set of migration commands
 from app import db,create_app
-from app import models
 
 config_name= os.getenv('APP_SETTINGS')
 app= create_app(config_name)
