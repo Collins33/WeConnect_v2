@@ -216,10 +216,18 @@ def create_app(config_name):
         valid_token=Access_token.query.filter_by(token=access_token).first()
         if not valid_token:
             #if access_token exists, delete business
-            business.delete_business()
-            response=jsonify({"message":"business successfully deleted","status_code":200})
-            response.status_code=200
-            return response
+            business_owner=User.decode_token(access_token)#returns the id of logged in user
+            real_owner=business.business_owner#return id of the user who created the business
+            if business_owner == real_owner:
+                business.delete_business()
+                response=jsonify({"message":"business successfully deleted","status_code":200})
+                response.status_code=200
+                return response
+            #response if user who did not add the business tries to delete it
+            message="You cannot delete a business you did not add"
+            response=jsonify({"message":message,"status_code":401})
+            response.status_code=401
+            return response   
         else:
             """user is not legit"""
             message = "You are not logged in. Please log in"
