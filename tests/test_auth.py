@@ -4,6 +4,12 @@ from app import create_app,db
 
 class AuthTestCase(unittest.TestCase):
     """testcase for auth blueprint"""
+
+    #url endpoint for authentication
+    registration='/api/v2/auth/registration'
+    login='/api/v2/auth/login'
+    logout='/api/v2/auth/log-out'
+
     def setUp(self):
         self.app=create_app(config_name="testing")
         self.client=self.app.test_client
@@ -21,16 +27,16 @@ class AuthTestCase(unittest.TestCase):
             db.create_all()
 
     def register_user(self):
-        result=self.client().post('/api/v2/auth/registration', data=self.user)
+        result=self.client().post(AuthTestCase.registration, data=self.user)
         return result
 
     def log_in(self):
         self.register_user()
-        result=self.client().post('/api/v2/auth/login', data=self.user)
+        result=self.client().post(AuthTestCase.login, data=self.user)
         return result       
 
     def test_registration(self):
-        res=self.client().post('/api/v2/auth/registration', data=self.user)
+        res=self.client().post(AuthTestCase.registration, data=self.user)
         """get the response after registering"""
 
         result=json.loads(res.data.decode())
@@ -42,7 +48,7 @@ class AuthTestCase(unittest.TestCase):
     def test_registration_user_already_exists(self):
         """test if user can be registered twice"""
         self.register_user()
-        result=self.client().post('/api/v2/auth/registration', data=self.user)
+        result=self.client().post(AuthTestCase.registration, data=self.user)
         response_result=json.loads(result.data.decode())
         self.assertEqual(result.status_code,409)
         self.assertEqual(response_result['message'],"user already exists")
@@ -50,7 +56,7 @@ class AuthTestCase(unittest.TestCase):
     def test_login_user(self):
         """test if the api can login a user"""
         self.register_user()
-        res=self.client().post('/api/v2/auth/login', data=self.user)
+        res=self.client().post(AuthTestCase.login, data=self.user)
         self.assertEqual(res.status_code,200)
         result_response=json.loads(res.data.decode())
         self.assertEqual(result_response["message"],"you logged in successfully")
@@ -61,12 +67,12 @@ class AuthTestCase(unittest.TestCase):
         result=self.log_in()
         access_token=json.loads(result.data.decode())['access_token']
         
-        response=self.client().post('/api/v2/auth/log-out',headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
+        response=self.client().post(AuthTestCase.logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
         self.assertEqual(response.status_code,200)
         self.assertIn("You have successfully logged out",str(response.data))
 
     def test_non_registered_user(self):       
-        res=self.client().post('/api/v2/auth/login', data=self.user)
+        res=self.client().post(AuthTestCase.login, data=self.user)
         self.assertEqual(res.status_code,401)
 
     def test_password_confirm_not_match(self):
@@ -75,7 +81,7 @@ class AuthTestCase(unittest.TestCase):
             'password': 'nope',
             'confirm_password':'nope2'
         }
-        result=self.client().post('/api/v2/auth/registration', data=user)
+        result=self.client().post(AuthTestCase.registration, data=user)
         self.assertEqual(result.status_code,400)
         self.assertIn("password and confirm_password have to match", str(result.data))
         
@@ -85,7 +91,7 @@ class AuthTestCase(unittest.TestCase):
             'password': 'nope',
             'confirm_password':'nope'
         }
-        result=self.client().post('/api/v2/auth/registration', data=user)
+        result=self.client().post(AuthTestCase.registration, data=user)
         self.assertEqual(result.status_code,400)
         self.assertIn("enter valid email",str(result.data))
 
@@ -95,7 +101,7 @@ class AuthTestCase(unittest.TestCase):
             'password': 'nope',
             'confirm_password':'nope'
         }
-        result=self.client().post('/api/v2/auth/registration', data=user)
+        result=self.client().post(AuthTestCase.registration, data=user)
         self.assertEqual(result.status_code,400)
         self.assertIn("password length should be greater than 6",str(result.data))
 
@@ -105,7 +111,7 @@ class AuthTestCase(unittest.TestCase):
             'password': '       ',
             'confirm_password':'       '
         }
-        result=self.client().post('/api/v2/auth/registration', data=user)
+        result=self.client().post(AuthTestCase.registration, data=user)
         self.assertEqual(result.status_code,400)
         self.assertIn("email cannot be empty",str(result.data))
 
