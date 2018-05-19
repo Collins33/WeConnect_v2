@@ -235,7 +235,6 @@ class BusinessTestCase(unittest.TestCase):
         self.assertIn("You cannot delete a business you did not add",str(edit_response.data))
         self.assertEqual(edit_response.status_code,401)#unauthorized
 
-
     def test_logged_out_user_cannot_delete_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user("collins.muru@andela.com","123test","123test")
