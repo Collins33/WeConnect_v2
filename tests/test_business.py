@@ -213,6 +213,24 @@ class BusinessTestCase(unittest.TestCase):
         result=self.client().get(BusinessTestCase.business_id_url.format('1'))
         self.assertEqual(result.status_code,404)
 
+    def test_unauthorized_user_cannot_delete_business(self):
+        """you cannot delete a business you did not create"""
+        #register and login first user
+        self.register_user("collins.muru@andela.com","123test","123test")
+        result=self.login_user("collins.muru@andela.com","123test","123test")
+        #register and login second user
+        self.register_user("collinsnjau39@gmail.com","123test","123test")
+        second_result=self.login_user("collinsnjau39@gmail.com","123test","123test")
+        #first user add a business
+        access_token_first=json.loads(result.data.decode())['access_token']
+        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token_first) ,data=self.business)
+        #second user tries to delete the business
+        access_token_second=json.loads(second_result.data.decode())['access_token']
+        edit_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token_second),data=self.secondBusiness)
+        self.assertIn("You cannot delete a business you did not add",str(edit_response.data))
+        self.assertEqual(edit_response.status_code,401)#unauthorized
+
+
     def test_logged_out_user_cannot_delete_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user("collins.muru@andela.com","123test","123test")

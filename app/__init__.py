@@ -186,7 +186,7 @@ def create_app(config_name):
                     })
                     response.status_code=400
                     return response
-
+            #response if user who did not add the business tries to edit it
             message="You cannot update a business you did not add"
             response=jsonify({"message":message,"status_code":401})
             response.status_code=401
