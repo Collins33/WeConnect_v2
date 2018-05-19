@@ -44,7 +44,6 @@ class BusinessTestCase(unittest.TestCase):
         }
         return self.client().post('/api/v2/auth/login',data=user_data)
                 
-
     def add_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user("collins.muru@andela.com","123test","123test")
@@ -62,7 +61,6 @@ class BusinessTestCase(unittest.TestCase):
         #add the access token to the header
         response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.secondBusiness)
         return response
-
 
     def test_business_creation(self):
         #register a test user and log him in
@@ -83,12 +81,10 @@ class BusinessTestCase(unittest.TestCase):
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
         self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-
         response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(response.status_code,403)
         self.assertIn("You are not logged in. Please log in",str(response.data))
         
-
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
         #add a business
@@ -153,7 +149,6 @@ class BusinessTestCase(unittest.TestCase):
         access_token=json.loads(result.data.decode())['access_token']
         #add the access token to the header
         self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-
         edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
         self.assertEqual(edit_response.status_code,200)
 
