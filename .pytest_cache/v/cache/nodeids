@@ -26,6 +26,8 @@
   "tests/test_business.py::BusinessTestCase::test_register_business_with_empty_string",
   "tests/test_business.py::BusinessTestCase::test_register_business_with_name_already_exists",
   "tests/test_business.py::BusinessTestCase::test_search_with_empty_field",
+  "tests/test_business.py::BusinessTestCase::test_unauthorized_user_cannot_delete_business",
+  "tests/test_business.py::BusinessTestCase::test_unauthorized_user_cannot_update_business",
   "tests/test_reviews.py::ReviewsTestCase::test_add_empty_opinion",
   "tests/test_reviews.py::ReviewsTestCase::test_add_empty_rating",
   "tests/test_reviews.py::ReviewsTestCase::test_add_review_business_not_exist",
