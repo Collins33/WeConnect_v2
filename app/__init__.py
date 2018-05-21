@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 #import the environment dict
 from instance.config import app_config
 from flask import request, jsonify, abort,session
+from flask_mail import Mail,Message
 #initialize sqlalchemy
 db=SQLAlchemy()
 
@@ -15,6 +16,14 @@ def create_app(config_name):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     #connect the db
     db.init_app(app)
+    mail=Mail(app)
+    app.config['MAIL_SERVER']='smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USERNAME'] = 'hcbullss@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'hc_bullss'
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+    mail=Mail(app)
     #import auth blueprint and register it
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
@@ -26,7 +35,27 @@ def create_app(config_name):
         response.status_code=200
         return response
 
-    """BUSINESS ENDPOINTS"""
+    @app.route('/api/v2/auth/reset-password', methods=['POST'])
+    def reset_password():
+        email=str(request.data.get('email', ''))
+        user=User.query.filter_by(email=email).first()
+
+        if user:
+            #if the user with the email actually exists
+            msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients = [email])
+            msg.body = "Your password has been reset"
+            mail.send(msg)
+
+            message="Password successfully reset.Check email for new password"
+            response=jsonify({"message":message,"status":200})
+            response.status_code=200
+            return response
+        message="Email does not exist"
+        response=jsonify({"message":message,"status":401})
+        response.status_code=401
+        return response    
+      
+    #BUSINESS ENDPOINTS
     @app.route('/api/v2/businesses',methods=['POST'])
     def add_business():
         #get access token from the header

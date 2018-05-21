@@ -8,6 +8,7 @@
   "tests/test_auth.py::AuthTestCase::test_registration",
   "tests/test_auth.py::AuthTestCase::test_registration_when_user_already_exists",
   "tests/test_auth.py::AuthTestCase::test_short_password",
+  "tests/test_auth.py::AuthTestCase::test_user_can_reset_password",
   "tests/test_business.py::BusinessTestCase::test_api_can_delete_business",
   "tests/test_business.py::BusinessTestCase::test_api_can_filter_by_category",
   "tests/test_business.py::BusinessTestCase::test_api_can_get_all_businesses",

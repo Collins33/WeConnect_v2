@@ -2,6 +2,7 @@ from . import auth_blueprint
 from app.models import User,Access_token
 from flask import make_response, request,jsonify
 from flask.views import MethodView
+from flask_mail import Mail,Message
 
 class RegistrationView(MethodView):
     """this class will handle registration of users"""
@@ -114,7 +115,7 @@ class LogoutView(MethodView):
                 "message":message,"status":200
             })
             response.status_code=200
-            return response            
+            return response
 
 #MAKE THE CLASS CALLABLE SO THAT IT
 registration_view=RegistrationView.as_view('registration_view')
