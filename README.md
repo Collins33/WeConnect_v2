@@ -39,7 +39,7 @@ WeConnect provides a platform that brings businesses and individuals together. T
 ## Running tests
 -pytest
 
--nosetest --with-coverage
+-nosetests --with-coverage
 
 ### Prerequisites
 
