@@ -9,6 +9,7 @@ class BusinessTestCase(unittest.TestCase):
     register_business='/api/v2/businesses'
     business_id_url='/api/v2/businesses/{}'
     user_logout='/api/v2/auth/log-out'
+    wrong_url='/api/v/businesses'
 
     def setUp(self):
         """initilize the app
@@ -268,7 +269,15 @@ class BusinessTestCase(unittest.TestCase):
         second_response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
         self.assertEqual(second_response.status_code,409)
         self.assertIn("Business name already exists", str(second_response.data))
-          
+
+    def test_wrong_url(self):
+        """test response for wrong url"""
+        #add a business
+        self.add_business()
+        result=self.client().get(BusinessTestCase.wrong_url)
+        self.assertEqual(result.status_code,404)
+        self.assertIn("That page does not exist",str(result.data))
+
     def tearDown(self):
         """connect to current context
         and drop all tables"""
