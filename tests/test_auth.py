@@ -144,7 +144,6 @@ class AuthTestCase(unittest.TestCase):
         self.assertIn("Email does not exist",str(response.data))
         self.assertEqual(response.status_code,400)#bad request
 
-
     def tearDown(self):
         #run after every test
         with self.app.app_context():
