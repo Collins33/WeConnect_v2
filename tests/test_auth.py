@@ -8,6 +8,7 @@ class AuthTestCase(unittest.TestCase):
     registration='/api/v2/auth/registration'
     login='/api/v2/auth/login'
     logout='/api/v2/auth/log-out'
+    reset='/api/v2/auth/reset-password'
 
     def setUp(self):
         self.app=create_app(config_name="testing")
@@ -16,6 +17,9 @@ class AuthTestCase(unittest.TestCase):
             'email':'collinsnjau39@gmail.com',
             'password':'colo123',
             'confirm_password':'colo123'
+        }
+        self.reset_email={
+            'email':'collinsnjau39@gmail.com'
         }
         """connect to current context
         and connect the tables"""
@@ -123,6 +127,15 @@ class AuthTestCase(unittest.TestCase):
         result=self.client().post(AuthTestCase.registration, data=user)
         self.assertEqual(result.status_code,400)#bad request
         self.assertIn("email cannot be empty",str(result.data))
+
+    def test_user_can_reset_password(self):
+        """this tests if the user can reset a password they forgot"""
+        #first register a user
+        self.register_user()
+        #registered user forgets password so they make a post request to reset password
+        #its a post request with the user email as the payload
+        response=self.client().post(AuthTestCase.reset,data=self.reset_email)
+        self.assertIn("Password successfully reset.Check email for new password",str(response.data))
 
     def tearDown(self):
         #run after every test

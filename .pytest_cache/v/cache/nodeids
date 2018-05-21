@@ -19,6 +19,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_get_business_does_not_exist",
   "tests/test_business.py::BusinessTestCase::test_api_logged_out_user_cannot_update_business",
   "tests/test_business.py::BusinessTestCase::test_api_response_for_search_not_exist",
+  "tests/test_business.py::BusinessTestCase::test_api_welcome_page",
   "tests/test_business.py::BusinessTestCase::test_business_creation",
   "tests/test_business.py::BusinessTestCase::test_business_creation_when_user_logged_out",
   "tests/test_business.py::BusinessTestCase::test_filter_non_existent_category",
