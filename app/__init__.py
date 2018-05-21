@@ -60,7 +60,6 @@ def create_app(config_name):
             msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients = [email])
             msg.body = "Your new password is {}".format(str(password))
             mail.send(msg)
-
             message="Password successfully reset.Check email for new password"
             response=jsonify({"message":message,"status":200})
             response.status_code=200
@@ -352,7 +351,6 @@ def create_app(config_name):
             return response
         opinion=str(request.data.get('opinion', ''))
         rating=int(request.data.get('rating', ''))
-        
         if rating and opinion:
             new_review=Review(opinion=opinion,rating=rating,business_main=id)
             new_review.save()
@@ -374,7 +372,6 @@ def create_app(config_name):
                 "name":business.name
             }
             all_business.append(obj)
-
         if not all_business:
             message="cannot get review business that does not exist"
             response=jsonify({"message":message,"status_code":404})
@@ -390,7 +387,6 @@ def create_app(config_name):
                 "rating":review.rating
             }
             all_reviews.append(obj)
-            
         if not all_reviews:
             message="no reviews available"
             response=jsonify({"message":message,"status_code":404})
