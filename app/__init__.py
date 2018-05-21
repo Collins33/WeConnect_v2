@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from instance.config import app_config
 from flask import request, jsonify, abort,session
 from flask_mail import Mail,Message
+import os
+import random
 #initialize sqlalchemy
 db=SQLAlchemy()
 
@@ -18,11 +20,11 @@ def create_app(config_name):
     db.init_app(app)
     mail=Mail(app)
     app.config['MAIL_SERVER']='smtp.gmail.com'
-    app.config['MAIL_PORT'] = 465
-    app.config['MAIL_USERNAME'] = 'hcbullss@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'hc_bullss'
-    app.config['MAIL_USE_TLS'] = False
-    app.config['MAIL_USE_SSL'] = True
+    app.config['MAIL_PORT']=os.environ['PORT']
+    app.config['MAIL_USERNAME']=os.environ['MAIL']
+    app.config['MAIL_PASSWORD']=os.environ['PASSWORD']
+    app.config['MAIL_USE_TLS']=False
+    app.config['MAIL_USE_SSL']=True
     mail=Mail(app)
     #import auth blueprint and register it
     from .auth import auth_blueprint
@@ -44,7 +46,8 @@ def create_app(config_name):
         if user:
             #if the user with the email actually exists
             #generate a random string
-            password="kiblymonkey"
+            number=random.randint(10000000,10000000000)
+            password="kiblymonkey"+str(number)
             #update details
             User.update(User, user.id, password=password)
             msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients = [email])
