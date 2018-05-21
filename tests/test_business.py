@@ -2,8 +2,8 @@ import os
 import unittest
 import json
 from app import db, create_app
-
-class BusinessTestCase(unittest.TestCase):
+from tests.base import BaseTestHelper
+class BusinessTestCase(BaseTestHelper):
     """this class tests the business endpoints"""
     #business_endpoints
     register_business='/api/v2/businesses'
@@ -28,23 +28,6 @@ class BusinessTestCase(unittest.TestCase):
             #create db tables
             db.create_all()
 
-    def register_user(self,email,password,confirm_password):
-        """this method will register a user"""
-        user_data={
-            'email':email,
-            'password':password,
-            'confirm_password':confirm_password
-        }
-        return self.client().post('/api/v2/auth/registration',data=user_data)
-
-    def login_user(self,email,password,confirm_password):
-        user_data={
-            'email':email,
-            'password':password,
-            'confirm_password':confirm_password
-        }
-        return self.client().post('/api/v2/auth/login',data=user_data)
-                
     def add_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
         result=self.login_user("collins.muru@andela.com","123test","123test")

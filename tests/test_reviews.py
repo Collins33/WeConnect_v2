@@ -1,8 +1,9 @@
 import unittest
 import json
 from app import db,create_app
+from tests.base import BaseTestHelper
 
-class ReviewsTestCase(unittest.TestCase):
+class ReviewsTestCase(BaseTestHelper):
     #reviews url
     review_url='api/v2/businesses/{}/reviews'
     """class for testing reviews"""
@@ -19,23 +20,6 @@ class ReviewsTestCase(unittest.TestCase):
         with self.app.app_context():
             #create db tables
             db.create_all()
-
-    def register_user(self,email,password,confirm_password):
-        """this method will register a user"""
-        user_data={
-            'email':email,
-            'password':password,
-            'confirm_password':confirm_password
-        }
-        return self.client().post('/api/v2/auth/registration',data=user_data)
-
-    def login_user(self,email,password,confirm_password):
-        user_data={
-            'email':email,
-            'password':password,
-            'confirm_password':confirm_password
-        }
-        return self.client().post('/api/v2/auth/login',data=user_data)
 
     def add_business(self):
         self.register_user("collins.muru@andela.com","123test","123test")
