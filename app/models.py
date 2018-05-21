@@ -90,7 +90,17 @@ class User(db.Model):
     def validate_password_format(password):
         if re.match(r"^[A-Za-z0-9\.\+_-]*$",password):
             return True
-        return False    
+        return False 
+
+    @staticmethod
+    def update(class_name, row_id, **kwargs):
+        """Update selected columns in given row in a table"""
+        row = class_name.query.filter_by(id=row_id).first()
+        for column in kwargs:
+            if column == 'password':
+                kwargs[column] = Bcrypt().generate_password_hash(kwargs[column]).decode()
+            setattr(row, column, kwargs[column])
+        db.session.commit()   
 
 class Business(db.Model):
     __tablename__ = 'businesses'
