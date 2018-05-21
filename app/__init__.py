@@ -51,8 +51,8 @@ def create_app(config_name):
             response.status_code=200
             return response
         message="Email does not exist"
-        response=jsonify({"message":message,"status":401})
-        response.status_code=401
+        response=jsonify({"message":message,"status":400})
+        response.status_code=400
         return response    
       
     #BUSINESS ENDPOINTS

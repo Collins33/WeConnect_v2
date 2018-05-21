@@ -137,6 +137,14 @@ class AuthTestCase(unittest.TestCase):
         response=self.client().post(AuthTestCase.reset,data=self.reset_email)
         self.assertIn("Password successfully reset.Check email for new password",str(response.data))
 
+    def test_user_tries_to_reset_with_wrong_email(self):
+        """this tests if an email that is not registered can be used to reset"""
+        #reset url without registering a user
+        response=self.client().post(AuthTestCase.reset,data=self.reset_email)
+        self.assertIn("Email does not exist",str(response.data))
+        self.assertEqual(response.status_code,400)#bad request
+
+
     def tearDown(self):
         #run after every test
         with self.app.app_context():
