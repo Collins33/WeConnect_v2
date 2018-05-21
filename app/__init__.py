@@ -37,6 +37,13 @@ def create_app(config_name):
         response.status_code=200
         return response
 
+    @app.errorhandler(404)
+    def error(e):
+        message="That page does not exist"
+        response=jsonify({'message':message,'status':404})
+        response.status_code=404
+        return response
+
     @app.route('/api/v2/auth/reset-password', methods=['POST'])
     def reset_password():
         #get email from the request
