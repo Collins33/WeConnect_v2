@@ -318,7 +318,6 @@ def create_app(config_name):
             response.status_code = 404
             return response
 
-
     @app.route('/api/v2/businesses/<string:category>', methods=['GET'])
     def filter_category(category):
         """get business based on category"""
