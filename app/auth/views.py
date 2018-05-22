@@ -119,6 +119,7 @@ class LogoutView(MethodView):
             response.status_code = 200
             return response
 
+
 # MAKE THE CLASS CALLABLE SO THAT IT
 registration_view = RegistrationView.as_view('registration_view')
 login_view = LoginView.as_view('login_view')
