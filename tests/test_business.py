@@ -81,6 +81,7 @@ class BusinessTestCase(BaseTestHelper):
         self.add_business()
         result = self.client().get(BusinessTestCase.register_business)
         self.assertEqual(result.status_code, 200)
+        self.assertTrue(len(result.data)>1)
 
     def test_api_can_get_business_by_id(self):
         # you dont need to be authenticated to view a business
