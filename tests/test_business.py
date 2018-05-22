@@ -79,6 +79,7 @@ class BusinessTestCase(BaseTestHelper):
         """this tests if the api can return all bucketlists"""
         # add a business
         self.add_business()
+        self.add_second_business()
         result = self.client().get(BusinessTestCase.register_business)
         self.assertEqual(result.status_code, 200)
         self.assertTrue(len(result.data)>1)
