@@ -115,33 +115,22 @@ class BusinessTestCase(BaseTestHelper):
         # registers a user and adds a business called crasty crab
         self.add_business() 
         # fill form to search for it
-        result = self.client().post('/api/v2/businesses/search', data=self.search_param)
+        result = self.client().get('/api/v2/businesses/searches?q=cra')
         # expected request status 
         self.assertEqual(result.status_code, 200)
         # request should return the whole business
         self.assertIn('crastycrab', str(result.data))
-
-    def test_search_with_empty_field(self):
-        # if the user searches an empty field
-        # registers a user and adds a business called crasty crab
-        self.add_business() 
-        # fill form to search for it
-        result = self.client().post('/api/v2/businesses/search', data={'name': ''})
-        # expected request status 
-        self.assertEqual(result.status_code, 400)
-        # request should return the whole business
-        self.assertIn('please enter name to search', str(result.data))
 
     def test_api_response_for_search_not_exist(self):
         # if the user searches an empty field
         # registers a user and adds a business called crasty crab
         self.add_business() 
         # fill form to search for it
-        result = self.client().post('/api/v2/businesses/search', data={'name': 'apple'})
-        # expected request status 
+        result = self.client().get('/api/v2/businesses/searches?q=ten')
+        # expected request status
         self.assertEqual(result.status_code, 404)
         # request should return the whole business
-        self.assertIn('Sorry but the business could not be found', str(result.data))
+        self.assertIn("No business found", str(result.data))
 
     def test_api_get_business_does_not_exist(self):
         # add two businesses
