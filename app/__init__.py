@@ -113,8 +113,23 @@ def create_app(config_name):
                         response = jsonify({'message': message, 'status': 400})
                         response.status_code = 400
                         return response
+                elif not description:
+                    message = "Business description missing"
+                    response = jsonify({'message': message, 'status': 400})
+                    response.status_code = 400
+                    return response
+                elif not location:
+                    message = "Business location missing"
+                    response = jsonify({'message': message, 'status': 400})
+                    response.status_code = 400
+                    return response
+                elif not contact:
+                    message = "Business contact missing"
+                    response = jsonify({'message': message, 'status': 400})
+                    response.status_code = 400
+                    return response
                 else:
-                    message = "Enter all the details"
+                    message = "Business category missing"
                     response = jsonify({'message': message, 'status': 400})
                     response.status_code = 400
                     return response
@@ -125,7 +140,7 @@ def create_app(config_name):
                     "message": message, 'status': 409
                 })
                 response.status_code = 409
-                return response        
+                return response
         else:
             # user is not legit
             message = "You are not logged in. Please log in"

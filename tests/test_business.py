@@ -24,6 +24,10 @@ class BusinessTestCase(BaseTestHelper):
         self.empty_name = {'name': '  ', 'description': 'Fast food restaurant', 'contact': '0702848032', 'category': 'fast food', 'location': 'atlantic'}
         self.empty_update = {'name': '', 'description': 'Fastfood', 'contact': '0702848032', 'category': 'fastfood', 'location': 'atlantic'}
         self.search_param = {'name': 'crastycrab'}
+        self.empty_desc = {'name': 'crast', 'contact': '0702848032', 'category': 'fast food', 'location': 'atlantic'}
+        self.empty_cont = {'name': 'crasty', 'description': 'Fast food restaurant', 'category': 'fast food', 'location': 'atlantic'}
+        self.empty_cat = {'name': 'crasty', 'description': 'Fast food restaurant', 'contact': '0702848032', 'location': 'atlantic'}
+        self.empty_loc = {'name': 'crasty', 'description': 'Fast food restaurant', 'contact': '0702848032', 'category': 'fast food'}
         # bind app to current context
         with self.app.app_context():
             # create db tables
@@ -123,7 +127,7 @@ class BusinessTestCase(BaseTestHelper):
         self.add_business() 
         # fill form to search for it
         result = self.client().post('/api/v2/businesses/search', data={'name': ''})
-        #expected request status 
+        # expected request status 
         self.assertEqual(result.status_code, 400)
         # request should return the whole business
         self.assertIn('please enter name to search', str(result.data))
@@ -164,9 +168,9 @@ class BusinessTestCase(BaseTestHelper):
         # register and login second user
         self.register_user("collinsnjau39@gmail.com", "123test", "123test")
         second_result = self.login_user("collinsnjau39@gmail.com", "123test", "123test")
-        #first user add a business
+        # first user add a business
         access_token_first = json.loads(result.data.decode())['access_token']
-        self.client().post(BusinessTestCase.register_business ,headers=dict(Authorization="Bearer " + access_token_first), data=self.business)
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token_first), data=self.business)
         # second user tries to update the business
         access_token_second = json.loads(second_result.data.decode())['access_token']
         edit_response = self.client().put(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token_second), data=self.secondBusiness)
@@ -247,14 +251,45 @@ class BusinessTestCase(BaseTestHelper):
         self.assertEqual(del_response.status_code, 403)
         self.assertIn("You are not logged in. Please log in", str(del_response.data))
         
-    def test_register_business_with_empty_string(self):
+    def test_register_business_with_empty_description(self):
         self.register_user("collins.muru@andela.com", "123test", "123test")
         result = self.login_user("collins.muru@andela.com", "123test", "123test")
         # get the access token
         access_token = json.loads(result.data.decode())['access_token']
         # add the access token to the header
-        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token) ,data=self.empty_name)
+        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.empty_desc)
         self.assertEqual(result.status_code, 400)
+        self.assertIn("Business description missing", str(result.data))
+
+    def test_register_business_with_empty_category(self):
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.empty_cat)
+        self.assertEqual(result.status_code, 400)
+        self.assertIn("Business category missing", str(result.data))
+
+    def test_register_business_with_empty_location(self):
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.empty_loc)
+        self.assertEqual(result.status_code, 400)
+        self.assertIn("Business location missing", str(result.data))
+
+    def test_register_business_with_empty_contact(self):
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.empty_cont)
+        self.assertEqual(result.status_code, 400)
+        self.assertIn("Business contact missing", str(result.data))                
 
     def test_register_business_with_name_already_exists(self):
         # register a test user and log him in
