@@ -1,94 +1,95 @@
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
-#import the environment dict
+# import the environment dict
 from instance.config import app_config
-from flask import request, jsonify, abort,session
-from flask_mail import Mail,Message
+from flask import request, jsonify
+from flask_mail import Mail, Message
 import os
 import random
-#initialize sqlalchemy
-db=SQLAlchemy()
+# initialize sqlalchemy
+db = SQLAlchemy()
+
 
 def create_app(config_name):
-    from app.models import Business, User, Review,Access_token
-    #this method wraps creation of flask-api object and returns it after loading the configurations
-    app=FlaskAPI(__name__, instance_relative_config=True)
+    from app.models import Business, User, Review, Access_token
+    # this method wraps creation of flask-api object and returns it after loading the configurations
+    app = FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    #connect the db
+    # connect the db
     db.init_app(app)
-    mail=Mail(app)
-    app.config['MAIL_SERVER']='smtp.gmail.com'
-    app.config['MAIL_PORT']=os.environ['PORT']
-    app.config['MAIL_USERNAME']=os.environ['MAIL']
-    app.config['MAIL_PASSWORD']=os.environ['PASSWORD']
-    app.config['MAIL_USE_TLS']=False
-    app.config['MAIL_USE_SSL']=True
-    mail=Mail(app)
-    #import auth blueprint and register it
+    mail = Mail(app)
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = os.environ['PORT']
+    app.config['MAIL_USERNAME'] = os.environ['MAIL']
+    app.config['MAIL_PASSWORD'] = os.environ['PASSWORD']
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+    mail = Mail(app)
+    # import auth blueprint and register it
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     @app.route('/', methods=['GET'])
     def welcome():
-        message="Welcome to WeConnect"
-        response=jsonify({'message':message,'status':200})
-        response.status_code=200
+        message = "Welcome to WeConnect"
+        response = jsonify({'message': message, 'status': 200})
+        response.status_code = 200
         return response
 
     @app.errorhandler(404)
     def error(e):
-        message="That page does not exist"
-        response=jsonify({'message':message,'status':404})
-        response.status_code=404
+        message = "That page does not exist"
+        response = jsonify({'message': message, 'status': 404})
+        response.status_code = 404
         return response
 
     @app.route('/api/v2/auth/reset-password', methods=['POST'])
     def reset_password():
-        #get email from the request
-        email=str(request.data.get('email', ''))
-        #get the user who matches the email
-        user=User.query.filter_by(email=email).first()
+        # get email from the request
+        email = str(request.data.get('email', ''))
+        # get the user who matches the email
+        user = User.query.filter_by(email=email).first()
         if user:
-            #if the user with the email actually exists
-            #generate a random string
-            number=random.randint(10000000,10000000000)
-            password="kiblymonkey"+str(number)
-            #update details
+            # if the user with the email actually exists
+            # generate a random string
+            number = random.randint(10000000, 10000000000)
+            password = "kiblymonkey"+str(number)
+            # update details
             User.update(User, user.id, password=password)
-            msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients = [email])
+            msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients =[email])
             msg.body = "Your new password is {}".format(str(password))
             mail.send(msg)
-            message="Password successfully reset.Check email for new password"
-            response=jsonify({"message":message,"status":200})
-            response.status_code=200
+            message = "Password successfully reset.Check email for new password"
+            response = jsonify({"message":message, "status": 200})
+            response.status_code = 200
             return response
-        message="Email does not exist"
-        response=jsonify({"message":message,"status":400})
-        response.status_code=400
+        message = "Email does not exist"
+        response = jsonify({"message":message, "status": 400})
+        response.status_code= 400
         return response    
       
-    #BUSINESS ENDPOINTS
-    @app.route('/api/v2/businesses',methods=['POST'])
+    # BUSINESS ENDPOINTS
+    @app.route('/api/v2/businesses', methods=['POST'])
     def add_business():
-        #get access token from the header
-        auth_header=request.headers.get('Authorization')
-        access_token=auth_header.split(" ")[1]
-        valid_token=Access_token.query.filter_by(token=access_token).first() #return true if token is valid
+        # get access token from the header
+        auth_header = request.headers.get('Authorization')
+        access_token = auth_header.split(" ")[1]
+        valid_token = Access_token.query.filter_by(token=access_token).first() #return true if token is valid
         if not valid_token:
-            #user is legit
-            #decode the access_token and get the user_id
-            user_id=User.decode_token(access_token)
-            #get the user data
+            # user is legit
+            # decode the access_token and get the user_id
+            user_id = User.decode_token(access_token)
+            # get the user data
             name = str(request.data.get('name', ''))          
-            description=str(request.data.get('description', ''))
-            location=str(request.data.get('location', ''))
-            contact=str(request.data.get('contact', ''))
-            category=str(request.data.get('category',''))
-            #validate user data
-            validate_name=Business.validate_business_details(name)
-            business_exist=Business.query.filter_by(name=name).first()
+            description = str(request.data.get('description', ''))
+            location = str(request.data.get('location', ''))
+            contact = str(request.data.get('contact', ''))
+            category = str(request.data.get('category',''))
+            # validate user data
+            validate_name = Business.validate_business_details(name)
+            business_exist = Business.query.filter_by(name=name).first()
             if not business_exist:
             #first validate that the business name does not exist
                 if name and description and location and contact and category:

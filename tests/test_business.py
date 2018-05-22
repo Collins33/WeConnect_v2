@@ -1,134 +1,147 @@
-import os
 import unittest
 import json
 from app import db, create_app
 from tests.base import BaseTestHelper
+
+
 class BusinessTestCase(BaseTestHelper):
     """this class tests the business endpoints"""
-    #business_endpoints
-    register_business='/api/v2/businesses'
-    business_id_url='/api/v2/businesses/{}'
-    user_logout='/api/v2/auth/log-out'
-    wrong_url='/api/v/businesses'
+    # business_endpoints
+    register_business = '/api/v2/businesses'
+    business_id_url = '/api/v2/businesses/{}'
+    user_logout = '/api/v2/auth/log-out'
+    wrong_url = '/api/v/businesses'
 
     def setUp(self):
         """initilize the app
         create test variables"""
-        self.app=create_app(config_name="testing")
-        self.client=self.app.test_client
-        self.business=self.business={'name':'crastycrab','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
-        self.secondBusiness={'name':'chumbucket','description':'Fast food restaurant','contact':'0702848031','category':'fast food','location':'atlantic'}
-        self.business_test={'name':'crastycrab','description':'Fast food restaurant','category':'fast food','location':'atlantic'}
-        self.business_edit={'name':'chumbucket','description':'Fast food restaurant under the sea','contact':'0702848032','category':'fast food','location':'atlantic'}
-        self.empty_name={'name':'  ','description':'Fast food restaurant','contact':'0702848032','category':'fast food','location':'atlantic'}
-        self.empty_update={'name':'','description':'Fastfood','contact':'0702848032','category':'fastfood','location':'atlantic'}
-        self.search_param={'name':'crastycrab'}
-        #bind app to current context
+        self.app = create_app(config_name="testing")
+        self.client = self.app.test_client
+        self.business = {'name': 'crastycrab', 'description': 'Fastfood', 'contact': '0702848032', 'category': 'fastfood', 'location': 'atlantic'}
+        self.secondBusiness = {'name': 'chumbucket', 'description': 'Fast food restaurant', 'contact': '0702848031', 'category': 'fast food', 'location': 'atlantic'}
+        self.business_test = {'name': 'crastycrab', 'description': 'Fast food restaurant', 'category': 'fast food', 'location': 'atlantic'}
+        self.business_edit = {'name': 'chumbucket', 'description': 'Fast food restaurant under the sea', 'contact': '0702848032', 'category': 'fast food', 'location': 'atlantic'}
+        self.empty_name = {'name': '  ', 'description': 'Fast food restaurant', 'contact': '0702848032', 'category': 'fast food', 'location': 'atlantic'}
+        self.empty_update = {'name': '', 'description': 'Fastfood', 'contact': '0702848032', 'category': 'fastfood', 'location': 'atlantic'}
+        self.search_param = {'name': 'crastycrab'}
+        # bind app to current context
         with self.app.app_context():
-            #create db tables
+            # create db tables
             db.create_all()
 
     def add_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        response = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
         return response
 
     def add_second_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.secondBusiness)
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        response = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.secondBusiness)
         return response
 
     def test_api_welcome_page(self):
-        response=self.client().get('/')
-        self.assertEqual(response.status_code,200)
-        self.assertIn("Welcome to WeConnect",str(response.data))    
+        response = self.client().get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Welcome to WeConnect", str(response.data))    
 
     def test_business_creation(self):
-        #register a test user and log him in
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        self.assertEqual(response.status_code,201)
-        self.assertIn('crastycrab',str(response.data))
+        # register a test user and log him in
+        self.register_user("collins.muru@andela.com" ,"123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        response = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('crastycrab', str(response.data))
 
     def test_business_creation_when_user_logged_out(self):
-        #register a test user and log him in
+        # register a test user and log him in
         self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-        response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        self.assertEqual(response.status_code,403)
-        self.assertIn("You are not logged in. Please log in",str(response.data))
+        result = self.login_user("collins.muru@andela.com","123test","123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.user_logout, headers=dict(Authorization="Bearer " + access_token), data={"token": access_token})
+        response = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("You are not logged in. Please log in", str(response.data))
         
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
-        #add a business
+        # add a business
         self.add_business()
-        result=self.client().get(BusinessTestCase.register_business)
-        self.assertEqual(result.status_code,200)
+        result = self.client().get(BusinessTestCase.register_business)
+        self.assertEqual(result.status_code, 200)
 
     def test_api_can_get_business_by_id(self):
-        #you dont need to be authenticated to view a business
-        self.add_business() #registers a user and adds a business
-        result=self.client().get(BusinessTestCase.business_id_url.format('1'))
-        self.assertEqual(result.status_code,200) 
-        self.assertIn('crastycrab',str(result.data))
+        # you dont need to be authenticated to view a business
+        self.add_business()
+        result = self.client().get(BusinessTestCase.business_id_url.format('1'))
+        self.assertEqual(result.status_code, 200) 
+        self.assertIn('crastycrab', str(result.data))
 
     def test_api_can_filter_by_category(self):
-        #you dont need to be authenticated to view a business
-        self.add_business() #registers a user and adds a business
-        result=self.client().get(BusinessTestCase.business_id_url.format('fastfood'))
-        self.assertEqual(result.status_code,200) 
-        self.assertIn('crastycrab',str(result.data))
+        # you dont need to be authenticated to view a business
+        self.add_business() 
+        result = self.client().get(BusinessTestCase.business_id_url.format('fastfood'))
+        self.assertEqual(result.status_code, 200) 
+        self.assertIn('crastycrab', str(result.data))
 
     def test_filter_non_existent_category(self):
         """test for filtering with category that does not exist"""
-        #you dont need to be authenticated to view a business
-        self.add_business() #registers a user and adds a business
-        result=self.client().get(BusinessTestCase.business_id_url.format('cars'))
-        self.assertEqual(result.status_code,404) 
-        self.assertIn("No business in that category",str(result.data))
+        # you dont need to be authenticated to view a business
+        self.add_business() 
+        result = self.client().get(BusinessTestCase.business_id_url.format('cars'))
+        self.assertEqual(result.status_code, 404) 
+        self.assertIn("No business in that category", str(result.data))
 
     def test_api_can_get_business_by_name(self):
-        #you dont need to be authenticated to view or search for a business
-        self.add_business() #registers a user and adds a business called crasty crab
-        result=self.client().post('/api/v2/businesses/search', data=self.search_param)# fill form to search for it
-        self.assertEqual(result.status_code,200)#expected request status 
-        self.assertIn('crastycrab',str(result.data))# request should return the whole business
+        # you dont need to be authenticated to view or search for a business
+        # registers a user and adds a business called crasty crab
+        self.add_business() 
+        # fill form to search for it
+        result = self.client().post('/api/v2/businesses/search', data=self.search_param)
+        # expected request status 
+        self.assertEqual(result.status_code, 200)
+        # request should return the whole business
+        self.assertIn('crastycrab', str(result.data))
 
     def test_search_with_empty_field(self):
-        #if the user searches an empty field
-        self.add_business() #registers a user and adds a business called crasty crab
-        result=self.client().post('/api/v2/businesses/search', data={'name':''})# fill form to search for it
-        self.assertEqual(result.status_code,400)#expected request status 
-        self.assertIn('please enter name to search',str(result.data))# request should return the whole business
+        # if the user searches an empty field
+        # registers a user and adds a business called crasty crab
+        self.add_business() 
+        # fill form to search for it
+        result = self.client().post('/api/v2/businesses/search', data={'name': ''})
+        #expected request status 
+        self.assertEqual(result.status_code, 400)
+        # request should return the whole business
+        self.assertIn('please enter name to search', str(result.data))
 
     def test_api_response_for_search_not_exist(self):
-        #if the user searches an empty field
-        self.add_business() #registers a user and adds a business called crasty crab
-        result=self.client().post('/api/v2/businesses/search', data={'name':'apple'})# fill form to search for it
-        self.assertEqual(result.status_code,404)#expected request status 
-        self.assertIn('Sorry but the business could not be found',str(result.data))# request should return the whole business
+        # if the user searches an empty field
+        # registers a user and adds a business called crasty crab
+        self.add_business() 
+        # fill form to search for it
+        result = self.client().post('/api/v2/businesses/search', data={'name': 'apple'})
+        # expected request status 
+        self.assertEqual(result.status_code, 404)
+        # request should return the whole business
+        self.assertIn('Sorry but the business could not be found',str(result.data))
 
     def test_api_get_business_does_not_exist(self):
-        #add two businesses
+        # add two businesses
         self.add_business()
         self.add_second_business()
-        result=self.client().get(BusinessTestCase.business_id_url.format('10'))
+        result = self.client().get(BusinessTestCase.business_id_url.format('10'))
         self.assertEqual(result.status_code,404)
 
     def test_api_can_update_business(self):
