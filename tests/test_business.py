@@ -54,7 +54,7 @@ class BusinessTestCase(BaseTestHelper):
 
     def test_business_creation(self):
         # register a test user and log him in
-        self.register_user("collins.muru@andela.com" ,"123test", "123test")
+        self.register_user("collins.muru@andela.com", "123test", "123test")
         result = self.login_user("collins.muru@andela.com", "123test", "123test")
         # get the access token
         access_token = json.loads(result.data.decode())['access_token']
@@ -65,8 +65,8 @@ class BusinessTestCase(BaseTestHelper):
 
     def test_business_creation_when_user_logged_out(self):
         # register a test user and log him in
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result = self.login_user("collins.muru@andela.com","123test","123test")
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
         # get the access token
         access_token = json.loads(result.data.decode())['access_token']
         # add the access token to the header
@@ -82,7 +82,7 @@ class BusinessTestCase(BaseTestHelper):
         self.add_second_business()
         result = self.client().get(BusinessTestCase.register_business)
         self.assertEqual(result.status_code, 200)
-        self.assertTrue(len(result.data)>1)
+        self.assertTrue(len(result.data) > 1)
 
     def test_api_can_get_business_by_id(self):
         # you dont need to be authenticated to view a business
@@ -137,144 +137,144 @@ class BusinessTestCase(BaseTestHelper):
         # expected request status 
         self.assertEqual(result.status_code, 404)
         # request should return the whole business
-        self.assertIn('Sorry but the business could not be found',str(result.data))
+        self.assertIn('Sorry but the business could not be found', str(result.data))
 
     def test_api_get_business_does_not_exist(self):
         # add two businesses
         self.add_business()
         self.add_second_business()
         result = self.client().get(BusinessTestCase.business_id_url.format('10'))
-        self.assertEqual(result.status_code,404)
+        self.assertEqual(result.status_code, 404)
 
     def test_api_can_update_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
-        self.assertEqual(edit_response.status_code,200)
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        edit_response = self.client().put(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token), data=self.secondBusiness)
+        self.assertEqual(edit_response.status_code, 200)
 
     def test_unauthorized_user_cannot_update_business(self):
         """you cannot edit a business you did not create"""
-        #register and login first user
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #register and login second user
-        self.register_user("collinsnjau39@gmail.com","123test","123test")
-        second_result=self.login_user("collinsnjau39@gmail.com","123test","123test")
+        # register and login first user
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # register and login second user
+        self.register_user("collinsnjau39@gmail.com", "123test", "123test")
+        second_result = self.login_user("collinsnjau39@gmail.com", "123test", "123test")
         #first user add a business
-        access_token_first=json.loads(result.data.decode())['access_token']
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token_first) ,data=self.business)
-        #second user tries to update the business
-        access_token_second=json.loads(second_result.data.decode())['access_token']
-        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token_second),data=self.secondBusiness)
-        self.assertIn("You cannot update a business you did not add",str(edit_response.data))
-        self.assertEqual(edit_response.status_code,401)#unauthorized
+        access_token_first = json.loads(result.data.decode())['access_token']
+        self.client().post(BusinessTestCase.register_business ,headers=dict(Authorization="Bearer " + access_token_first), data=self.business)
+        # second user tries to update the business
+        access_token_second = json.loads(second_result.data.decode())['access_token']
+        edit_response = self.client().put(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token_second), data=self.secondBusiness)
+        self.assertIn("You cannot update a business you did not add", str(edit_response.data))
+        self.assertEqual(edit_response.status_code, 401)
 
     def test_api_cannot_update_business_with_fields_missing(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.empty_update)
-        self.assertEqual(edit_response.status_code,400)
-        self.assertIn("No field can be empty when updating a business",str(edit_response.data))
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        edit_response = self.client().put(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token), data=self.empty_update)
+        self.assertEqual(edit_response.status_code, 400)
+        self.assertIn("No field can be empty when updating a business", str(edit_response.data))
         
     def test_api_logged_out_user_cannot_update_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)        
-        #log out the user
-        self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-        edit_response=self.client().put(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
-        self.assertEqual(edit_response.status_code,403)
-        self.assertIn("You are not logged in. Please log in",str(edit_response.data))
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)        
+        # log out the user
+        self.client().post(BusinessTestCase.user_logout, headers=dict(Authorization="Bearer " + access_token), data={"token": access_token})
+        edit_response = self.client().put(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token), data=self.secondBusiness)
+        self.assertEqual(edit_response.status_code, 403)
+        self.assertIn("You are not logged in. Please log in", str(edit_response.data))
 
     def test_api_cannot_update_nonexistent_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        edit_response=self.client().put(BusinessTestCase.business_id_url.format('30'),headers=dict(Authorization="Bearer "+ access_token),data=self.secondBusiness)
-        self.assertEqual(edit_response.status_code,404)
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        edit_response = self.client().put(BusinessTestCase.business_id_url.format('30'), headers=dict(Authorization="Bearer " + access_token), data=self.secondBusiness)
+        self.assertEqual(edit_response.status_code, 404)
 
     def test_api_can_delete_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        edit_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token))
-        self.assertEqual(edit_response.status_code,200) 
-        result=self.client().get(BusinessTestCase.business_id_url.format('1'))
-        self.assertEqual(result.status_code,404)
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        edit_response = self.client().delete(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual(edit_response.status_code, 200) 
+        result = self.client().get(BusinessTestCase.business_id_url.format('1'))
+        self.assertEqual(result.status_code, 404)
 
     def test_unauthorized_user_cannot_delete_business(self):
         """you cannot delete a business you did not create"""
-        #register and login first user
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #register and login second user
-        self.register_user("collinsnjau39@gmail.com","123test","123test")
-        second_result=self.login_user("collinsnjau39@gmail.com","123test","123test")
-        #first user add a business
-        access_token_first=json.loads(result.data.decode())['access_token']
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token_first) ,data=self.business)
-        #second user tries to delete the business
-        access_token_second=json.loads(second_result.data.decode())['access_token']
-        edit_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token_second),data=self.secondBusiness)
-        self.assertIn("You cannot delete a business you did not add",str(edit_response.data))
-        self.assertEqual(edit_response.status_code,401)#unauthorized
+        # register and login first user
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # register and login second user
+        self.register_user("collinsnjau39@gmail.com", "123test", "123test")
+        second_result = self.login_user("collinsnjau39@gmail.com", "123test", "123test")
+        # first user add a business
+        access_token_first = json.loads(result.data.decode())['access_token']
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token_first), data=self.business)
+        # second user tries to delete the business
+        access_token_second = json.loads(second_result.data.decode())['access_token']
+        edit_response = self.client().delete(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token_second), data=self.secondBusiness)
+        self.assertIn("You cannot delete a business you did not add", str(edit_response.data))
+        self.assertEqual(edit_response.status_code, 401)
 
     def test_logged_out_user_cannot_delete_business(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        #log out the user
-        self.client().post(BusinessTestCase.user_logout,headers=dict(Authorization="Bearer "+ access_token),data={"token":access_token})
-        del_response=self.client().delete(BusinessTestCase.business_id_url.format('1'),headers=dict(Authorization="Bearer "+ access_token))
-        self.assertEqual(del_response.status_code,403)
-        self.assertIn("You are not logged in. Please log in",str(del_response.data))
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        # log out the user
+        self.client().post(BusinessTestCase.user_logout, headers=dict(Authorization="Bearer " + access_token), data={"token": access_token})
+        del_response = self.client().delete(BusinessTestCase.business_id_url.format('1'), headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual(del_response.status_code, 403)
+        self.assertIn("You are not logged in. Please log in", str(del_response.data))
         
     def test_register_business_with_empty_string(self):
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        result=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.empty_name)
-        self.assertEqual(result.status_code,400)#bad request
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token) ,data=self.empty_name)
+        self.assertEqual(result.status_code, 400)
 
     def test_register_business_with_name_already_exists(self):
-        #register a test user and log him in
-        self.register_user("collins.muru@andela.com","123test","123test")
-        result=self.login_user("collins.muru@andela.com","123test","123test")
-        #get the access token
-        access_token=json.loads(result.data.decode())['access_token']
-        #add the access token to the header
-        self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        second_response=self.client().post(BusinessTestCase.register_business,headers=dict(Authorization="Bearer "+ access_token) ,data=self.business)
-        self.assertEqual(second_response.status_code,409)
+        # register a test user and log him in
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        second_response = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        self.assertEqual(second_response.status_code, 409)
         self.assertIn("Business name already exists", str(second_response.data))
 
     def test_wrong_url(self):
         """test response for wrong url"""
-        #add a business
+        # add a business
         self.add_business()
-        result=self.client().get(BusinessTestCase.wrong_url)
-        self.assertEqual(result.status_code,404)
-        self.assertIn("That page does not exist",str(result.data))
+        result = self.client().get(BusinessTestCase.wrong_url)
+        self.assertEqual(result.status_code, 404)
+        self.assertIn("That page does not exist", str(result.data))
 
     def tearDown(self):
         """connect to current context
@@ -282,6 +282,7 @@ class BusinessTestCase(BaseTestHelper):
         with self.app.app_context():
             db.session.remove()
             db.drop_all()
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
