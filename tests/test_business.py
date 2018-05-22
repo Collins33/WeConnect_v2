@@ -251,16 +251,6 @@ class BusinessTestCase(BaseTestHelper):
         self.assertEqual(del_response.status_code, 403)
         self.assertIn("You are not logged in. Please log in", str(del_response.data))
         
-    def test_register_business_with_empty_name(self):
-        self.register_user("collins.muru@andela.com", "123test", "123test")
-        result = self.login_user("collins.muru@andela.com", "123test", "123test")
-        # get the access token
-        access_token = json.loads(result.data.decode())['access_token']
-        # add the access token to the header
-        result = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.empty_name)
-        self.assertEqual(result.status_code, 400)
-        self.assertIn("Business name missing", str(result.data))
-
     def test_register_business_with_empty_description(self):
         self.register_user("collins.muru@andela.com", "123test", "123test")
         result = self.login_user("collins.muru@andela.com", "123test", "123test")
