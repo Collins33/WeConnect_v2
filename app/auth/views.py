@@ -55,10 +55,10 @@ class RegistrationView(MethodView):
                     return make_response(jsonify(response)), 400
             except Exception as e:
                 response = {
-                    "message": str(e) + "is missing"
+                    "message": str(e) + " is missing"
                 }
                 print(response)
-                return make_response(jsonify(response)), 401
+                return make_response(jsonify(response)), 403
         else:
             # this will run if the user exists
             response = {

@@ -5,6 +5,7 @@
   "tests/test_auth.py::AuthTestCase::test_logout_user",
   "tests/test_auth.py::AuthTestCase::test_non_registered_user_trying_to_login",
   "tests/test_auth.py::AuthTestCase::test_password_and_confirm_not_match",
+  "tests/test_auth.py::AuthTestCase::test_register_user_with_password_missing",
   "tests/test_auth.py::AuthTestCase::test_registration",
   "tests/test_auth.py::AuthTestCase::test_registration_when_user_already_exists",
   "tests/test_auth.py::AuthTestCase::test_short_password",
