@@ -15,6 +15,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_can_get_all_businesses",
   "tests/test_business.py::BusinessTestCase::test_api_can_get_business_by_id",
   "tests/test_business.py::BusinessTestCase::test_api_can_get_business_by_name",
+  "tests/test_business.py::BusinessTestCase::test_api_can_paginate_results",
   "tests/test_business.py::BusinessTestCase::test_api_can_update_business",
   "tests/test_business.py::BusinessTestCase::test_api_cannot_update_business_with_fields_missing",
   "tests/test_business.py::BusinessTestCase::test_api_cannot_update_nonexistent_business",

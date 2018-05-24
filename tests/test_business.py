@@ -11,6 +11,7 @@ class BusinessTestCase(BaseTestHelper):
     business_id_url = '/api/v2/businesses/{}'
     user_logout = '/api/v2/auth/log-out'
     wrong_url = '/api/v/businesses'
+    paginate_business='/api/v2/businesses/paginate/1'
 
     def setUp(self):
         """initilize the app
@@ -87,6 +88,14 @@ class BusinessTestCase(BaseTestHelper):
         result = self.client().get(BusinessTestCase.register_business)
         self.assertEqual(result.status_code, 200)
         self.assertTrue(len(result.data) > 1)
+
+    def test_api_can_paginate_results(self):
+        "tests if api can paginate the businesses into the desired number"
+         # add a business
+        self.add_business()
+        self.add_second_business()
+        result = self.client().get(BusinessTestCase.paginate_business)
+        self.assertEqual(result.status_code, 200)
 
     def test_api_can_get_business_by_id(self):
         # you dont need to be authenticated to view a business
