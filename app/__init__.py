@@ -75,80 +75,86 @@ def create_app(config_name):
     def add_business():
         # get access token from the header
         auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1]
-        # return true if token is valid
-        valid_token = Access_token.query.filter_by(token=access_token).first() 
-        if not valid_token:
-            # user is legit
-            # decode the access_token and get the user_id
-            user_id = User.decode_token(access_token)
-            # get the user data
-            name = str(request.data.get('name', ''))          
-            description = str(request.data.get('description', ''))
-            location = str(request.data.get('location', ''))
-            contact = str(request.data.get('contact', ''))
-            category = str(request.data.get('category', ''))
-            # validate user data
-            validate_name = Business.validate_business_details(name)
-            business_exist = Business.query.filter_by(name=name).first()
-            if not business_exist:
-                if name and description and location and contact and category:
-                    if validate_name:
-                        business = Business(name=name, description=description, location=location, contact=contact, category=category, business_owner=user_id)
-                        business.save()
-                        creation_response = jsonify({
-                            'id': business.id,
-                            'name': business.name,
-                            'description': business.description,
-                            'location': business.location,
-                            'contact': business.contact,
-                            'category': business.category,
-                            'business_owner': business.business_owner
-                        })
-                        creation_response.status_code = 201
-                        return creation_response
-                    else:
-                        message = "details cannot be empty string"
-                        # 400 is bad request
+        if auth_header:
+
+            access_token = auth_header.split(" ")[1]
+            # return true if token is valid
+            valid_token = Access_token.query.filter_by(token=access_token).first() 
+            if not valid_token:
+                # user is legit
+                # decode the access_token and get the user_id
+                user_id = User.decode_token(access_token)
+                # get the user data
+                name = str(request.data.get('name', ''))          
+                description = str(request.data.get('description', ''))
+                location = str(request.data.get('location', ''))
+                contact = str(request.data.get('contact', ''))
+                category = str(request.data.get('category', ''))
+                # validate user data
+                validate_name = Business.validate_business_details(name)
+                business_exist = Business.query.filter_by(name=name).first()
+                if not business_exist:
+                    if name and description and location and contact and category:
+                        if validate_name:
+                            business = Business(name=name, description=description, location=location, contact=contact, category=category, business_owner=user_id)
+                            business.save()
+                            creation_response = jsonify({
+                                'id': business.id,
+                                'name': business.name,
+                                'description': business.description,
+                                'location': business.location,
+                                'contact': business.contact,
+                                'category': business.category,
+                                'business_owner': business.business_owner
+                            })
+                            creation_response.status_code = 201
+                            return creation_response
+                        else:
+                            message = "details cannot be empty string"
+                            # 400 is bad request
+                            response = jsonify({'message': message, 'status': 400})
+                            response.status_code = 400
+                            return response
+                    elif not description:
+                        message = "Business description missing"
                         response = jsonify({'message': message, 'status': 400})
                         response.status_code = 400
                         return response
-                elif not description:
-                    message = "Business description missing"
-                    response = jsonify({'message': message, 'status': 400})
-                    response.status_code = 400
-                    return response
-                elif not location:
-                    message = "Business location missing"
-                    response = jsonify({'message': message, 'status': 400})
-                    response.status_code = 400
-                    return response
-                elif not contact:
-                    message = "Business contact missing"
-                    response = jsonify({'message': message, 'status': 400})
-                    response.status_code = 400
-                    return response
+                    elif not location:
+                        message = "Business location missing"
+                        response = jsonify({'message': message, 'status': 400})
+                        response.status_code = 400
+                        return response
+                    elif not contact:
+                        message = "Business contact missing"
+                        response = jsonify({'message': message, 'status': 400})
+                        response.status_code = 400
+                        return response
+                    else:
+                        message = "Business category missing"
+                        response = jsonify({'message': message, 'status': 400})
+                        response.status_code = 400
+                        return response
                 else:
-                    message = "Business category missing"
-                    response = jsonify({'message': message, 'status': 400})
-                    response.status_code = 400
+                    # if business name exists
+                    message = "Business name already exists"
+                    response = jsonify({
+                        "message": message, 'status': 409
+                    })
+                    response.status_code = 409
                     return response
             else:
-                # if business name exists
-                message = "Business name already exists"
+                # user is not legit
+                message = "You are not logged in. Please log in"
                 response = jsonify({
-                    "message": message, 'status': 409
+                    "message": message
                 })
-                response.status_code = 409
+                response.status_code = 403
                 return response
-        else:
-            # user is not legit
-            message = "You are not logged in. Please log in"
-            response = jsonify({
-                "message": message
-            })
-            response.status_code = 403
-            return response
+        message = "You must have a token to add a business. Login to get a token"
+        response = jsonify({"message": message, "status": 403})
+        response.status_code = 403
+        return response        
 
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():

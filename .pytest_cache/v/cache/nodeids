@@ -26,6 +26,7 @@
   "tests/test_business.py::BusinessTestCase::test_api_welcome_page",
   "tests/test_business.py::BusinessTestCase::test_business_creation",
   "tests/test_business.py::BusinessTestCase::test_business_creation_when_user_logged_out",
+  "tests/test_business.py::BusinessTestCase::test_business_creation_with_token_missing",
   "tests/test_business.py::BusinessTestCase::test_filter_non_existent_category",
   "tests/test_business.py::BusinessTestCase::test_logged_out_user_cannot_delete_business",
   "tests/test_business.py::BusinessTestCase::test_register_business_with_empty_category",
