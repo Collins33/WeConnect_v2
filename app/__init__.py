@@ -168,7 +168,11 @@ def create_app(config_name):
         response = jsonify(final_result)
         response.status_code = 200
         return response
-
+    
+    @app.route('/api/v2/businesses/paginate/<int:number>', methods=['GET'])
+    def paginate_business(number):
+        pass
+        
     @app.route('/api/v2/businesses/<int:id>', methods=['GET'])
     def get_single_business(id):
         business = Business.query.filter_by(id=id).first()
