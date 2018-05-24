@@ -23,13 +23,21 @@ WeConnect provides a platform that brings businesses and individuals together. T
 -Add the following to it:
 
 export FLASK_APP="run.py"
+
 export SECRET="some-very-long-string-of-random-characters-CHANGE-TO-YOUR-LIKING"
+
 export APP_SETTINGS="development"
+
 export DATABASE_URL="postgresql://localhost/<name of your database>"
+
 export PORT=465
+
 export MAIL="xxxx@gmail.com"
+
 export PASSWORD="xxxx"
+
 export TLS=False
+
 export SSL=True
 
 ## Database
