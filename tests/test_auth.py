@@ -19,7 +19,7 @@ class AuthTestCase(unittest.TestCase):
             'password': 'colo123',
             'confirm_password': 'colo123'
         }
-        self.user_password={
+        self.user_password = {
             'email': 'collinsnjau39@gmail.com',
             'confirm_password': 'colo123'
         }
@@ -53,10 +53,8 @@ class AuthTestCase(unittest.TestCase):
     def test_register_user_with_password_missing(self):
         res = self.client().post(AuthTestCase.registration, data=self.user_password)
         """get the response after registering"""
-        result = json.loads(res.data.decode())
         # assert the results
         self.assertEqual(res.status_code, 403)
-
 
     def test_registration_when_user_already_exists(self):
         """test if user can be registered twice"""

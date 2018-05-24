@@ -138,7 +138,7 @@ class Business(db.Model):
     @staticmethod
     def paginate_business(page_per_post):
         """return a given number of businesses"""
-        return Business.query.paginate(1,page_per_post,False)    
+        return Business.query.paginate(1, page_per_post, False)    
 
     @staticmethod
     def get(owner):
