@@ -11,7 +11,7 @@ class BusinessTestCase(BaseTestHelper):
     business_id_url = '/api/v2/businesses/{}'
     user_logout = '/api/v2/auth/log-out'
     wrong_url = '/api/v/businesses'
-    paginate_business='/api/v2/businesses/paginate/1'
+    paginate_business = '/api/v2/businesses/paginate/1'
 
     def setUp(self):
         """initilize the app

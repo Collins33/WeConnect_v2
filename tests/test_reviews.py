@@ -35,7 +35,7 @@ class ReviewsTestCase(BaseTestHelper):
         self.add_business()
         # add the review for the business
         result = self.client().post(ReviewsTestCase.review_url.format('1'), data= self.review)
-        self.assertEqual(result.status_code, 201)# review created
+        self.assertEqual(result.status_code, 201)
         self.assertIn("succesfully added the review", str(result.data))
 
     def test_review_get_all(self):
@@ -43,7 +43,7 @@ class ReviewsTestCase(BaseTestHelper):
         self.client().post(ReviewsTestCase.review_url.format('1'), data=self.review)
         # get reviews for the particular business
         result = self.client().get(ReviewsTestCase.review_url.format('1'))
-        self.assertEqual(result.status_code, 200)# reviews successfully created
+        self.assertEqual(result.status_code, 200)
 
     def test_review_not_exist(self):
         self.add_business()
