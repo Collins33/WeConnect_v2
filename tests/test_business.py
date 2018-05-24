@@ -79,6 +79,14 @@ class BusinessTestCase(BaseTestHelper):
         response = self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
         self.assertEqual(response.status_code, 403)
         self.assertIn("You are not logged in. Please log in", str(response.data))
+
+    def test_business_creation_with_token_missing(self):
+        """this will test if a user can add a business without a token"""
+        response = self.client().post(BusinessTestCase.register_business, data=self.business)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("You must have a token to add a business. Login to get a token", str(response.data))
+        
+
         
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""

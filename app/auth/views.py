@@ -32,7 +32,7 @@ class RegistrationView(MethodView):
                     }
                     # return response to notify user that they have been registered
                     # make_response() is used for returning responses
-                    return make_response(jsonify(response)),201
+                    return make_response(jsonify(response)), 201
                 elif password != confirm_password:
                     response = {
                         "message": "password and confirm_password have to match"
@@ -55,10 +55,10 @@ class RegistrationView(MethodView):
                     return make_response(jsonify(response)), 400
             except Exception as e:
                 response = {
-                    "message": str(e) + "is missing"
+                    "message": str(e) + " is missing"
                 }
                 print(response)
-                return make_response(jsonify(response)), 401
+                return make_response(jsonify(response)), 403
         else:
             # this will run if the user exists
             response = {
