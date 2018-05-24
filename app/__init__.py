@@ -168,6 +168,25 @@ def create_app(config_name):
         response = jsonify(final_result)
         response.status_code = 200
         return response
+    
+    @app.route('/api/v2/businesses/paginate/<int:number>', methods=['GET'])
+    def paginate_business(number):
+        """get a given number of business"""
+        businesses = Business.paginate_business(number)
+        final_result = []
+        for business in businesses.items:
+            obj = {
+                'id': business.id,
+                'name': business.name,
+                'description': business.description,
+                'location': business.location,
+                'contact': business.contact,
+                'category': business.category
+            }
+            final_result.append(obj)
+        response = jsonify(final_result)
+        response.status_code = 200
+        return response
 
     @app.route('/api/v2/businesses/<int:id>', methods=['GET'])
     def get_single_business(id):
