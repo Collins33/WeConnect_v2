@@ -85,9 +85,7 @@ class BusinessTestCase(BaseTestHelper):
         response = self.client().post(BusinessTestCase.register_business, data=self.business)
         self.assertEqual(response.status_code, 403)
         self.assertIn("You must have a token to add a business. Login to get a token", str(response.data))
-        
-
-        
+             
     def test_api_can_get_all_businesses(self):
         """this tests if the api can return all bucketlists"""
         # add a business
@@ -96,14 +94,6 @@ class BusinessTestCase(BaseTestHelper):
         result = self.client().get(BusinessTestCase.register_business)
         self.assertEqual(result.status_code, 200)
         self.assertTrue(len(result.data) > 1)
-
-    def test_api_can_paginate_results(self):
-        "tests if api can paginate the businesses into the desired number"
-         # add a business
-        self.add_business()
-        self.add_second_business()
-        result = self.client().get(BusinessTestCase.paginate_business)
-        self.assertEqual(result.status_code, 200)
 
     def test_api_can_get_business_by_id(self):
         # you dont need to be authenticated to view a business
