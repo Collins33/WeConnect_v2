@@ -89,7 +89,7 @@ export SSL=True
 | GET  /api/businesses/businessName       | retrieve a single business by name |
 | POST  /api/businesses/businessId/reviews| add a review                  |
 | GET  /api/businesses/businessId/reviews | get all reviews for a business               |
-| GET  /api/businesses/paginate/number| This limit amount of businesses retrieved to amount specified      |       
+| GET  /api/v2/business/paginate/page&limit| This limits amount of businesses retrieved to amount specified  and the number of pages |       
        
        
 
