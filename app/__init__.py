@@ -175,10 +175,10 @@ def create_app(config_name):
         response.status_code = 200
         return response
     
-    @app.route('/api/v2/businesses/paginate/<int:number>', methods=['GET'])
-    def paginate_business(number):
+    @app.route('/api/v2/business/paginate/page=<int:page>&limit=<int:limit>', methods=['GET'])
+    def paginate_business(limit=4, page=1):
         """get a given number of business"""
-        businesses = Business.paginate_business(number)
+        businesses = Business.query.paginate(page, per_page=limit, error_out=True)
         final_result = []
         for business in businesses.items:
             obj = {

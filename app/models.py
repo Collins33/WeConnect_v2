@@ -136,11 +136,6 @@ class Business(db.Model):
         return Business.query.all()
 
     @staticmethod
-    def paginate_business(page_per_post):
-        """return a given number of businesses"""
-        return Business.query.paginate(1, page_per_post, False)    
-
-    @staticmethod
     def get(owner):
         """this gets all the business for a particular user"""
         return Business.query.filter_by(business_owner=owner)
