@@ -323,6 +323,12 @@ class BusinessTestCase(BaseTestHelper):
         self.assertEqual(response.status_code, 200)
         self.assertIn('crastycrab', str(response.data))
 
+    def test_access_dashboard_without_logging_in(self):
+        # access dashboard
+        response = self.client().get(BusinessTestCase.dashboard)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("You must be logged in to access the dashboard", str(response.data))
+
     def tearDown(self):
         """connect to current context
         and drop all tables"""

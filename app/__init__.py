@@ -182,11 +182,11 @@ def create_app(config_name):
                 response = jsonify(final_result)
                 response.status_code = 200
                 return response
-        message = "You must have a token to add a business. Login to get a token"
+        message = "You must be logged in to access the dashboard"
         response = jsonify({"message": message, "status": 403})
         response.status_code = 403
-        return response    
-                
+        return response
+         
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():
         """this will get all the businesses"""
