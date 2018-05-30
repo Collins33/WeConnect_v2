@@ -12,7 +12,7 @@ class BusinessTestCase(BaseTestHelper):
     user_logout = '/api/v2/auth/log-out'
     wrong_url = '/api/v/businesses'
     paginate_business = '/api/v2/businesses/paginate/1'
-    dashboard = '/api/v/dashboard'
+    dashboard = '/api/v2/dashboard'
 
     def setUp(self):
         """initilize the app

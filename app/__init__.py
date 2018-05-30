@@ -156,7 +156,7 @@ def create_app(config_name):
         response.status_code = 403
         return response
 
-    @app.route('/api/v/dashboard', methods=['GET'])
+    @app.route('/api/v2/dashboard', methods=['GET'])
     def dashboard():
         auth_header = request.headers.get('Authorization')
         if auth_header:
