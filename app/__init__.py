@@ -154,8 +154,39 @@ def create_app(config_name):
         message = "You must have a token to add a business. Login to get a token"
         response = jsonify({"message": message, "status": 403})
         response.status_code = 403
-        return response        
+        return response
 
+    @app.route('/api/v2/dashboard', methods=['GET'])
+    def dashboard():
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            access_token = auth_header.split(" ")[1]
+            # return true if token is valid
+            valid_token = Access_token.query.filter_by(token=access_token).first()
+            if not valid_token:
+                # this user is legit and authorized get the id
+                user_id = User.decode_token(access_token)
+                # use the user id to get businesses owned by the user
+                businesses = Business.get(user_id)
+                final_result = []
+                for business in businesses:
+                    obj = {
+                        'id': business.id,
+                        'name': business.name,
+                        'description': business.description,
+                        'location': business.location,
+                        'contact': business.contact,
+                        'category': business.category
+                    }
+                    final_result.append(obj)
+                response = jsonify(final_result)
+                response.status_code = 200
+                return response
+        message = "You must be logged in to access the dashboard"
+        response = jsonify({"message": message, "status": 403})
+        response.status_code = 403
+        return response
+         
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():
         """this will get all the businesses"""

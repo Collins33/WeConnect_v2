@@ -12,6 +12,7 @@ class BusinessTestCase(BaseTestHelper):
     user_logout = '/api/v2/auth/log-out'
     wrong_url = '/api/v/businesses'
     paginate_business = '/api/v2/businesses/paginate/1'
+    dashboard = '/api/v2/dashboard'
 
     def setUp(self):
         """initilize the app
@@ -306,6 +307,27 @@ class BusinessTestCase(BaseTestHelper):
         result = self.client().get(BusinessTestCase.wrong_url)
         self.assertEqual(result.status_code, 404)
         self.assertIn("That page does not exist", str(result.data))
+
+    def test_dashboard_returns_right_businesses(self):
+        """test if the dashboard endpoint returns the businesses owned by logged in 
+        user"""
+        # register a test user and log him in
+        self.register_user("collins.muru@andela.com", "123test", "123test")
+        result = self.login_user("collins.muru@andela.com", "123test", "123test")
+        # get the access token
+        access_token = json.loads(result.data.decode())['access_token']
+        # add the access token to the header
+        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
+        # access dashboard
+        response = self.client().get(BusinessTestCase.dashboard, headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('crastycrab', str(response.data))
+
+    def test_access_dashboard_without_logging_in(self):
+        # access dashboard
+        response = self.client().get(BusinessTestCase.dashboard)
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("You must be logged in to access the dashboard", str(response.data))
 
     def tearDown(self):
         """connect to current context
