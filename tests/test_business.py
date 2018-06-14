@@ -13,7 +13,7 @@ class BusinessTestCase(BaseTestHelper):
     wrong_url = '/api/v/businesses'
     paginate_business = '/api/v2/businesses/paginate/1'
     dashboard = '/api/v2/dashboard'
-    single_business_dashboard = '/api/v2/dashboard/{}'
+    single_business_dashboard = '/api/v2/dashboard/business/{}'
 
     def setUp(self):
         """initilize the app
@@ -329,22 +329,6 @@ class BusinessTestCase(BaseTestHelper):
         response = self.client().get(BusinessTestCase.dashboard)
         self.assertEqual(response.status_code, 403)
         self.assertIn("You must be logged in to access the dashboard", str(response.data))
-
-    def test_get_single_business_in_dashboard(self):
-        """test if the dashboard endpoint returns the businesses owned by logged in 
-        user"""
-        # register a test user and log him in
-        self.register_user("collins.muru@andela.com", "123test", "123test")
-        result = self.login_user("collins.muru@andela.com", "123test", "123test")
-        # get the access token
-        access_token = json.loads(result.data.decode())['access_token']
-        # add the access token to the header and add 2 businesses
-        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.business)
-        self.client().post(BusinessTestCase.register_business, headers=dict(Authorization="Bearer " + access_token), data=self.secondBusiness)
-        # access dashboard
-        response = self.client().get(BusinessTestCase.single_business_dashboard.format('1'), headers=dict(Authorization="Bearer " + access_token))
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('crastycrab', str(response.data))
 
     def tearDown(self):
         """connect to current context
