@@ -357,15 +357,18 @@ def create_app(config_name):
         search = searches.get('q')
         operators = "%" + search + "%"
         business = Business.query.filter(Business.name.ilike(operators)).first()
+        final_result = []
         if business:
-            response = jsonify({
+            obj ={
                 'id': business.id,
                 'name': business.name,
                 'description': business.description,
                 'location': business.location,
                 'contact': business.contact,
                 'category': business.category
-            })
+            }
+            final_result.append(obj)
+            response = jsonify(final_result)
             response.status_code = 200
             return response
         else:
