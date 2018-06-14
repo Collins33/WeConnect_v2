@@ -13,6 +13,7 @@ class BusinessTestCase(BaseTestHelper):
     wrong_url = '/api/v/businesses'
     paginate_business = '/api/v2/businesses/paginate/1'
     dashboard = '/api/v2/dashboard'
+    single_business_dashboard = '/api/v2/dashboard/business/{}'
 
     def setUp(self):
         """initilize the app

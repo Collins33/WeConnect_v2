@@ -186,7 +186,7 @@ def create_app(config_name):
         response = jsonify({"message": message, "status": 403})
         response.status_code = 403
         return response
-         
+ 
     @app.route('/api/v2/businesses', methods=['GET'])
     def all_business():
         """this will get all the businesses"""
