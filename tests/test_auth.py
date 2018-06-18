@@ -47,7 +47,7 @@ class AuthTestCase(unittest.TestCase):
         """get the response after registering"""
         result = json.loads(res.data.decode())
         # assert the results
-        self.assertEqual(result['message'], 'successfully registered user')
+        self.assertEqual(result[0]['message'], 'successfully registered user')
         self.assertEqual(res.status_code, 201)
 
     def test_register_user_with_password_missing(self):
