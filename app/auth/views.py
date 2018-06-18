@@ -36,24 +36,32 @@ class RegistrationView(MethodView):
                     # make_response() is used for returning responses
                     return make_response(jsonify(register_user)), 201
                 elif password != confirm_password:
+                    register_user = []
                     response = {
                         "message": "password and confirm_password have to match"
                     }
-                    return make_response(jsonify(response)), 400
+                    register_user.append(response)
+                    return make_response(jsonify(register_user)), 400
                 elif not valid_email:
+                    register_user = []
                     response = {
                         "message": "enter valid email"
                     }
-                    return make_response(jsonify(response)), 400
+                    register_user.append(response)
+                    return make_response(jsonify(register_user)), 400
                 elif not valid_password_length:
+                    register_user = []
                     response = {
                         "message": "password length should be greater than 6"
                     }
-                    return make_response(jsonify(response)), 400
+                    register_user.append(response)
+                    return make_response(jsonify(register_user)), 400
                 else:
+                    register_user = []
                     response = {
                         "message": "email cannot be empty"
                     }
+                    register_user.append(response)
                     return make_response(jsonify(response)), 400
             except Exception as e:
                 response = {
