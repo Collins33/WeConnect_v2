@@ -26,13 +26,15 @@ class RegistrationView(MethodView):
                 if password == confirm_password and valid_email and valid_password_length and valid_password_format:
                     user = User(email=email, password=password)
                     user.save()
-
+                    register_user = []
                     response = {
                         "message": "successfully registered user"
                     }
+                    register_user.append(response)
+
                     # return response to notify user that they have been registered
                     # make_response() is used for returning responses
-                    return make_response(jsonify(response)), 201
+                    return make_response(jsonify(register_user)), 201
                 elif password != confirm_password:
                     response = {
                         "message": "password and confirm_password have to match"
