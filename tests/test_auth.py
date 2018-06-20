@@ -10,6 +10,7 @@ class AuthTestCase(unittest.TestCase):
     login = '/api/v2/auth/login'
     logout = '/api/v2/auth/log-out'
     reset = '/api/v2/auth/reset-password'
+    admin = '/api/v2/admin/users'
 
     def setUp(self):
         self.app = create_app(config_name="testing")
@@ -161,6 +162,8 @@ class AuthTestCase(unittest.TestCase):
         self.assertIn("Email does not exist", str(response.data))
         # bad request
         self.assertEqual(response.status_code, 400)
+
+        
 
     def tearDown(self):
         # run after every test

@@ -68,6 +68,20 @@ def create_app(config_name):
         message = "Email does not exist"
         response = jsonify({"message": message, "status": 400})
         response.status_code = 400
+        return response
+
+    @app.route('/api/v2/admin/users', methods=['GET'])
+    def get_users():
+        """this will return a list of all user emails"""
+        users = User.get_all_users()
+        final_result = []
+        for user in users:
+            obj = {
+                'email': user.email
+            }
+            final_result.append(obj)
+        response = jsonify(final_result)
+        response.status_code = 200
         return response    
       
     # BUSINESS ENDPOINTS
