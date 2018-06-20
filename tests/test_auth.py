@@ -165,7 +165,7 @@ class AuthTestCase(unittest.TestCase):
 
     def test_get_all_user(self):
         """test if the end point to get all users works"""
-        response = self.client.get(AuthTestCase.admin)
+        response = self.client().get(AuthTestCase.admin)
         # assert the response code
         self.assertEqual(response.status_code, 200)    
 

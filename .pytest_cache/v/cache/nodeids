@@ -1,5 +1,6 @@
 [
   "tests/test_auth.py::AuthTestCase::test_empty_password",
+  "tests/test_auth.py::AuthTestCase::test_get_all_user",
   "tests/test_auth.py::AuthTestCase::test_invalid_email",
   "tests/test_auth.py::AuthTestCase::test_login_user",
   "tests/test_auth.py::AuthTestCase::test_logout_user",
