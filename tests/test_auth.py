@@ -163,7 +163,11 @@ class AuthTestCase(unittest.TestCase):
         # bad request
         self.assertEqual(response.status_code, 400)
 
-        
+    def test_get_all_user(self):
+        """test if the end point to get all users works"""
+        response = self.client.get(AuthTestCase.admin)
+        # assert the response code
+        self.assertEqual(response.status_code, 200)    
 
     def tearDown(self):
         # run after every test
