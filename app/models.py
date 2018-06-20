@@ -41,6 +41,11 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    @staticmethod
+    def get_all_users():
+        """returns all users"""
+        return User.query.all()   
+
     def generate_token(self, user_id):
         """this method generates the user token
         using the user_id"""
