@@ -52,19 +52,23 @@ def create_app(config_name):
         # get the user who matches the email
         user = User.query.filter_by(email=email).first()
         if user:
-            # if the user with the email actually exists
-            # generate a random string
-            number = random.randint(10000000, 10000000000)
-            password = "kiblymonkey"+str(number)
-            # update details
-            User.update(User, user.id, password=password)
-            msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients=[email])
-            msg.body = "Your new password is {}".format(str(password))
-            mail.send(msg)
             message = "Password successfully reset.Check email for new password"
             response = jsonify({"message": message, "status": 200})
             response.status_code = 200
-            return response
+
+            try:
+                return response
+            finally:
+
+                # if the user with the email actually exists
+                # generate a random string
+                number = random.randint(10000000, 10000000000)
+                password = "kiblymonkey"+str(number)
+                # update details
+                User.update(User, user.id, password=password)
+                msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients=[email])
+                msg.body = "Your new password is {}".format(str(password))
+                mail.send(msg)
         message = "Email does not exist"
         response = jsonify({"message": message, "status": 400})
         response.status_code = 400
