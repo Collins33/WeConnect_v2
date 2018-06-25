@@ -6,6 +6,7 @@ from flask import request, jsonify
 from flask_mail import Mail, Message
 import os
 import random
+from flask_cors import CORS
 # initialize sqlalchemy
 db = SQLAlchemy()
 
@@ -19,6 +20,7 @@ def create_app(config_name):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # connect the db
     db.init_app(app)
+    CORS(app)
     mail = Mail(app)
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = os.environ['PORT']
