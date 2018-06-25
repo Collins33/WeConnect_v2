@@ -53,12 +53,12 @@ def create_app(config_name):
         email = str(request.data.get('email', ''))
         # get the user who matches the email
         user = User.query.filter_by(email=email).first()
-        print(user)
+       
         if user:
             message = "Password successfully reset.Check email for new password"
             response = jsonify({"message": message, "status": 200})
             response.status_code = 200
-            print(response)
+           
             try:
                 return response
             finally:
@@ -68,12 +68,19 @@ def create_app(config_name):
                 number = 10 
                 password = "kiblymonkey"+str(number)
                 # update details
-                print(password)
+                
                 User.update(User, user.id, password=password)
+                print("print user")
                 msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients=[email])
                 msg.body = "Your new password is {}".format(str(password))
+                print("print mail")
                 mail.send(msg)
+
         message = "Email does not exist"
+        msg = Message('Hello', sender='collinsnjau39@gmail.com', recipients="collins.muru@andela.com")
+        msg.body = "Your new password is {}".format(message)
+        print("print mail")
+        mail.send(msg)
         response = jsonify({"message": message, "status": 400})
         response.status_code = 400
         return response
