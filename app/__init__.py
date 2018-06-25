@@ -64,7 +64,7 @@ def create_app(config_name):
 
                 # if the user with the email actually exists
                 # generate a random string
-                number = random.randint(10000000, 10000000000)
+                number = random.randint(10, 20)
                 password = "kiblymonkey"+str(number)
                 # update details
                 User.update(User, user.id, password=password)
