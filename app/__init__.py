@@ -257,14 +257,17 @@ def create_app(config_name):
             # 404 if business does not exist
             response.status_code = 404
             return response
-        response = jsonify({
+        final_result = []
+        obj = {
             'id': business.id,
             'name': business.name,
             'description': business.description,
             'location': business.location,
             'contact': business.contact,
             'category': business.category
-        })
+        }
+        final_result.append(obj)
+        response = jsonify(final_result)
         response.status_code = 200
         return response
 
