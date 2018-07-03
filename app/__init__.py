@@ -381,26 +381,27 @@ def create_app(config_name):
         searches = request.args
         search = searches.get('q')
         operators = "%" + search + "%"
-        business = Business.query.filter(Business.name.ilike(operators)).first()
+        businesses = Business.query.filter(Business.name.ilike(operators)) # list with businesses
         final_result = []
-        if business:
-            obj ={
-                'id': business.id,
-                'name': business.name,
-                'description': business.description,
-                'location': business.location,
-                'contact': business.contact,
-                'category': business.category
-            }
+        for business in businesses:
+            if business:
+                obj ={
+                    'id': business.id,
+                    'name': business.name,
+                    'description': business.description,
+                    'location': business.location,
+                    'contact': business.contact,
+                    'category': business.category
+                }
             final_result.append(obj)
             response = jsonify(final_result)
             response.status_code = 200
             return response
-        else:
-            message = "No business found"
-            response = jsonify({"message": message, "status_code": 404})
-            response.status_code = 404
-            return response
+            else:
+                message = "No business found"
+                response = jsonify({"message": message, "status_code": 404})
+                response.status_code = 404
+                return response
 
     @app.route('/api/v2/businesses/<string:category>', methods=['GET'])
     def filter_category(category):
