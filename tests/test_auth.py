@@ -93,15 +93,14 @@ class AuthTestCase(unittest.TestCase):
         self.assertIn("You have successfully logged out", str(response.data))
 
     def test_authentication_verification(self):
-         # register a user
+        # register a user
         self.register_user()
         # login the user
         result = self.log_in()
         access_token = json.loads(result.data.decode())['access_token']
-        response = self.client().get(AuthTestCase.auth_verification, headers=dict(Authorization ="Bearer " + access_token))
+        response = self.client().get(AuthTestCase.auth_verification, headers=dict(Authorization="Bearer " + access_token))
         # after successfully logging out
         self.assertEqual(response.status_code, 200)
-
 
     def test_non_registered_user_trying_to_login(self):
         """test if non registered user can login""" 

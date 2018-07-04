@@ -102,9 +102,7 @@ def create_app(config_name):
         if auth_header:
             access_token = auth_header.split(" ")[1]
             user_id = User.decode_token(access_token)
-            message = "you are logged in as"
-            response = jsonify({"message": message, "status": 200})
-            response.status_code = 200
+            response = jsonify({"message": user_id})
             return response
 
         else:
