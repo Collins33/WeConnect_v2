@@ -91,7 +91,26 @@ def create_app(config_name):
         response = jsonify(final_result)
         response.status_code = 200
         return response    
-      
+    
+    # authentication-validation access
+    # this endpoint is used by the front end to know interface for authenticated
+    # and unauthenticated users
+    @app.route('/api/v2/authentication/validation', methods=['GET'])
+    def get_auth_status():
+        # get access token from the header
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            access_token = auth_header.split(" ")[1]
+            user_id = User.decode_token(access_token)
+            response = jsonify({"message": user_id})
+            return response
+
+        else:
+            message = "You are not loggen in"
+            response = jsonify({"message": message, "status": 403})
+            response.status_code = 403
+            return response
+
     # BUSINESS ENDPOINTS
     @app.route('/api/v2/businesses', methods=['POST'])
     def add_business():
