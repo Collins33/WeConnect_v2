@@ -11,6 +11,7 @@ class AuthTestCase(unittest.TestCase):
     logout = '/api/v2/auth/log-out'
     reset = '/api/v2/auth/reset-password'
     admin = '/api/v2/admin/users'
+    auth_verification = '/api/v2/authentication/validation'
 
     def setUp(self):
         self.app = create_app(config_name="testing")
@@ -91,6 +92,17 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("You have successfully logged out", str(response.data))
 
+    def test_authentication_verification(self):
+         # register a user
+        self.register_user()
+        # login the user
+        result = self.log_in()
+        access_token = json.loads(result.data.decode())['access_token']
+        response = self.client().get(AuthTestCase.auth_verification, headers=dict(Authorization ="Bearer " + access_token))
+        # after successfully logging out
+        self.assertEqual(response.status_code, 200)
+
+
     def test_non_registered_user_trying_to_login(self):
         """test if non registered user can login""" 
         # try logging in the user without registering the user      
@@ -130,7 +142,7 @@ class AuthTestCase(unittest.TestCase):
         }
         # register user with short password
         result = self.client().post(AuthTestCase.registration, data=user)
-        #bad request
+        # bad request
         self.assertEqual(result.status_code, 400)
         self.assertIn("password length should be greater than 6", str(result.data))
 
